@@ -50,6 +50,7 @@ type
     FIconCache: TExplorerImageArray;
     function GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
     function GetImageIndexFromPng(const AFilename: string): integer;
+    function GetImageIndex_Std(const AFileName: string; var AIndex: integer): boolean;
     function PrettyDirName(const S: string): string;
     procedure FillTreeForFolder(const AFolder: string; ANode: TTreeNode);
     procedure SetFolder(const AValue: string);
@@ -235,9 +236,53 @@ begin
   end;
 end;
 
+function TfmExplorer.GetImageIndex_Std(const AFileName: string; var AIndex: integer): boolean;
+begin
+  Result:= true;
+  case LowerCase(ExtractFileExt(AFileName)) of
+    '.zip',
+    '.rar',
+    '.tar',
+    '.xz',
+    '.gz',
+    '.7z':
+      AIndex:= FIconIndexZip;
+    '.png',
+    '.gif',
+    '.bmp',
+    '.jpg',
+    '.jpeg',
+    '.ico':
+      AIndex:= FIconIndexPic;
+    '.exe',
+    '.dll',
+    '.dat',
+    '.so',
+    '.dylib',
+    '.dbg',
+    '.chm',
+    '.pyc',
+    '.o',
+    '.a',
+    '.mp3',
+    '.mp4',
+    '.avi',
+    '.mov',
+    '.mpeg',
+    '.ogg',
+    '.flac',
+    '.webm':
+      AIndex:= FIconIndexBin;
+    '.log',
+    '.txt':
+      AIndex:= FIconIndexDefault;
+    else
+      Result:= false;
+  end;
+end;
+
 function TfmExplorer.GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
 var
-  ext: string;
   SLexer: string;
   fnConfig: string;
   fnIcon: string;
@@ -267,49 +312,10 @@ begin
     FIconIndexBin:= GetImageIndexFromPng(FIconNameBin);
   end;
 
+  Result:= FIconIndexDefault;
   if AIsDir then
     exit(FIconIndexDir);
-
-  case LowerCase(ExtractFileExt(AFileName)) of
-    '.zip',
-    '.rar',
-    '.tar',
-    '.xz',
-    '.gz',
-    '.7z':
-      exit(FIconIndexZip);
-    '.png',
-    '.gif',
-    '.bmp',
-    '.jpg',
-    '.jpeg',
-    '.ico':
-      exit(FIconIndexPic);
-    '.exe',
-    '.dll',
-    '.dat',
-    '.so',
-    '.dylib',
-    '.dbg',
-    '.chm',
-    '.pyc',
-    '.o',
-    '.a',
-    '.mp3',
-    '.mp4',
-    '.avi',
-    '.mov',
-    '.mpeg',
-    '.ogg',
-    '.flac',
-    '.webm':
-      exit(FIconIndexBin);
-    '.log',
-    '.txt':
-      exit(FIconIndexDefault);
-  end;
-
-  Result:= FIconIndexDefault;
+  if GetImageIndex_Std(AFileName, Result) then exit;
 
   SLexer:= OnGetLexer(AFileName);
   if SLexer='' then exit;
