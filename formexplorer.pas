@@ -402,6 +402,10 @@ begin
       ALexer:= 'Pascal';
     'yml', 'yaml':
       ALexer:= 'YAML';
+    'asm':
+      ALexer:= 'Assembly';
+    'cs':
+      ALexer:= 'C#';
     else
       Result:= false;
   end;
