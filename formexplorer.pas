@@ -45,11 +45,11 @@ type
     procedure InitIconConfig;
     function GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
     function GetImageIndexFromPng(const AFilename: string): integer;
-    function GetImageIndex_Std(const AExt: string; var AIndex: integer): boolean;
+    function DetectUsualFiles(const AExt: string; var AIndex: integer): boolean;
+    function DetectLexerByExt(const AExt: string; var ALexer: string): boolean;
     function PrettyDirName(const S: string): string;
     procedure FillTreeForFolder(const AFolder: string; ANode: TTreeNode);
     procedure SetFolder(const AValue: string);
-    function DetectLexerByExt(const ext: string; var ALexer: string): boolean;
   public
     property Folder: string read FFolder write SetFolder;
     property ShowDotNames: boolean read FShowDotNames write FShowDotNames;
@@ -229,7 +229,7 @@ begin
   end;
 end;
 
-function TfmExplorer.GetImageIndex_Std(const AExt: string; var AIndex: integer): boolean;
+function TfmExplorer.DetectUsualFiles(const AExt: string; var AIndex: integer): boolean;
 begin
   Result:= true;
   case AExt of
@@ -318,7 +318,7 @@ begin
   ext:= LowerCase(ExtractFileExt(AFileName));
   if ext<>'' then
     Delete(ext, 1, 1);
-  if GetImageIndex_Std(ext, Result) then exit;
+  if DetectUsualFiles(ext, Result) then exit;
 
   //cache holds extensions, not lexer names! much faster
   if FIconCache.Find(ext, i) then
@@ -358,10 +358,10 @@ begin
   end;
 end;
 
-function TfmExplorer.DetectLexerByExt(const ext: string; var ALexer: string): boolean;
+function TfmExplorer.DetectLexerByExt(const AExt: string; var ALexer: string): boolean;
 begin
   Result:= true;
-  case ext of
+  case AExt of
     'c', 'h':
       ALexer:= 'C';
     'cpp', 'hpp':
