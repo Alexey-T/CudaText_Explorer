@@ -41,10 +41,12 @@ type
     FIconNameDir: string;
     FIconNameZip: string;
     FIconNamePic: string;
+    FIconNameBin: string;
     FIconIndexDefault: integer;
     FIconIndexDir: integer;
     FIconIndexZip: integer;
     FIconIndexPic: integer;
+    FIconIndexBin: integer;
     FIconCache: TExplorerImageArray;
     function GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
     function GetImageIndexFromPng(const AFilename: string): integer;
@@ -256,11 +258,13 @@ begin
     FIconNameDir:= FIconCfg.GetValue('_dir', '');
     FIconNameZip:= FIconCfg.GetValue('_zip', '');
     FIconNamePic:= FIconCfg.GetValue('_img', '');
+    FIconNameBin:= FIconCfg.GetValue('_bin', '');
 
     FIconIndexDefault:= GetImageIndexFromPng(FIconNameDefault);
     FIconIndexDir:= GetImageIndexFromPng(FIconNameDir);
     FIconIndexZip:= GetImageIndexFromPng(FIconNameZip);
     FIconIndexPic:= GetImageIndexFromPng(FIconNamePic);
+    FIconIndexBin:= GetImageIndexFromPng(FIconNameBin);
   end;
 
   if AIsDir then
@@ -281,6 +285,17 @@ begin
     '.jpeg',
     '.ico':
       exit(FIconIndexPic);
+    '.exe',
+    '.dll',
+    '.dat',
+    '.so',
+    '.dylib',
+    '.dbg',
+    '.chm':
+      exit(FIconIndexBin);
+    '.log',
+    '.txt':
+      exit(FIconIndexDefault);
   end;
 
   Result:= FIconIndexDefault;

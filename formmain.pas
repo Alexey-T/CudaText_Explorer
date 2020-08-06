@@ -66,6 +66,7 @@ begin
     '.sql': Result:= 'SQL';
     '.php': Result:= 'PHP';
     '.py': Result:= 'Python';
+    '.json': Result:= 'JSON';
     else Result:= '';
   end;
 end;
