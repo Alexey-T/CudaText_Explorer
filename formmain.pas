@@ -42,7 +42,7 @@ begin
   fe.Align:= alClient;
   fe.Show;
 
-  fe.IconDir:= '/home/user/cuda/cuda/app/data/filetypeicons/vscode_16x16';
+  fe.IconDir:= ExtractFilePath(Application.ExeName)+'vscode_16x16';
   fe.OnGetLexer:= @GetLexer;
   fe.Folder:= '/home/user/test';
 end;
