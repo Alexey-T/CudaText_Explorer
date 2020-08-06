@@ -17,6 +17,8 @@ type
     Tree: TTreeView;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure TreeClick(Sender: TObject);
+    procedure TreeDeletion(Sender: TObject; Node: TTreeNode);
     procedure TreeExpanding(Sender: TObject; Node: TTreeNode;
       var AllowExpansion: Boolean);
   private
@@ -52,11 +54,40 @@ type
 procedure TfmExplorer.FormCreate(Sender: TObject);
 begin
   Tree.ShowRoot:= false;
+  Tree.ReadOnly:= true;
+  Tree.RowSelect:= true;
+  //Tree.HotTrack:= true;
 end;
 
 procedure TfmExplorer.FormDestroy(Sender: TObject);
 begin
   Tree.Items.Clear;
+end;
+
+procedure TfmExplorer.TreeClick(Sender: TObject);
+var
+  P: TPoint;
+  Node: TTreeNode;
+  Data: TExplorerTreeData;
+begin
+  P:= Tree.ScreenToClient(Mouse.CursorPos);
+  Node:= Tree.GetNodeAt(P.X, P.Y);
+  if Assigned(Node) then
+    if Assigned(Node.Data) then
+    begin
+      Data:= TExplorerTreeData(Node.Data);
+      if Data.IsDir then
+        if Node.Expanded then
+          Node.Collapse(false)
+        else
+          Node.Expand(false);
+    end;
+end;
+
+procedure TfmExplorer.TreeDeletion(Sender: TObject; Node: TTreeNode);
+begin
+  if Assigned(Node.Data) then
+    TObject(Node.Data).Free;
 end;
 
 procedure TfmExplorer.TreeExpanding(Sender: TObject; Node: TTreeNode; var AllowExpansion: Boolean);

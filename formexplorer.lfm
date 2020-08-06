@@ -27,6 +27,8 @@ object fmExplorer: TfmExplorer
       Align = alClient
       BorderStyle = bsNone
       TabOrder = 0
+      OnClick = TreeClick
+      OnDeletion = TreeDeletion
       OnExpanding = TreeExpanding
     end
   end
