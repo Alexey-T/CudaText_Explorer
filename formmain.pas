@@ -21,7 +21,7 @@ type
     procedure FormCreate(Sender: TObject);
   private
     fe: TfmExplorer;
-
+    function GetLexer(const fn: string): string;
   public
 
   end;
@@ -42,7 +42,34 @@ begin
   fe.Align:= alClient;
   fe.Show;
 
+  fe.IconDir:= '/home/user/cuda/cuda/app/data/filetypeicons/vscode_16x16';
+  fe.OnGetLexer:= @GetLexer;
   fe.Folder:= '/home/user/test';
+end;
+
+function TfmMain.GetLexer(const fn: string): string;
+var
+  ext: string;
+begin
+  ext:= ExtractFileExt(fn);
+  case ext of
+    '.pas': Result:= 'Pascal';
+    'c.': Result:= 'C';
+    '.cpp': Result:= 'C++';
+    '.sh': Result:= 'Bash script';
+    'htm', '.html': Result:= 'HTML';
+    '.js': Result:= 'JavaScript';
+    '.css': Result:= 'CSS';
+    '.md': Result:= 'Markdown';
+    '.xml': Result:= 'XML';
+    '.sql': Result:= 'SQL';
+    '.php': Result:= 'PHP';
+    '.py': Result:= 'Python';
+    '.png': Result:= '_img';
+    '.zip': Result:= '_zip';
+    else Result:= '_';
+  end;
+
 end;
 
 procedure TfmMain.Button1Click(Sender: TObject);

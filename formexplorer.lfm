@@ -26,6 +26,7 @@ object fmExplorer: TfmExplorer
       Width = 325
       Align = alClient
       BorderStyle = bsNone
+      Images = Images
       TabOrder = 0
       OnClick = TreeClick
       OnDeletion = TreeDeletion
@@ -40,5 +41,9 @@ object fmExplorer: TfmExplorer
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
+  end
+  object Images: TImageList
+    Left = 203
+    Top = 77
   end
 end

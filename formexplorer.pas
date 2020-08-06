@@ -5,13 +5,17 @@ unit formexplorer;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls,
+  jsonConf;
 
 type
+  TExplorerGetLexer = function(const fn: string): string of object;
 
+type
   { TfmExplorer }
 
   TfmExplorer = class(TForm)
+    Images: TImageList;
     PanelTree: TPanel;
     PanelTabs: TPanel;
     Tree: TTreeView;
@@ -19,18 +23,28 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure TreeClick(Sender: TObject);
     procedure TreeDeletion(Sender: TObject; Node: TTreeNode);
-    procedure TreeExpanding(Sender: TObject; Node: TTreeNode;
-      var AllowExpansion: Boolean);
+    procedure TreeExpanding(Sender: TObject; Node: TTreeNode; var AllowExpansion: Boolean);
   private
     FFolder: string;
+    FIconDir: string;
     FRootNode: TTreeNode;
     FShowDotNames: boolean;
+    FOnGetLexer: TExplorerGetLexer;
+    FIconCfg: TJSONConfig;
+    FIconNameDefault: string;
+    FIconNameDir: string;
+    FIconIndexDefault: integer;
+    FIconIndexDir: integer;
+    function GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
+    function LoadIcon(const AFilename: string): integer;
     function PrettyDirName(const S: string): string;
     procedure FillTreeForFolder(const AFolder: string; ANode: TTreeNode);
     procedure SetFolder(const AValue: string);
   public
     property Folder: string read FFolder write SetFolder;
     property ShowDotNames: boolean read FShowDotNames write FShowDotNames;
+    property IconDir: string read FIconDir write FIconDir;
+    property OnGetLexer: TExplorerGetLexer read FOnGetLexer write FOnGetLexer;
   end;
 
 var
@@ -66,6 +80,8 @@ end;
 procedure TfmExplorer.FormDestroy(Sender: TObject);
 begin
   Tree.Items.Clear;
+  if Assigned(FIconCfg) then
+    FreeAndNil(FIconCfg);
 end;
 
 procedure TfmExplorer.TreeClick(Sender: TObject);
@@ -193,12 +209,69 @@ begin
         S:= PrettyDirName(S);
 
       Node:= Tree.Items.AddChildObject(ANode, S, Data);
+      Node.ImageIndex:= GetImageIndex(Data.Path, Data.IsDir);
+
       //add fictive child, to show expand arrow
       if bDir then
         Tree.Items.AddChild(Node, '?');
     end;
   finally
     FreeAndNil(List);
+  end;
+end;
+
+function TfmExplorer.GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
+var
+  SLexer: string;
+  fnConfig: string;
+  fnIcon: string;
+begin
+  Result:= -1;
+  if not Assigned(OnGetLexer) then exit;
+
+  if not Assigned(FIconCfg) then
+  begin
+    fnConfig:= FIconDir+DirectorySeparator+'icons.json';
+    if not FileExists(fnConfig) then exit;
+
+    FIconCfg:= TJSONConfig.Create(Self);
+    FIconCfg.Filename:= fnConfig;
+
+    FIconNameDefault:= FIconCfg.GetValue('_', '');
+    FIconNameDir:= FIconCfg.GetValue('_dir', '');
+
+    FIconIndexDefault:= LoadIcon(FIconNameDefault);
+    FIconIndexDir:= LoadIcon(FIconNameDir);
+  end;
+
+  if AIsDir then
+    exit(FIconIndexDir);
+  Result:= FIconIndexDefault;
+
+  SLexer:= OnGetLexer(AFileName);
+  if SLexer='' then exit;
+
+  fnIcon:= FIconCfg.GetValue(SLexer, '');
+  if fnIcon='' then exit;
+
+  Result:= LoadIcon(fnIcon);
+end;
+
+function TfmExplorer.LoadIcon(const AFilename: string): integer;
+var
+  Img: TPortableNetworkGraphic;
+  fn: string;
+begin
+  fn:= FIconDir+DirectorySeparator+AFilename;
+  if not FileExists(fn) then
+    exit(FIconIndexDefault);
+
+  Img:= TPortableNetworkGraphic.Create;
+  try
+    Img.LoadFromFile(fn);
+    Result:= Images.Add(Img, nil);
+  finally
+    FreeAndNil(Img);
   end;
 end;
 
