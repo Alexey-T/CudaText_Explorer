@@ -41,6 +41,8 @@ begin
   fe.Parent:= Panel1;
   fe.Align:= alClient;
   fe.Show;
+
+  fe.Folder:= '/home/user/test';
 end;
 
 procedure TfmMain.Button1Click(Sender: TObject);

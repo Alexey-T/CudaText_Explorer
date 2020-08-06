@@ -24,11 +24,13 @@ type
   private
     FFolder: string;
     FRootNode: TTreeNode;
+    FShowDotNames: boolean;
     function PrettyDirName(const S: string): string;
     procedure FillTreeForFolder(const AFolder: string; ANode: TTreeNode);
     procedure SetFolder(const AValue: string);
   public
     property Folder: string read FFolder write SetFolder;
+    property ShowDotNames: boolean read FShowDotNames write FShowDotNames;
   end;
 
 var
@@ -57,6 +59,8 @@ begin
   Tree.ReadOnly:= true;
   Tree.RowSelect:= true;
   //Tree.HotTrack:= true;
+
+  FShowDotNames:= false;
 end;
 
 procedure TfmExplorer.FormDestroy(Sender: TObject);
@@ -165,6 +169,8 @@ begin
       repeat
         S:= Rec.Name;
         if (S='.') or (S='..') then Continue;
+        if (S[1]='.') and not FShowDotNames then Continue;
+
         if (Rec.Attr and faDirectory)<>0 then
           NData:= 1
         else
@@ -191,7 +197,7 @@ begin
       Node:= Tree.Items.AddChildObject(ANode, S, Data);
       //add fictive child, to show expand arrow
       if bDir then
-        Tree.Items.AddChild(Node, '...');
+        Tree.Items.AddChild(Node, '?');
     end;
   finally
     FreeAndNil(List);
