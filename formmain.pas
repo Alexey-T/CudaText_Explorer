@@ -48,27 +48,8 @@ begin
 end;
 
 function TfmMain.GetLexer(const fn: string): string;
-var
-  ext: string;
 begin
-  ext:= ExtractFileExt(fn);
-  case ext of
-    '.c': Result:= 'C';
-    '.cpp': Result:= 'C++';
-    '.sh': Result:= 'Bash script';
-    '.pas': Result:= 'Pascal';
-    '.htm',
-    '.html': Result:= 'HTML';
-    '.js': Result:= 'JavaScript';
-    '.css': Result:= 'CSS';
-    '.md': Result:= 'Markdown';
-    '.xml': Result:= 'XML';
-    '.sql': Result:= 'SQL';
-    '.php': Result:= 'PHP';
-    '.py': Result:= 'Python';
-    '.json': Result:= 'JSON';
-    else Result:= '';
-  end;
+  Result:= '';
 end;
 
 procedure TfmMain.Button1Click(Sender: TObject);

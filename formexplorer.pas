@@ -42,13 +42,14 @@ type
     FIconIndexPic: integer;
     FIconIndexBin: integer;
     FIconCache: TStringList;
+    procedure InitIconConfig;
     function GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
     function GetImageIndexFromPng(const AFilename: string): integer;
     function GetImageIndex_Std(const AExt: string; var AIndex: integer): boolean;
-    procedure InitIconConfig;
     function PrettyDirName(const S: string): string;
     procedure FillTreeForFolder(const AFolder: string; ANode: TTreeNode);
     procedure SetFolder(const AValue: string);
+    function DetectLexerByExt(const ext: string; var ALexer: string): boolean;
   public
     property Folder: string read FFolder write SetFolder;
     property ShowDotNames: boolean read FShowDotNames write FShowDotNames;
@@ -217,6 +218,7 @@ begin
 
       Node:= Tree.Items.AddChildObject(ANode, S, Data);
       Node.ImageIndex:= GetImageIndex(Data.Path, Data.IsDir);
+      Node.SelectedIndex:= Node.ImageIndex;
 
       //add fictive child, to show expand arrow
       if bDir then
@@ -227,46 +229,45 @@ begin
   end;
 end;
 
-function TfmExplorer.GetImageIndex_Std(const AExt: string; var AIndex: integer
-  ): boolean;
+function TfmExplorer.GetImageIndex_Std(const AExt: string; var AIndex: integer): boolean;
 begin
   Result:= true;
   case AExt of
-    '.zip',
-    '.rar',
-    '.tar',
-    '.xz',
-    '.gz',
-    '.7z':
+    'zip',
+    'rar',
+    'tar',
+    'xz',
+    'gz',
+    '7z':
       AIndex:= FIconIndexZip;
-    '.png',
-    '.gif',
-    '.bmp',
-    '.jpg',
-    '.jpeg',
-    '.ico':
+    'png',
+    'gif',
+    'bmp',
+    'jpg',
+    'jpeg',
+    'ico':
       AIndex:= FIconIndexPic;
-    '.exe',
-    '.dll',
-    '.dat',
-    '.so',
-    '.dylib',
-    '.dbg',
-    '.chm',
-    '.pyc',
-    '.o',
-    '.a',
-    '.mp3',
-    '.mp4',
-    '.avi',
-    '.mov',
-    '.mpeg',
-    '.ogg',
-    '.flac',
-    '.webm':
+    'exe',
+    'dll',
+    'dat',
+    'so',
+    'dylib',
+    'dbg',
+    'chm',
+    'pyc',
+    'o',
+    'a',
+    'mp3',
+    'mp4',
+    'avi',
+    'mov',
+    'mpeg',
+    'ogg',
+    'flac',
+    'webm':
       AIndex:= FIconIndexBin;
-    '.log',
-    '.txt':
+    'log',
+    'txt':
       AIndex:= FIconIndexDefault;
     else
       Result:= false;
@@ -315,6 +316,8 @@ begin
   Result:= FIconIndexDefault;
 
   ext:= LowerCase(ExtractFileExt(AFileName));
+  if ext<>'' then
+    Delete(ext, 1, 1);
   if GetImageIndex_Std(ext, Result) then exit;
 
   //cache holds extensions, not lexer names! much faster
@@ -324,7 +327,8 @@ begin
     exit;
   end;
 
-  SLexer:= OnGetLexer(AFileName);
+  if not DetectLexerByExt(ext, SLexer) then
+    SLexer:= OnGetLexer(AFileName);
   if SLexer='' then exit;
 
   fnIcon:= FIconCfg.GetValue(SLexer, '');
@@ -351,6 +355,55 @@ begin
     Result:= Images.Add(Img, nil);
   finally
     FreeAndNil(Img);
+  end;
+end;
+
+function TfmExplorer.DetectLexerByExt(const ext: string; var ALexer: string): boolean;
+begin
+  Result:= true;
+  case ext of
+    'c', 'h':
+      ALexer:= 'C';
+    'cpp', 'hpp':
+      ALexer:= 'C++';
+    'htm', 'html':
+      ALexer:= 'HTML';
+    'css':
+      ALexer:= 'CSS';
+    'js':
+      ALexer:= 'JavaScript';
+    'json':
+      ALexer:= 'JSON';
+    'java':
+      ALexer:= 'Java';
+    'sh':
+      ALexer:= 'Bash script';
+    'cmd':
+      ALexer:= 'Batch files';
+    'md':
+      ALexer:= 'Markdown';
+    'xml':
+      ALexer:= 'XML';
+    'php':
+      ALexer:= 'PHP';
+    'py':
+      ALexer:= 'Python';
+    'ini', 'inf':
+      ALexer:= 'Ini files';
+    'rs':
+      ALexer:= 'Rust';
+    'vbs':
+      ALexer:= 'VBScript';
+    'lua':
+      ALexer:= 'Lua';
+    'sql':
+      ALexer:= 'SQL';
+    'pas':
+      ALexer:= 'Pascal';
+    'yml', 'yaml':
+      ALexer:= 'YAML';
+    else
+      Result:= false;
   end;
 end;
 
