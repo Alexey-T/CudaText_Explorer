@@ -17,9 +17,12 @@ type
     Tree: TTreeView;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure TreeExpanding(Sender: TObject; Node: TTreeNode;
+      var AllowExpansion: Boolean);
   private
     FFolder: string;
     FRootNode: TTreeNode;
+    function PrettyDirName(const S: string): string;
     procedure FillTreeForFolder(const AFolder: string; ANode: TTreeNode);
     procedure SetFolder(const AValue: string);
   public
@@ -36,6 +39,14 @@ uses
 
 {$R *.lfm}
 
+type
+  TExplorerTreeData = class
+  public
+    Path: string;
+    IsDir: boolean;
+    Expanded: boolean;
+  end;
+
 { TfmExplorer }
 
 procedure TfmExplorer.FormCreate(Sender: TObject);
@@ -48,6 +59,26 @@ begin
   Tree.Items.Clear;
 end;
 
+procedure TfmExplorer.TreeExpanding(Sender: TObject; Node: TTreeNode; var AllowExpansion: Boolean);
+var
+  Data: TExplorerTreeData;
+begin
+  AllowExpansion:= true;
+  Data:= TExplorerTreeData(Node.Data);
+  if Data=nil then exit;
+  if Data.Expanded then exit;
+  if not Data.IsDir then exit;
+
+  Data.Expanded:= true;
+  FillTreeForFolder(Data.Path, Node);
+  //ShowMessage('fill: '+Data.Path);
+end;
+
+function TfmExplorer.PrettyDirName(const S: string): string;
+begin
+  Result:= '['+S+']';
+end;
+
 procedure TfmExplorer.SetFolder(const AValue: string);
 begin
   if FFolder=AValue then Exit;
@@ -58,7 +89,7 @@ begin
   if (FFolder='') or not DirectoryExists(FFolder) then
     exit;
 
-  FRootNode:= Tree.Items.Add(nil, '['+ExtractFileName(FFolder)+']');
+  FRootNode:= Tree.Items.Add(nil, PrettyDirName(ExtractFileName(FFolder)));
   FillTreeForFolder(FFolder, FRootNode);
   FRootNode.Expand(false);
 end;
@@ -92,6 +123,7 @@ var
   i: integer;
   bDir: boolean;
   NData: PtrInt;
+  Data: TExplorerTreeData;
 begin
   if ANode=nil then exit;
   ANode.DeleteChildren;
@@ -116,9 +148,18 @@ begin
     begin
       S:= ExtractFileName(L[i]);
       bDir:= L.Objects[i]<>nil;
+
+      Data:= TExplorerTreeData.Create;
+      Data.Path:= AFolder+DirectorySeparator+S;
+      Data.IsDir:= bDir;
+      Data.Expanded:= false;
+
       if bDir then
-        S:= '['+S+']';
-      Node:= Tree.Items.AddChild(ANode, S);
+        S:= PrettyDirName(S);
+
+      Node:= Tree.Items.AddChildObject(ANode, S, Data);
+      if bDir then
+        Tree.Items.AddChild(Node, '...');
     end;
   finally
     FreeAndNil(L);

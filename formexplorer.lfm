@@ -27,6 +27,7 @@ object fmExplorer: TfmExplorer
       Align = alClient
       BorderStyle = bsNone
       TabOrder = 0
+      OnExpanding = TreeExpanding
     end
   end
   object PanelTabs: TPanel
