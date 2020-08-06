@@ -1,0 +1,41 @@
+object fmExplorer: TfmExplorer
+  Left = 1530
+  Height = 573
+  Top = 185
+  Width = 325
+  Caption = 'fmExplorer'
+  ClientHeight = 573
+  ClientWidth = 325
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  LCLVersion = '2.1.0.0'
+  object PanelTree: TPanel
+    Left = 0
+    Height = 555
+    Top = 18
+    Width = 325
+    Align = alClient
+    BevelOuter = bvNone
+    ClientHeight = 555
+    ClientWidth = 325
+    TabOrder = 0
+    object Tree: TTreeView
+      Left = 0
+      Height = 555
+      Top = 0
+      Width = 325
+      Align = alClient
+      BorderStyle = bsNone
+      TabOrder = 0
+    end
+  end
+  object PanelTabs: TPanel
+    Left = 0
+    Height = 18
+    Top = 0
+    Width = 325
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 1
+  end
+end

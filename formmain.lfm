@@ -1,0 +1,41 @@
+object fmMain: TfmMain
+  Left = 1620
+  Height = 547
+  Top = 204
+  Width = 487
+  Caption = 'Explorer test'
+  ClientHeight = 547
+  ClientWidth = 487
+  OnCreate = FormCreate
+  LCLVersion = '2.1.0.0'
+  object Panel1: TPanel
+    Left = 0
+    Height = 547
+    Top = 0
+    Width = 314
+    Align = alLeft
+    BevelOuter = bvNone
+    Caption = 'Panel1'
+    TabOrder = 0
+  end
+  object Splitter1: TSplitter
+    Left = 314
+    Height = 547
+    Top = 0
+    Width = 5
+  end
+  object Button1: TButton
+    Left = 324
+    Height = 29
+    Top = 46
+    Width = 67
+    AutoSize = True
+    Caption = 'Folder...'
+    OnClick = Button1Click
+    TabOrder = 2
+  end
+  object SelectDirectoryDialog1: TSelectDirectoryDialog
+    Left = 330
+    Top = 91
+  end
+end
