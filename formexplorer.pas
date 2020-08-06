@@ -11,6 +11,12 @@ uses
 type
   TExplorerGetLexer = function(const fn: string): string of object;
 
+  TExplorerImageArray = array of
+     record
+       LexerName: string;
+       ImageIndex: integer;
+     end;
+
 type
   { TfmExplorer }
 
@@ -33,10 +39,15 @@ type
     FIconCfg: TJSONConfig;
     FIconNameDefault: string;
     FIconNameDir: string;
+    FIconNameZip: string;
+    FIconNamePic: string;
     FIconIndexDefault: integer;
     FIconIndexDir: integer;
+    FIconIndexZip: integer;
+    FIconIndexPic: integer;
+    FIconArray: TExplorerImageArray;
     function GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
-    function LoadIcon(const AFilename: string): integer;
+    function GetImageIndexFromPng(const AFilename: string): integer;
     function PrettyDirName(const S: string): string;
     procedure FillTreeForFolder(const AFolder: string; ANode: TTreeNode);
     procedure SetFolder(const AValue: string);
@@ -75,6 +86,8 @@ begin
   //Tree.HotTrack:= true;
 
   FShowDotNames:= false;
+
+  SetLength(FIconArray, 0);
 end;
 
 procedure TfmExplorer.FormDestroy(Sender: TObject);
@@ -222,9 +235,11 @@ end;
 
 function TfmExplorer.GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
 var
+  ext: string;
   SLexer: string;
   fnConfig: string;
   fnIcon: string;
+  i: integer;
 begin
   Result:= -1;
   if not Assigned(OnGetLexer) then exit;
@@ -239,13 +254,35 @@ begin
 
     FIconNameDefault:= FIconCfg.GetValue('_', '');
     FIconNameDir:= FIconCfg.GetValue('_dir', '');
+    FIconNameZip:= FIconCfg.GetValue('_zip', '');
+    FIconNamePic:= FIconCfg.GetValue('_img', '');
 
-    FIconIndexDefault:= LoadIcon(FIconNameDefault);
-    FIconIndexDir:= LoadIcon(FIconNameDir);
+    FIconIndexDefault:= GetImageIndexFromPng(FIconNameDefault);
+    FIconIndexDir:= GetImageIndexFromPng(FIconNameDir);
+    FIconIndexZip:= GetImageIndexFromPng(FIconNameZip);
+    FIconIndexPic:= GetImageIndexFromPng(FIconNamePic);
   end;
 
   if AIsDir then
     exit(FIconIndexDir);
+
+  case ExtractFileExt(AFileName) of
+    '.zip',
+    '.rar',
+    '.tar',
+    '.xz',
+    '.gz',
+    '.7z':
+      exit(FIconIndexZip);
+    '.png',
+    '.gif',
+    '.bmp',
+    '.jpg',
+    '.jpeg',
+    '.ico':
+      exit(FIconIndexPic);
+  end;
+
   Result:= FIconIndexDefault;
 
   SLexer:= OnGetLexer(AFileName);
@@ -254,10 +291,10 @@ begin
   fnIcon:= FIconCfg.GetValue(SLexer, '');
   if fnIcon='' then exit;
 
-  Result:= LoadIcon(fnIcon);
+  Result:= GetImageIndexFromPng(fnIcon);
 end;
 
-function TfmExplorer.LoadIcon(const AFilename: string): integer;
+function TfmExplorer.GetImageIndexFromPng(const AFilename: string): integer;
 var
   Img: TPortableNetworkGraphic;
   fn: string;
