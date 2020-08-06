@@ -233,6 +233,9 @@ function TfmExplorer.DetectUsualFiles(const AExt: string; var AIndex: integer): 
 begin
   Result:= true;
   case AExt of
+    'log',
+    'txt':
+      AIndex:= FIconIndexDefault;
     'zip',
     'rar',
     'tar',
@@ -245,6 +248,7 @@ begin
     'bmp',
     'jpg',
     'jpeg',
+    'svg',
     'ico':
       AIndex:= FIconIndexPic;
     'exe',
@@ -259,16 +263,22 @@ begin
     'a',
     'mp3',
     'mp4',
+    'm4a',
+    'mpg',
+    'mpeg',
     'avi',
     'mov',
-    'mpeg',
     'ogg',
     'flac',
-    'webm':
+    'webm',
+    'pdf',
+    'doc',
+    'docx',
+    'xls',
+    'xlsx',
+    'ppt',
+    'pptx':
       AIndex:= FIconIndexBin;
-    'log',
-    'txt':
-      AIndex:= FIconIndexDefault;
     else
       Result:= false;
   end;
