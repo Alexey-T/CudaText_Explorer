@@ -149,17 +149,17 @@ procedure TfmExplorer.FillTreeForFolder(const AFolder: string; ANode: TTreeNode)
 var
   Node: TTreeNode;
   Rec: TSearchRec;
-  S: string;
-  L: TStringList;
-  i: integer;
+  List: TStringList;
   bDir: boolean;
   NData: PtrInt;
   Data: TExplorerTreeData;
+  S: string;
+  i: integer;
 begin
   if ANode=nil then exit;
   ANode.DeleteChildren;
 
-  L:= TStringList.Create;
+  List:= TStringList.Create;
   try
     if FindFirst(AFolder+DirectorySeparator+'*', faAnyFile, Rec)=0 then
       repeat
@@ -169,16 +169,16 @@ begin
           NData:= 1
         else
           NData:= 0;
-        L.AddObject(AFolder+DirectorySeparator+S, TObject(NData));
+        List.AddObject(AFolder+DirectorySeparator+S, TObject(NData));
       until FindNext(Rec)<>0;
     FindClose(Rec);
 
-    L.CustomSort(@_CompareFilenames);
+    List.CustomSort(@_CompareFilenames);
 
-    for i:= 0 to L.Count-1 do
+    for i:= 0 to List.Count-1 do
     begin
-      S:= ExtractFileName(L[i]);
-      bDir:= L.Objects[i]<>nil;
+      S:= ExtractFileName(List[i]);
+      bDir:= List.Objects[i]<>nil;
 
       Data:= TExplorerTreeData.Create;
       Data.Path:= AFolder+DirectorySeparator+S;
@@ -189,11 +189,12 @@ begin
         S:= PrettyDirName(S);
 
       Node:= Tree.Items.AddChildObject(ANode, S, Data);
+      //add fictive child, to show expand arrow
       if bDir then
         Tree.Items.AddChild(Node, '...');
     end;
   finally
-    FreeAndNil(L);
+    FreeAndNil(List);
   end;
 end;
 
