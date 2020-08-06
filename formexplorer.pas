@@ -12,10 +12,10 @@ type
   TExplorerGetLexer = function(const fn: string): string of object;
 
   TExplorerImageArray = array of
-     record
-       LexerName: string;
-       ImageIndex: integer;
-     end;
+    record
+      SavedLexer: string;
+      SavedIndex: integer;
+    end;
 
 type
   { TfmExplorer }
@@ -45,7 +45,7 @@ type
     FIconIndexDir: integer;
     FIconIndexZip: integer;
     FIconIndexPic: integer;
-    FIconArray: TExplorerImageArray;
+    FIconCache: TExplorerImageArray;
     function GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
     function GetImageIndexFromPng(const AFilename: string): integer;
     function PrettyDirName(const S: string): string;
@@ -87,7 +87,7 @@ begin
 
   FShowDotNames:= false;
 
-  SetLength(FIconArray, 0);
+  SetLength(FIconCache, 0);
 end;
 
 procedure TfmExplorer.FormDestroy(Sender: TObject);
@@ -288,10 +288,24 @@ begin
   SLexer:= OnGetLexer(AFileName);
   if SLexer='' then exit;
 
+  for i:= 0 to High(FIconCache) do
+    with FIconCache[i] do
+      if SavedLexer=SLexer then
+        exit(SavedIndex);
+
   fnIcon:= FIconCfg.GetValue(SLexer, '');
   if fnIcon='' then exit;
 
   Result:= GetImageIndexFromPng(fnIcon);
+
+  SetLength(FIconCache, Length(FIconCache)+1);
+  with FIconCache[High(FIconCache)] do
+  begin
+    SavedLexer:= SLexer;
+    SavedIndex:= Result;
+  end;
+
+  //Showmessage('load ico: '+SLexer);
 end;
 
 function TfmExplorer.GetImageIndexFromPng(const AFilename: string): integer;
