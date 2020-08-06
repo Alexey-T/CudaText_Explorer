@@ -150,12 +150,13 @@ begin
 end;
 
 procedure TfmExplorer.FillTreeForFolder(const AFolder: string; ANode: TTreeNode);
+const
+  StrAllFiles = {$ifdef windows} '*.*' {$else} '*' {$endif};
 var
   Node: TTreeNode;
   Rec: TSearchRec;
   List: TStringList;
   bDir: boolean;
-  NData: PtrInt;
   Data: TExplorerTreeData;
   S: string;
   i: integer;
@@ -165,17 +166,14 @@ begin
 
   List:= TStringList.Create;
   try
-    if FindFirst(AFolder+DirectorySeparator+'*', faAnyFile, Rec)=0 then
+    if FindFirst(AFolder+DirectorySeparator+StrAllFiles, faAnyFile, Rec)=0 then
       repeat
         S:= Rec.Name;
         if (S='.') or (S='..') then Continue;
         if (S[1]='.') and not FShowDotNames then Continue;
 
-        if (Rec.Attr and faDirectory)<>0 then
-          NData:= 1
-        else
-          NData:= 0;
-        List.AddObject(AFolder+DirectorySeparator+S, TObject(NData));
+        bDir:= (Rec.Attr and faDirectory)<>0;
+        List.AddObject(S, TObject(PtrInt(bDir)));
       until FindNext(Rec)<>0;
     FindClose(Rec);
 
@@ -183,7 +181,7 @@ begin
 
     for i:= 0 to List.Count-1 do
     begin
-      S:= ExtractFileName(List[i]);
+      S:= List[i];
       bDir:= List.Objects[i]<>nil;
 
       Data:= TExplorerTreeData.Create;
