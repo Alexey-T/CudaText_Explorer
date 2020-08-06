@@ -406,6 +406,24 @@ begin
       ALexer:= 'Assembly';
     'cs':
       ALexer:= 'C#';
+    'ts':
+      ALexer:= 'TypeScript';
+    'rb':
+      ALexer:= 'Ruby';
+    'r':
+      ALexer:= 'R';
+    'scss':
+      ALexer:= 'SCSS';
+    'sass':
+      ALexer:= 'Sass';
+    'pl':
+      ALexer:= 'Perl';
+    'go':
+      ALexer:= 'Go';
+    'dart':
+      ALexer:= 'Dart';
+    'coffee':
+      ALexer:= 'CoffeeScript';
     else
       Result:= false;
   end;
