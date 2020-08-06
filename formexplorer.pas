@@ -9,13 +9,7 @@ uses
   jsonConf;
 
 type
-  TExplorerGetLexer = function(const fn: string): string of object;
-
-  TExplorerImageArray = array of
-    record
-      SavedLexer: string;
-      SavedIndex: integer;
-    end;
+  TExplorerOnGetLexer = function(const fn: string): string of object;
 
 type
   { TfmExplorer }
@@ -35,7 +29,7 @@ type
     FIconDir: string;
     FRootNode: TTreeNode;
     FShowDotNames: boolean;
-    FOnGetLexer: TExplorerGetLexer;
+    FOnGetLexer: TExplorerOnGetLexer;
     FIconCfg: TJSONConfig;
     FIconNameDefault: string;
     FIconNameDir: string;
@@ -59,16 +53,10 @@ type
     property Folder: string read FFolder write SetFolder;
     property ShowDotNames: boolean read FShowDotNames write FShowDotNames;
     property IconDir: string read FIconDir write FIconDir;
-    property OnGetLexer: TExplorerGetLexer read FOnGetLexer write FOnGetLexer;
+    property OnGetLexer: TExplorerOnGetLexer read FOnGetLexer write FOnGetLexer;
   end;
 
-var
-  fmExplorer: TfmExplorer;
-
 implementation
-
-uses
-  FileUtil;
 
 {$R *.lfm}
 
