@@ -47,10 +47,10 @@ type
     FIconIndexZip: integer;
     FIconIndexPic: integer;
     FIconIndexBin: integer;
-    FIconCache: TExplorerImageArray;
+    FIconCache: TStringList;
     function GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
     function GetImageIndexFromPng(const AFilename: string): integer;
-    function GetImageIndex_Std(const AFileName: string; var AIndex: integer): boolean;
+    function GetImageIndex_Std(const AExt: string; var AIndex: integer): boolean;
     procedure InitIconConfig;
     function PrettyDirName(const S: string): string;
     procedure FillTreeForFolder(const AFolder: string; ANode: TTreeNode);
@@ -91,12 +91,14 @@ begin
 
   FShowDotNames:= false;
 
-  SetLength(FIconCache, 0);
+  FIconCache:= TStringList.Create;
+  FIconCache.Sorted:= true;
 end;
 
 procedure TfmExplorer.FormDestroy(Sender: TObject);
 begin
   Tree.Items.Clear;
+  FreeAndNil(FIconCache);
   if Assigned(FIconCfg) then
     FreeAndNil(FIconCfg);
 end;
@@ -237,10 +239,11 @@ begin
   end;
 end;
 
-function TfmExplorer.GetImageIndex_Std(const AFileName: string; var AIndex: integer): boolean;
+function TfmExplorer.GetImageIndex_Std(const AExt: string; var AIndex: integer
+  ): boolean;
 begin
   Result:= true;
-  case LowerCase(ExtractFileExt(AFileName)) of
+  case AExt of
     '.zip',
     '.rar',
     '.tar',
@@ -312,38 +315,37 @@ function TfmExplorer.GetImageIndex(const AFileName: string; AIsDir: boolean): in
 var
   SLexer: string;
   fnIcon: string;
+  ext: string;
   i: integer;
 begin
   Result:= -1;
   if not Assigned(OnGetLexer) then exit;
   InitIconConfig;
 
-  Result:= FIconIndexDefault;
   if AIsDir then
     exit(FIconIndexDir);
-  if GetImageIndex_Std(AFileName, Result) then exit;
+  Result:= FIconIndexDefault;
+
+  ext:= LowerCase(ExtractFileExt(AFileName));
+  if GetImageIndex_Std(ext, Result) then exit;
+
+  //cache holds extensions, not lexer names! much faster
+  if FIconCache.Find(ext, i) then
+  begin
+    Result:= integer(PtrInt(FIconCache.Objects[i]));
+    exit;
+  end;
 
   SLexer:= OnGetLexer(AFileName);
   if SLexer='' then exit;
-
-  for i:= 0 to High(FIconCache) do
-    with FIconCache[i] do
-      if SavedLexer=SLexer then
-        exit(SavedIndex);
 
   fnIcon:= FIconCfg.GetValue(SLexer, '');
   if fnIcon='' then exit;
 
   Result:= GetImageIndexFromPng(fnIcon);
+  FIconCache.AddObject(ext, TObject(PtrInt(Result)));
 
-  SetLength(FIconCache, Length(FIconCache)+1);
-  with FIconCache[High(FIconCache)] do
-  begin
-    SavedLexer:= SLexer;
-    SavedIndex:= Result;
-  end;
-
-  //Showmessage('load ico: '+SLexer);
+  //ShowMessage('load ico: '+SLexer);
 end;
 
 function TfmExplorer.GetImageIndexFromPng(const AFilename: string): integer;
