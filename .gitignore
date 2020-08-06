@@ -1,4 +1,6 @@
+lib/
 *.lps
 *.exe
-lib/
+*.dbg
+*.res
 project1
