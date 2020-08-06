@@ -51,6 +51,7 @@ type
     function GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
     function GetImageIndexFromPng(const AFilename: string): integer;
     function GetImageIndex_Std(const AFileName: string; var AIndex: integer): boolean;
+    procedure InitIconConfig;
     function PrettyDirName(const S: string): string;
     procedure FillTreeForFolder(const AFolder: string; ANode: TTreeNode);
     procedure SetFolder(const AValue: string);
@@ -281,16 +282,10 @@ begin
   end;
 end;
 
-function TfmExplorer.GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
+procedure TfmExplorer.InitIconConfig;
 var
-  SLexer: string;
   fnConfig: string;
-  fnIcon: string;
-  i: integer;
 begin
-  Result:= -1;
-  if not Assigned(OnGetLexer) then exit;
-
   if not Assigned(FIconCfg) then
   begin
     fnConfig:= FIconDir+DirectorySeparator+'icons.json';
@@ -311,6 +306,17 @@ begin
     FIconIndexPic:= GetImageIndexFromPng(FIconNamePic);
     FIconIndexBin:= GetImageIndexFromPng(FIconNameBin);
   end;
+end;
+
+function TfmExplorer.GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
+var
+  SLexer: string;
+  fnIcon: string;
+  i: integer;
+begin
+  Result:= -1;
+  if not Assigned(OnGetLexer) then exit;
+  InitIconConfig;
 
   Result:= FIconIndexDefault;
   if AIsDir then
