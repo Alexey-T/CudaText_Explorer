@@ -291,7 +291,10 @@ begin
     '.so',
     '.dylib',
     '.dbg',
-    '.chm':
+    '.chm',
+    '.pyc',
+    '.o',
+    '.a':
       exit(FIconIndexBin);
     '.log',
     '.txt':
