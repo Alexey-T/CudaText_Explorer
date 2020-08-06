@@ -270,7 +270,7 @@ begin
   if AIsDir then
     exit(FIconIndexDir);
 
-  case ExtractFileExt(AFileName) of
+  case LowerCase(ExtractFileExt(AFileName)) of
     '.zip',
     '.rar',
     '.tar',
@@ -294,7 +294,15 @@ begin
     '.chm',
     '.pyc',
     '.o',
-    '.a':
+    '.a',
+    '.mp3',
+    '.mp4',
+    '.avi',
+    '.mov',
+    '.mpeg',
+    '.ogg',
+    '.flac',
+    '.webm':
       exit(FIconIndexBin);
     '.log',
     '.txt':
