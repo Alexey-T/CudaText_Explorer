@@ -9,6 +9,7 @@
     "_bad": "icon_bad.png",
     "_audio": "file_type_audio.png",
     "_video": "file_type_video.png",
+    "_pdf": "file_type_pdf.png",
     "ActionScript": "file_type_actionscript.png",
     "Apache config": "file_type_apache.png",
     "Apache Hive": "file_type_apache.png",

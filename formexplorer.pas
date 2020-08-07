@@ -153,6 +153,7 @@ begin
   AddLex('sh', 'Bash script');
   AddLex('bat', 'Batch files');
   AddLex('cmd', 'Batch files');
+  AddLex('log', 'Log files');
   AddLex('md', 'Markdown');
   AddLex('xml', 'XML');
   AddLex('php', 'PHP');
@@ -480,7 +481,6 @@ procedure TfmExplorer.InitUsualExtensions;
   end;
   //
 begin
-  AddExt('log', FIconIndexDefault);
   AddExt('txt', FIconIndexDefault);
   AddExt('csv', FIconIndexDefault);
 
@@ -493,6 +493,7 @@ begin
   AddExt('deb', FIconIndexZip);
   AddExt('rpm', FIconIndexZip);
   AddExt('iso', FIconIndexZip);
+  AddExt('jar', FIconIndexZip);
 
   AddExt('png', FIconIndexPic);
   AddExt('gif', FIconIndexPic);
@@ -519,6 +520,9 @@ begin
   AddExt('xlsx', FIconIndexBin);
   AddExt('ppt', FIconIndexBin);
   AddExt('pptx', FIconIndexBin);
+  AddExt('fnt', FIconIndexBin);
+  AddExt('ttf', FIconIndexBin);
+  AddExt('otf', FIconIndexBin);
 
   AddExt('wav', FIconIndexAudio);
   AddExt('mp3', FIconIndexAudio);
