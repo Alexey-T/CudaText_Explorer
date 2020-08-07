@@ -205,6 +205,7 @@ begin
   AddLex('pptx', 'PowerPoint');
   AddLex('po', 'PO');
   AddLex('fnt', 'Font');
+  AddLex('fon', 'Font');
   AddLex('ttf', 'Font');
   AddLex('otf', 'Font');
 end;
@@ -501,11 +502,16 @@ begin
   AddExt('tar', FIconIndexZip);
   AddExt('xz', FIconIndexZip);
   AddExt('gz', FIconIndexZip);
+  AddExt('z', FIconIndexZip);
   AddExt('7z', FIconIndexZip);
   AddExt('deb', FIconIndexZip);
+  AddExt('pkg', FIconIndexZip);
   AddExt('rpm', FIconIndexZip);
   AddExt('iso', FIconIndexZip);
   AddExt('jar', FIconIndexZip);
+  AddExt('arj', FIconIndexZip);
+  AddExt('dmg', FIconIndexZip);
+  AddExt('vcd', FIconIndexZip);
 
   AddExt('png', FIconIndexPic);
   AddExt('gif', FIconIndexPic);
@@ -514,6 +520,10 @@ begin
   AddExt('jpeg', FIconIndexPic);
   AddExt('svg', FIconIndexPic);
   AddExt('ico', FIconIndexPic);
+  AddExt('ai', FIconIndexPic);
+  AddExt('psd', FIconIndexPic);
+  AddExt('tif', FIconIndexPic);
+  AddExt('tiff', FIconIndexPic);
 
   AddExt('exe', FIconIndexBin);
   AddExt('dll', FIconIndexBin);
@@ -525,11 +535,24 @@ begin
   AddExt('pyc', FIconIndexBin);
   AddExt('o', FIconIndexBin);
   AddExt('a', FIconIndexBin);
+  AddExt('db', FIconIndexBin);
+  AddExt('dbf', FIconIndexBin);
+  AddExt('mdb', FIconIndexBin);
+  AddExt('apk', FIconIndexBin);
+  AddExt('bin', FIconIndexBin);
+  AddExt('msi', FIconIndexBin);
 
   AddExt('wav', FIconIndexAudio);
   AddExt('mp3', FIconIndexAudio);
+  AddExt('mpa', FIconIndexAudio);
   AddExt('ogg', FIconIndexAudio);
   AddExt('flac', FIconIndexAudio);
+  AddExt('wma', FIconIndexAudio);
+  AddExt('wpl', FIconIndexAudio);
+  AddExt('aif', FIconIndexAudio);
+  AddExt('cda', FIconIndexAudio);
+  AddExt('mid', FIconIndexAudio);
+  AddExt('midi', FIconIndexAudio);
 
   AddExt('mp4', FIconIndexVideo);
   AddExt('m4a', FIconIndexVideo);
