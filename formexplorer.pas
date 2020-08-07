@@ -59,10 +59,11 @@ type
     ListExt: TStringList;
     ListLexer: TStringList;
     ListExtToLexer: TStringList;
-    procedure HandleClick(ADouble: boolean);
     procedure InitCommonLexers;
     procedure InitUsualExtensions;
     procedure InitIconConfig;
+    procedure HandleClick(ADouble: boolean);
+    procedure ReadFolder(const AFolder: string; List: TStringList; out ACountHidden: integer);
     function GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
     function GetImageIndexFromPng(const AFilename: string): integer;
     function PrettyDirName(const S: string): string;
@@ -300,12 +301,37 @@ begin
     Result:= AnsiCompareText(s1, s2);
 end;
 
-procedure TfmExplorer.FillTreeForFolder(const AFolder: string; ANode: TTreeNode);
+procedure TfmExplorer.ReadFolder(const AFolder: string; List: TStringList; out ACountHidden: integer);
 const
-  StrAllFiles = {$ifdef windows} '*.*' {$else} '*' {$endif};
+  MaskAll = {$ifdef windows} '*.*' {$else} '*' {$endif};
+var
+  Rec: TSearchRec;
+  bDir: boolean;
+  S: string;
+begin
+  ACountHidden:= 0;
+  if FindFirst(AFolder+DirectorySeparator+MaskAll, faAnyFile, Rec)=0 then
+  begin
+    repeat
+      S:= Rec.Name;
+      if (S='.') or (S='..') then Continue;
+      if (S[1]='.') then
+      begin
+        Inc(ACountHidden);
+        if not ExplorerOptions.ShowDotNames then
+          Continue;
+      end;
+
+      bDir:= (Rec.Attr and faDirectory)<>0;
+      List.AddObject(S, TObject(PtrInt(bDir)));
+    until FindNext(Rec)<>0;
+    FindClose(Rec);
+  end;
+end;
+
+procedure TfmExplorer.FillTreeForFolder(const AFolder: string; ANode: TTreeNode);
 var
   Node: TTreeNode;
-  Rec: TSearchRec;
   List: TStringList;
   bDir: boolean;
   Data: TExplorerTreeData;
@@ -321,21 +347,7 @@ begin
   CountHidden:= 0;
   List:= TStringList.Create;
   try
-    if FindFirst(AFolder+DirectorySeparator+StrAllFiles, faAnyFile, Rec)=0 then
-      repeat
-        S:= Rec.Name;
-        if (S='.') or (S='..') then Continue;
-        if (S[1]='.') then
-          if not ExplorerOptions.ShowDotNames then
-          begin
-            Inc(CountHidden);
-            Continue;
-          end;
-
-        bDir:= (Rec.Attr and faDirectory)<>0;
-        List.AddObject(S, TObject(PtrInt(bDir)));
-      until FindNext(Rec)<>0;
-    FindClose(Rec);
+    ReadFolder(AFolder, List, CountHidden);
 
     if List.Count=0 then
     begin
