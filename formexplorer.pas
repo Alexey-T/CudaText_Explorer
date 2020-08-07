@@ -330,8 +330,13 @@ begin
   begin
     dot1:= s1[1]='.';
     dot2:= s2[1]='.';
+
     if dot1<>dot2 then
       exit(ord(dot2)-ord(dot1));
+
+    //compare dot-names w/o extensions (like VSCode)
+    if dot1 then
+      exit(CompareText(s1, s2));
   end;
 
   ext1:= ExtractFileExt(s1);
