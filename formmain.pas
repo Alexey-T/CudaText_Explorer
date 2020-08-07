@@ -14,6 +14,7 @@ type
 
   TfmMain = class(TForm)
     Button1: TButton;
+    chkShowRoot: TCheckBox;
     chkShowDotNames: TCheckBox;
     Panel1: TPanel;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
@@ -21,6 +22,7 @@ type
     StatusBar1: TStatusBar;
     procedure Button1Click(Sender: TObject);
     procedure chkShowDotNamesChange(Sender: TObject);
+    procedure chkShowRootChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
     exp: TfmExplorer;
@@ -82,6 +84,12 @@ end;
 procedure TfmMain.chkShowDotNamesChange(Sender: TObject);
 begin
   ExplorerOptions.ShowDotNames:= chkShowDotNames.Checked;
+  exp.Folder:= exp.Folder;
+end;
+
+procedure TfmMain.chkShowRootChange(Sender: TObject);
+begin
+  ExplorerOptions.ShowRootNode:= chkShowRoot.Checked;
   exp.Folder:= exp.Folder;
 end;
 

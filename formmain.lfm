@@ -51,8 +51,19 @@ object fmMain: TfmMain
     OnChange = chkShowDotNamesChange
     TabOrder = 4
   end
+  object chkShowRoot: TCheckBox
+    Left = 325
+    Height = 23
+    Top = 136
+    Width = 131
+    Caption = 'Show root node'
+    Checked = True
+    OnChange = chkShowRootChange
+    State = cbChecked
+    TabOrder = 5
+  end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
-    Left = 330
+    Left = 232
     Top = 91
   end
 end

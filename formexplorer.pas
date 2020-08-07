@@ -11,6 +11,7 @@ uses
 type
   TExplorerOptions = record
     IconDir: string;
+    ShowRootNode: boolean;
     ShowDotNames: boolean;
     ShowDotNamesFirst: boolean;
     ShowFolderBrackets: boolean;
@@ -99,7 +100,6 @@ begin
   Tree.ShowRoot:= false;
   Tree.ReadOnly:= true;
   Tree.RowSelect:= true;
-  //Tree.HotTrack:= true;
 
   ListExt:= TStringList.Create;
   ListExt.Sorted:= true;
@@ -270,16 +270,32 @@ begin
 end;
 
 procedure TfmExplorer.SetFolder(const AValue: string);
+var
+  RootNode: TTreeNode;
 begin
-  //if FFolder=AValue then Exit; //allow to re-read dir
   FFolder:= AValue;
 
   Tree.Items.Clear;
+  if FFolder='' then exit;
+  if not DirectoryExists(FFolder) then exit;
 
-  if (FFolder='') or not DirectoryExists(FFolder) then
-    exit;
+  InitIconConfig;
 
-  FillTreeForFolder(FFolder, nil);
+  Tree.ShowRoot:= not ExplorerOptions.ShowRootNode;
+
+  if ExplorerOptions.ShowRootNode then
+  begin
+    RootNode:= Tree.Items.Add(nil, PrettyDirName(ExtractFileName(FFolder)));
+    RootNode.ImageIndex:= FIconIndexDir;
+    RootNode.SelectedIndex:= FIconIndexDir;
+  end
+  else
+    RootNode:= nil;
+
+  FillTreeForFolder(FFolder, RootNode);
+
+  if Assigned(RootNode) then
+    RootNode.Expand(false);
 end;
 
 function _CompareFilenames(L: TStringList; Index1, Index2: integer): integer;
@@ -494,8 +510,6 @@ var
   ext: string;
   N: integer;
 begin
-  InitIconConfig;
-
   if AIsDir then
     exit(FIconIndexDir);
   Result:= FIconIndexDefault;
@@ -555,6 +569,7 @@ initialization
 
   with ExplorerOptions do
   begin
+    ShowRootNode:= true;
     ShowDotNames:= false;
     ShowDotNamesFirst:= true;
     ShowFolderBrackets:= true;
