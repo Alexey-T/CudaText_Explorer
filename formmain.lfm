@@ -2,79 +2,133 @@ object fmMain: TfmMain
   Left = 156
   Height = 547
   Top = 154
-  Width = 549
+  Width = 671
   Caption = 'Explorer test'
   ClientHeight = 547
-  ClientWidth = 549
+  ClientWidth = 671
   OnCreate = FormCreate
   Position = poScreenCenter
   LCLVersion = '2.1.0.0'
-  object Panel1: TPanel
+  object PanelLeft: TPanel
     Left = 0
-    Height = 529
+    Height = 527
     Top = 0
-    Width = 314
-    Align = alLeft
+    Width = 380
+    Align = alClient
     BevelOuter = bvNone
-    Caption = 'Panel1'
+    Caption = 'Explorer'
     TabOrder = 0
   end
   object Splitter1: TSplitter
-    Left = 314
-    Height = 529
+    Left = 380
+    Height = 527
     Top = 0
     Width = 5
-  end
-  object Button1: TButton
-    Left = 324
-    Height = 33
-    Top = 46
-    Width = 71
-    AutoSize = True
-    Caption = 'Folder...'
-    OnClick = Button1Click
-    TabOrder = 2
+    Align = alRight
+    ResizeAnchor = akRight
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 18
-    Top = 529
-    Width = 549
+    Height = 20
+    Top = 527
+    Width = 671
     Panels = <>
   end
-  object chkShowDotNames: TCheckBox
-    Left = 324
-    Height = 23
-    Top = 164
-    Width = 135
-    Caption = 'Show dot-names'
-    OnChange = chkShowDotNamesChange
-    TabOrder = 4
-  end
-  object chkShowRoot: TCheckBox
-    Left = 324
-    Height = 23
-    Top = 136
-    Width = 131
-    Caption = 'Show root node'
-    Checked = True
-    OnChange = chkShowRootChange
-    State = cbChecked
-    TabOrder = 5
-  end
-  object chkShowIcons: TCheckBox
-    Left = 324
-    Height = 23
-    Top = 190
-    Width = 99
-    Caption = 'Show icons'
-    Checked = True
-    OnChange = chkShowIconsChange
-    State = cbChecked
-    TabOrder = 6
+  object PanelRt: TPanel
+    Left = 385
+    Height = 527
+    Top = 0
+    Width = 286
+    Align = alRight
+    BevelOuter = bvNone
+    ClientHeight = 527
+    ClientWidth = 286
+    TabOrder = 3
+    object ListBox1: TListBox
+      Left = 0
+      Height = 360
+      Top = 8
+      Width = 176
+      ItemHeight = 0
+      ScrollWidth = 174
+      TabOrder = 0
+      TopIndex = -1
+    end
+    object BtnFolder: TButton
+      Left = 184
+      Height = 29
+      Top = 8
+      Width = 67
+      AutoSize = True
+      Caption = 'Folder...'
+      OnClick = BtnFolderClick
+      TabOrder = 1
+    end
+    object BtnAdd: TButton
+      Left = 184
+      Height = 29
+      Top = 64
+      Width = 66
+      AutoSize = True
+      Caption = 'Add tab'
+      OnClick = BtnAddClick
+      TabOrder = 2
+    end
+    object BtnClose: TButton
+      Left = 184
+      Height = 29
+      Top = 104
+      Width = 75
+      AutoSize = True
+      Caption = 'Close tab'
+      OnClick = BtnCloseClick
+      TabOrder = 3
+    end
+    object Panel2: TPanel
+      Left = 0
+      Height = 107
+      Top = 420
+      Width = 286
+      Align = alBottom
+      BevelOuter = bvNone
+      ClientHeight = 107
+      ClientWidth = 286
+      TabOrder = 4
+      object chkShowRoot: TCheckBox
+        Left = 8
+        Height = 24
+        Top = 56
+        Width = 131
+        Caption = 'Show root node'
+        Checked = True
+        OnChange = chkShowRootChange
+        State = cbChecked
+        TabOrder = 0
+      end
+      object chkShowDotNames: TCheckBox
+        Left = 8
+        Height = 24
+        Top = 32
+        Width = 135
+        Caption = 'Show dot-names'
+        OnChange = chkShowDotNamesChange
+        TabOrder = 1
+      end
+      object chkShowIcons: TCheckBox
+        Left = 8
+        Height = 24
+        Top = 8
+        Width = 99
+        Caption = 'Show icons'
+        Checked = True
+        OnChange = chkShowIconsChange
+        State = cbChecked
+        TabOrder = 2
+      end
+    end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
-    Left = 232
-    Top = 91
+    Left = 224
+    Top = 432
   end
 end

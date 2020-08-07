@@ -6,22 +6,29 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
-  ComCtrls, formexplorer;
+  ComCtrls, Math, formexplorer;
 
 type
 
   { TfmMain }
 
   TfmMain = class(TForm)
-    Button1: TButton;
+    BtnAdd: TButton;
+    BtnClose: TButton;
+    BtnFolder: TButton;
+    chkShowDotNames: TCheckBox;
     chkShowIcons: TCheckBox;
     chkShowRoot: TCheckBox;
-    chkShowDotNames: TCheckBox;
-    Panel1: TPanel;
+    ListBox1: TListBox;
+    PanelLeft: TPanel;
+    Panel2: TPanel;
+    PanelRt: TPanel;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     Splitter1: TSplitter;
     StatusBar1: TStatusBar;
-    procedure Button1Click(Sender: TObject);
+    procedure BtnAddClick(Sender: TObject);
+    procedure BtnCloseClick(Sender: TObject);
+    procedure BtnFolderClick(Sender: TObject);
     procedure chkShowDotNamesChange(Sender: TObject);
     procedure chkShowIconsChange(Sender: TObject);
     procedure chkShowRootChange(Sender: TObject);
@@ -49,7 +56,7 @@ uses
 procedure TfmMain.FormCreate(Sender: TObject);
 begin
   exp:= TfmExplorer.Create(Self);
-  exp.Parent:= Panel1;
+  exp.Parent:= PanelLeft;
   exp.Align:= alClient;
   exp.Show;
 
@@ -77,10 +84,29 @@ begin
   StatusBar1.SimpleText:= '"'+fn+'", '+sKind[Kind];
 end;
 
-procedure TfmMain.Button1Click(Sender: TObject);
+procedure TfmMain.BtnFolderClick(Sender: TObject);
 begin
   if SelectDirectoryDialog1.Execute then
     exp.Folder:= SelectDirectoryDialog1.FileName;
+end;
+
+procedure TfmMain.BtnAddClick(Sender: TObject);
+begin
+  Listbox1.Items.Add('Tab '+FormatDateTime('hh:ss', Now));
+  Listbox1.ItemIndex:= Listbox1.Items.Count-1;
+end;
+
+procedure TfmMain.BtnCloseClick(Sender: TObject);
+var
+  N: integer;
+begin
+  with Listbox1 do
+    if ItemIndex>=0 then
+    begin
+      N:= ItemIndex;
+      Items.Delete(ItemIndex);
+      ItemIndex:= Min(N, Items.Count-1);
+    end;
 end;
 
 procedure TfmMain.chkShowDotNamesChange(Sender: TObject);
