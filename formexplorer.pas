@@ -373,10 +373,8 @@ var
   SLexer: string;
   fnIcon: string;
   ext: string;
-  i: integer;
+  N: integer;
 begin
-  Result:= -1;
-  if not Assigned(OnGetLexer) then exit;
   InitIconConfig;
 
   if AIsDir then
@@ -388,18 +386,19 @@ begin
     Delete(ext, 1, 1);
 
   //read cache for extensions
-  if ListExt.Find(ext, i) then
-    exit(PtrInt(ListExt.Objects[i]));
+  if ListExt.Find(ext, N) then
+    exit(PtrInt(ListExt.Objects[N]));
 
-  if ListExtToLexer.Find(ext, i) then
-    SLexer:= TExplorerStringDataItem(ListExtToLexer.Objects[i]).Str
+  if ListExtToLexer.Find(ext, N) then
+    SLexer:= TExplorerStringDataItem(ListExtToLexer.Objects[N]).Str
   else
+  if Assigned(OnGetLexer) then
     SLexer:= OnGetLexer(AFileName);
   if SLexer='' then exit;
 
   //read cache for lexers
-  if ListLexer.Find(SLexer, i) then
-    exit(PtrInt(ListLexer.Objects[i]));
+  if ListLexer.Find(SLexer, N) then
+    exit(PtrInt(ListLexer.Objects[N]));
 
   fnIcon:= FIconCfg.GetValue(SLexer, '');
   if fnIcon='' then exit;
