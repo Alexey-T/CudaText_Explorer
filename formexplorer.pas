@@ -57,11 +57,7 @@ type
     FIconCfg: TJSONConfig;
     FIconIndexDefault: integer;
     FIconIndexDir: integer;
-    FIconIndexZip: integer;
     FIconIndexPic: integer;
-    FIconIndexBin: integer;
-    FIconIndexAudio: integer;
-    FIconIndexVideo: integer;
     ListExt: TStringList;
     ListLexer: TStringList;
     ListExtToLexer: TStringList;
@@ -197,6 +193,8 @@ begin
   AddLex('cmake', 'CMake');
   AddLex('ps1', 'PowerShell');
   AddLex('d', 'D');
+  AddLex('po', 'PO');
+
   AddLex('pdf', 'PDF');
   AddLex('doc', 'Word');
   AddLex('docx', 'Word');
@@ -204,11 +202,69 @@ begin
   AddLex('xlsx', 'Excel');
   AddLex('ppt', 'PowerPoint');
   AddLex('pptx', 'PowerPoint');
-  AddLex('po', 'PO');
-  AddLex('fnt', 'Font');
-  AddLex('fon', 'Font');
-  AddLex('ttf', 'Font');
-  AddLex('otf', 'Font');
+
+  AddLex('zip', '_zip');
+  AddLex('rar', '_zip');
+  AddLex('tar', '_zip');
+  AddLex('xz', '_zip');
+  AddLex('gz', '_zip');
+  AddLex('z', '_zip');
+  AddLex('7z', '_zip');
+  AddLex('deb', '_zip');
+  AddLex('pkg', '_zip');
+  AddLex('rpm', '_zip');
+  AddLex('iso', '_zip');
+  AddLex('jar', '_zip');
+  AddLex('arj', '_zip');
+  AddLex('dmg', '_zip');
+  AddLex('vcd', '_zip');
+
+  AddLex('exe', '_bin');
+  AddLex('dll', '_bin');
+  AddLex('so', '_bin');
+  AddLex('ocx', '_bin');
+  AddLex('dbg', '_bin');
+  AddLex('chm', '_bin');
+  AddLex('pyc', '_bin');
+  AddLex('o', '_bin');
+  AddLex('a', '_bin');
+  AddLex('db', '_bin');
+  AddLex('dbf', '_bin');
+  AddLex('mdb', '_bin');
+  AddLex('apk', '_bin');
+  AddLex('dat', '_bin');
+  AddLex('bin', '_bin');
+  AddLex('msi', '_bin');
+
+  AddLex('wav', '_audio');
+  AddLex('mp3', '_audio');
+  AddLex('mpa', '_audio');
+  AddLex('ogg', '_audio');
+  AddLex('flac', '_audio');
+  AddLex('wma', '_audio');
+  AddLex('wpl', '_audio');
+  AddLex('aif', '_audio');
+  AddLex('cda', '_audio');
+  AddLex('mid', '_audio');
+  AddLex('midi', '_audio');
+  AddLex('mka', '_audio');
+  AddLex('s3m', '_audio');
+  AddLex('xm', '_audio');
+  AddLex('it', '_audio');
+
+  AddLex('mp4', '_video');
+  AddLex('m4a', '_video');
+  AddLex('mpg', '_video');
+  AddLex('mpeg', '_video');
+  AddLex('avi', '_video');
+  AddLex('mov', '_video');
+  AddLex('webm', '_video');
+  AddLex('mkv', '_video');
+
+  AddLex('fnt', '_font');
+  AddLex('fon', '_font');
+  AddLex('ttf', '_font');
+  AddLex('otf', '_font');
 end;
 
 procedure TfmExplorer.HandleClick(ADouble: boolean);
@@ -460,7 +516,7 @@ end;
 procedure TfmExplorer.InitIconConfig;
 var
   fnConfig: string;
-  fnDefault, fnDir, fnZip, fnPic, fnBin, fnAudio, fnVideo: string;
+  fnDefault, fnDir, fnPic: string;
 begin
   if not Assigned(FIconCfg) then
   begin
@@ -472,19 +528,11 @@ begin
 
     fnDefault:= FIconCfg.GetValue('_', '');
     fnDir:= FIconCfg.GetValue('_dir', '');
-    fnZip:= FIconCfg.GetValue('_zip', '');
     fnPic:= FIconCfg.GetValue('_img', '');
-    fnBin:= FIconCfg.GetValue('_bin', '');
-    fnAudio:= FIconCfg.GetValue('_audio', '');
-    fnVideo:= FIconCfg.GetValue('_video', '');
 
     FIconIndexDefault:= GetImageIndexFromPng(fnDefault);
     FIconIndexDir:= GetImageIndexFromPng(fnDir);
-    FIconIndexZip:= GetImageIndexFromPng(fnZip);
     FIconIndexPic:= GetImageIndexFromPng(fnPic);
-    FIconIndexBin:= GetImageIndexFromPng(fnBin);
-    FIconIndexAudio:= GetImageIndexFromPng(fnAudio);
-    FIconIndexVideo:= GetImageIndexFromPng(fnVideo);
 
     InitUsualExtensions;
   end;
@@ -501,22 +549,6 @@ begin
   AddExt('txt', FIconIndexDefault);
   AddExt('csv', FIconIndexDefault);
 
-  AddExt('zip', FIconIndexZip);
-  AddExt('rar', FIconIndexZip);
-  AddExt('tar', FIconIndexZip);
-  AddExt('xz', FIconIndexZip);
-  AddExt('gz', FIconIndexZip);
-  AddExt('z', FIconIndexZip);
-  AddExt('7z', FIconIndexZip);
-  AddExt('deb', FIconIndexZip);
-  AddExt('pkg', FIconIndexZip);
-  AddExt('rpm', FIconIndexZip);
-  AddExt('iso', FIconIndexZip);
-  AddExt('jar', FIconIndexZip);
-  AddExt('arj', FIconIndexZip);
-  AddExt('dmg', FIconIndexZip);
-  AddExt('vcd', FIconIndexZip);
-
   AddExt('png', FIconIndexPic);
   AddExt('gif', FIconIndexPic);
   AddExt('bmp', FIconIndexPic);
@@ -528,45 +560,6 @@ begin
   AddExt('psd', FIconIndexPic);
   AddExt('tif', FIconIndexPic);
   AddExt('tiff', FIconIndexPic);
-
-  AddExt('exe', FIconIndexBin);
-  AddExt('dll', FIconIndexBin);
-  AddExt('so', FIconIndexBin);
-  AddExt('ocx', FIconIndexBin);
-  AddExt('dbg', FIconIndexBin);
-  AddExt('chm', FIconIndexBin);
-  AddExt('pyc', FIconIndexBin);
-  AddExt('o', FIconIndexBin);
-  AddExt('a', FIconIndexBin);
-  AddExt('db', FIconIndexBin);
-  AddExt('dbf', FIconIndexBin);
-  AddExt('mdb', FIconIndexBin);
-  AddExt('apk', FIconIndexBin);
-  AddExt('dat', FIconIndexBin);
-  AddExt('bin', FIconIndexBin);
-  AddExt('msi', FIconIndexBin);
-
-  AddExt('wav', FIconIndexAudio);
-  AddExt('mp3', FIconIndexAudio);
-  AddExt('mpa', FIconIndexAudio);
-  AddExt('ogg', FIconIndexAudio);
-  AddExt('flac', FIconIndexAudio);
-  AddExt('wma', FIconIndexAudio);
-  AddExt('wpl', FIconIndexAudio);
-  AddExt('aif', FIconIndexAudio);
-  AddExt('cda', FIconIndexAudio);
-  AddExt('mid', FIconIndexAudio);
-  AddExt('midi', FIconIndexAudio);
-  AddExt('mka', FIconIndexAudio);
-
-  AddExt('mp4', FIconIndexVideo);
-  AddExt('m4a', FIconIndexVideo);
-  AddExt('mpg', FIconIndexVideo);
-  AddExt('mpeg', FIconIndexVideo);
-  AddExt('avi', FIconIndexVideo);
-  AddExt('mov', FIconIndexVideo);
-  AddExt('webm', FIconIndexVideo);
-  AddExt('mkv', FIconIndexVideo);
 end;
 
 function TfmExplorer.GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
