@@ -13,7 +13,8 @@ type
     IconDir: string;
     ShowDotNames: boolean;
     ShowFolderBrackets: boolean;
-    EmptyDirText: string;
+    TextEmpty: string;
+    TextEmptyWithHidden: string;
   end;
 
 var
@@ -308,6 +309,7 @@ var
   List: TStringList;
   bDir: boolean;
   Data: TExplorerTreeData;
+  CountHidden: integer;
   S: string;
   i: integer;
 begin
@@ -316,6 +318,7 @@ begin
   else
     Tree.Items.Clear;
 
+  CountHidden:= 0;
   List:= TStringList.Create;
   try
     if FindFirst(AFolder+DirectorySeparator+StrAllFiles, faAnyFile, Rec)=0 then
@@ -323,7 +326,11 @@ begin
         S:= Rec.Name;
         if (S='.') or (S='..') then Continue;
         if (S[1]='.') then
-          if not ExplorerOptions.ShowDotNames then Continue;
+          if not ExplorerOptions.ShowDotNames then
+          begin
+            Inc(CountHidden);
+            Continue;
+          end;
 
         bDir:= (Rec.Attr and faDirectory)<>0;
         List.AddObject(S, TObject(PtrInt(bDir)));
@@ -332,7 +339,11 @@ begin
 
     if List.Count=0 then
     begin
-      Node:= Tree.Items.AddChild(ANode, ExplorerOptions.EmptyDirText);
+      if CountHidden=0 then
+        S:= ExplorerOptions.TextEmpty
+      else
+        S:= Format(ExplorerOptions.TextEmptyWithHidden, [CountHidden]);
+      Node:= Tree.Items.AddChild(ANode, S);
       exit;
     end;
 
@@ -465,6 +476,9 @@ begin
     exit(FIconIndexDir);
   Result:= FIconIndexDefault;
 
+  //show dot-names with default icon
+  if AFileName[1]='.' then exit;
+
   ext:= LowerCase(ExtractFileExt(AFileName));
   if ext<>'' then
     Delete(ext, 1, 1);
@@ -519,7 +533,8 @@ initialization
   begin
     ShowDotNames:= false;
     ShowFolderBrackets:= true;
-    EmptyDirText:= '(Empty)';
+    TextEmpty:= '(Empty)';
+    TextEmptyWithHidden:= '(Empty, %d hidden item(s))';
   end;
 
 end.
