@@ -642,7 +642,7 @@ initialization
     ShowFolderBrackets:= true;
     ShowIcons:= true;
     ShowNodeForEmpty:= false;
-    FoldDirsByClick:= false;//true;
+    FoldDirsByClick:= true;
     TextEmpty:= '(Empty)';
     TextEmptyWithHidden:= '(Empty, %d hidden item(s))';
   end;
