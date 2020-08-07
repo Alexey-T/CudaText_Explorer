@@ -13,6 +13,7 @@ type
     IconDir: string;
     ShowDotNames: boolean;
     ShowFolderBrackets: boolean;
+    EmptyDirText: string;
   end;
 
 var
@@ -329,6 +330,12 @@ begin
       until FindNext(Rec)<>0;
     FindClose(Rec);
 
+    if List.Count=0 then
+    begin
+      Node:= Tree.Items.AddChild(ANode, ExplorerOptions.EmptyDirText);
+      exit;
+    end;
+
     List.CustomSort(@_CompareFilenames);
 
     for i:= 0 to List.Count-1 do
@@ -512,6 +519,7 @@ initialization
   begin
     ShowDotNames:= false;
     ShowFolderBrackets:= true;
+    EmptyDirText:= '(Empty)';
   end;
 
 end.
