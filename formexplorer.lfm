@@ -1,7 +1,7 @@
 object fmExplorer: TfmExplorer
-  Left = 1530
+  Left = 1041
   Height = 573
-  Top = 185
+  Top = 158
   Width = 325
   Caption = 'fmExplorer'
   ClientHeight = 573

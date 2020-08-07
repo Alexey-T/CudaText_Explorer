@@ -1,16 +1,17 @@
 object fmMain: TfmMain
-  Left = 1620
+  Left = 156
   Height = 547
-  Top = 204
+  Top = 154
   Width = 549
   Caption = 'Explorer test'
   ClientHeight = 547
   ClientWidth = 549
   OnCreate = FormCreate
+  Position = poScreenCenter
   LCLVersion = '2.1.0.0'
   object Panel1: TPanel
     Left = 0
-    Height = 527
+    Height = 529
     Top = 0
     Width = 314
     Align = alLeft
@@ -20,15 +21,15 @@ object fmMain: TfmMain
   end
   object Splitter1: TSplitter
     Left = 314
-    Height = 527
+    Height = 529
     Top = 0
     Width = 5
   end
   object Button1: TButton
     Left = 324
-    Height = 29
+    Height = 33
     Top = 46
-    Width = 67
+    Width = 71
     AutoSize = True
     Caption = 'Folder...'
     OnClick = Button1Click
@@ -36,8 +37,8 @@ object fmMain: TfmMain
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 20
-    Top = 527
+    Height = 18
+    Top = 529
     Width = 549
     Panels = <>
   end

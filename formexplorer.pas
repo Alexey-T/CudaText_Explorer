@@ -9,6 +9,15 @@ uses
   jsonConf;
 
 type
+  TExplorerOptions = record
+    ShowDotNames: boolean;
+    ShowFolderBrackets: boolean;
+  end;
+
+var
+  ExplorerOptions: TExplorerOptions;
+
+type
   TExplorerClickKind = (
     eckFileClick,
     eckFileDblClick,
@@ -37,7 +46,6 @@ type
   private
     FFolder: string;
     FIconDir: string;
-    FShowDotNames: boolean;
     FOnGetLexer: TExplorerOnGetLexer;
     FOnItemClick: TExplorerOnItemClick;
     FIconCfg: TJSONConfig;
@@ -60,7 +68,6 @@ type
     procedure SetFolder(const AValue: string);
   public
     property Folder: string read FFolder write SetFolder;
-    property ShowDotNames: boolean read FShowDotNames write FShowDotNames;
     property IconDir: string read FIconDir write FIconDir;
     property OnGetLexer: TExplorerOnGetLexer read FOnGetLexer write FOnGetLexer;
     property OnItemClick: TExplorerOnItemClick read FOnItemClick write FOnItemClick;
@@ -90,8 +97,6 @@ begin
   Tree.ReadOnly:= true;
   Tree.RowSelect:= true;
   //Tree.HotTrack:= true;
-
-  FShowDotNames:= false;
 
   ListExt:= TStringList.Create;
   ListExt.Sorted:= true;
@@ -255,7 +260,10 @@ end;
 
 function TfmExplorer.PrettyDirName(const S: string): string;
 begin
-  Result:= '['+S+']';
+  if ExplorerOptions.ShowFolderBrackets then
+    Result:= '['+S+']'
+  else
+    Result:= S;
 end;
 
 procedure TfmExplorer.SetFolder(const AValue: string);
@@ -314,7 +322,8 @@ begin
       repeat
         S:= Rec.Name;
         if (S='.') or (S='..') then Continue;
-        if (S[1]='.') and not FShowDotNames then Continue;
+        if (S[1]='.') then
+          if not ExplorerOptions.ShowDotNames then Continue;
 
         bDir:= (Rec.Attr and faDirectory)<>0;
         List.AddObject(S, TObject(PtrInt(bDir)));
@@ -495,6 +504,14 @@ begin
     FreeAndNil(Img);
   end;
 end;
+
+initialization
+
+  with ExplorerOptions do
+  begin
+    ShowDotNames:= false;
+    ShowFolderBrackets:= true;
+  end;
 
 end.
 
