@@ -73,6 +73,7 @@ type
     procedure FillTreeForFolder(const AFolder: string; ANode: TTreeNode);
     procedure SetFolder(const AValue: string);
   public
+    procedure Refresh;
     property Folder: string read FFolder write SetFolder;
     property OnGetLexer: TExplorerOnGetLexer read FOnGetLexer write FOnGetLexer;
     property OnItemClick: TExplorerOnItemClick read FOnItemClick write FOnItemClick;
@@ -302,6 +303,12 @@ begin
 
   if Assigned(RootNode) then
     RootNode.Expand(false);
+end;
+
+procedure TfmExplorer.Refresh;
+begin
+  if FFolder<>'' then
+    SetFolder(FFolder);
 end;
 
 function _CompareFilenames(L: TStringList; Index1, Index2: integer): integer;

@@ -86,19 +86,19 @@ end;
 procedure TfmMain.chkShowDotNamesChange(Sender: TObject);
 begin
   ExplorerOptions.ShowDotNames:= chkShowDotNames.Checked;
-  exp.Folder:= exp.Folder;
+  exp.Refresh;
 end;
 
 procedure TfmMain.chkShowIconsChange(Sender: TObject);
 begin
   ExplorerOptions.ShowIcons:= chkShowIcons.Checked;
-  exp.Folder:= exp.Folder;
+  exp.Refresh;
 end;
 
 procedure TfmMain.chkShowRootChange(Sender: TObject);
 begin
   ExplorerOptions.ShowRootNode:= chkShowRoot.Checked;
-  exp.Folder:= exp.Folder;
+  exp.Refresh;
 end;
 
 end.
