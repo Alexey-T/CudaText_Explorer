@@ -10,7 +10,15 @@ uses
 
 type
   TExplorerOnGetLexer = function(const AFileName: string): string of object;
-  TExplorerOnClick = procedure(const AFileName: string; ADblClick: boolean) of object;
+
+  TExplorerClickKind = (
+    eckFileClick,
+    eckFileDblClick,
+    eckFolderFold,
+    eckFolderUnfold
+    );
+
+  TExplorerOnClick = procedure(const AFileName: string; AKind: TExplorerClickKind) of object;
 
 type
   { TfmExplorer }
@@ -181,6 +189,7 @@ var
   P: TPoint;
   Node: TTreeNode;
   Data: TExplorerTreeData;
+  Kind: TExplorerClickKind;
 begin
   P:= Tree.ScreenToClient(Mouse.CursorPos);
   Node:= Tree.GetNodeAt(P.X, P.Y);
@@ -191,16 +200,26 @@ begin
       if Data.IsDir then
       begin
         if Node.Expanded then
-          Node.Collapse(false)
+        begin
+          Node.Collapse(false);
+          Kind:= eckFolderFold;
+        end
         else
+        begin
           Node.Expand(false);
-        if Assigned(FOnItemClick) then
-          FOnItemClick('', ADouble);
+          Kind:= eckFolderUnfold;
+        end;
       end
       else
-      if Assigned(FOnItemClick) then
-        FOnItemClick(Data.Path, ADouble);
+      begin
+        if ADouble then
+          Kind:= eckFileDblClick
+        else
+          Kind:= eckFileClick;
+      end;
     end;
+  if Assigned(FOnItemClick) then
+    FOnItemClick(Data.Path, Kind);
 end;
 
 procedure TfmExplorer.TreeClick(Sender: TObject);

@@ -23,7 +23,7 @@ type
   private
     fe: TfmExplorer;
     function ExplorerGetLexer(const fn: string): string;
-    procedure ExplorerClick(const fn: string; Dbl: boolean);
+    procedure ExplorerClick(const fn: string; Kind: TExplorerClickKind);
   public
 
   end;
@@ -61,15 +61,11 @@ begin
   end;
 end;
 
-procedure TfmMain.ExplorerClick(const fn: string; Dbl: boolean);
-var
-  s: string;
+procedure TfmMain.ExplorerClick(const fn: string; Kind: TExplorerClickKind);
+const
+  sKind: array[TExplorerClickKind] of string = ('click', 'dbl-click', 'fold', 'unfold');
 begin
-  if Dbl then
-    s:= '(dbl click)'
-  else
-    s:= '(click)';
-  StatusBar1.SimpleText:= s+' "'+fn+'"';
+  StatusBar1.SimpleText:= '"'+fn+'", '+sKind[Kind];
 end;
 
 procedure TfmMain.Button1Click(Sender: TObject);
