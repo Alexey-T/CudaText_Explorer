@@ -405,6 +405,9 @@ begin
   AddExt('xz', FIconIndexZip);
   AddExt('gz', FIconIndexZip);
   AddExt('7z', FIconIndexZip);
+  AddExt('deb', FIconIndexZip);
+  AddExt('rpm', FIconIndexZip);
+  AddExt('iso', FIconIndexZip);
 
   AddExt('png', FIconIndexPic);
   AddExt('gif', FIconIndexPic);
@@ -441,7 +444,6 @@ begin
   AddExt('xlsx', FIconIndexBin);
   AddExt('ppt', FIconIndexBin);
   AddExt('pptx', FIconIndexBin);
-  AddExt('iso', FIconIndexBin);
 end;
 
 function TfmExplorer.GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
