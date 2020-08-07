@@ -344,7 +344,6 @@ begin
   else
     Tree.Items.Clear;
 
-  CountHidden:= 0;
   List:= TStringList.Create;
   try
     ReadFolder(AFolder, List, CountHidden);
