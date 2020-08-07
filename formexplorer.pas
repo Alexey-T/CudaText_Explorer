@@ -31,11 +31,6 @@ type
     FShowDotNames: boolean;
     FOnGetLexer: TExplorerOnGetLexer;
     FIconCfg: TJSONConfig;
-    FIconNameDefault: string;
-    FIconNameDir: string;
-    FIconNameZip: string;
-    FIconNamePic: string;
-    FIconNameBin: string;
     FIconIndexDefault: integer;
     FIconIndexDir: integer;
     FIconIndexZip: integer;
@@ -298,6 +293,11 @@ procedure TfmExplorer.InitIconConfig;
   //
 var
   fnConfig: string;
+  fnDefault,
+  fnDir,
+  fnZip,
+  fnPic,
+  fnBin: string;
 begin
   if not Assigned(FIconCfg) then
   begin
@@ -307,17 +307,17 @@ begin
     FIconCfg:= TJSONConfig.Create(Self);
     FIconCfg.Filename:= fnConfig;
 
-    FIconNameDefault:= FIconCfg.GetValue('_', '');
-    FIconNameDir:= FIconCfg.GetValue('_dir', '');
-    FIconNameZip:= FIconCfg.GetValue('_zip', '');
-    FIconNamePic:= FIconCfg.GetValue('_img', '');
-    FIconNameBin:= FIconCfg.GetValue('_bin', '');
+    fnDefault:= FIconCfg.GetValue('_', '');
+    fnDir:= FIconCfg.GetValue('_dir', '');
+    fnZip:= FIconCfg.GetValue('_zip', '');
+    fnPic:= FIconCfg.GetValue('_img', '');
+    fnBin:= FIconCfg.GetValue('_bin', '');
 
-    FIconIndexDefault:= GetImageIndexFromPng(FIconNameDefault);
-    FIconIndexDir:= GetImageIndexFromPng(FIconNameDir);
-    FIconIndexZip:= GetImageIndexFromPng(FIconNameZip);
-    FIconIndexPic:= GetImageIndexFromPng(FIconNamePic);
-    FIconIndexBin:= GetImageIndexFromPng(FIconNameBin);
+    FIconIndexDefault:= GetImageIndexFromPng(fnDefault);
+    FIconIndexDir:= GetImageIndexFromPng(fnDir);
+    FIconIndexZip:= GetImageIndexFromPng(fnZip);
+    FIconIndexPic:= GetImageIndexFromPng(fnPic);
+    FIconIndexBin:= GetImageIndexFromPng(fnBin);
 
     AddExt('log', FIconIndexDefault);
     AddExt('txt', FIconIndexDefault);
