@@ -45,6 +45,8 @@ begin
   fe.IconDir:= ExtractFilePath(Application.ExeName)+'vscode_16x16';
   fe.OnGetLexer:= @GetLexer;
   fe.Folder:= '/home/user/test';
+
+  Caption:= 'Explorer: '+fe.Folder;
 end;
 
 function TfmMain.GetLexer(const fn: string): string;

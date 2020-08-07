@@ -27,7 +27,6 @@ type
   private
     FFolder: string;
     FIconDir: string;
-    FRootNode: TTreeNode;
     FShowDotNames: boolean;
     FOnGetLexer: TExplorerOnGetLexer;
     FIconCfg: TJSONConfig;
@@ -228,9 +227,7 @@ begin
   if (FFolder='') or not DirectoryExists(FFolder) then
     exit;
 
-  FRootNode:= Tree.Items.Add(nil, PrettyDirName(ExtractFileName(FFolder)));
-  FillTreeForFolder(FFolder, FRootNode);
-  FRootNode.Expand(false);
+  FillTreeForFolder(FFolder, nil);
 end;
 
 function _CompareFilenames(L: TStringList; Index1, Index2: integer): integer;
@@ -265,8 +262,10 @@ var
   S: string;
   i: integer;
 begin
-  if ANode=nil then exit;
-  ANode.DeleteChildren;
+  if Assigned(ANode) then
+    ANode.DeleteChildren
+  else
+    Tree.Items.Clear;
 
   List:= TStringList.Create;
   try
