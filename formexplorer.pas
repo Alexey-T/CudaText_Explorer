@@ -200,6 +200,12 @@ begin
   AddLex('docx', 'Word');
   AddLex('xls', 'Excel');
   AddLex('xlsx', 'Excel');
+  AddLex('ppt', 'PowerPoint');
+  AddLex('pptx', 'PowerPoint');
+  AddLex('po', 'PO');
+  AddLex('fnt', 'Font');
+  AddLex('ttf', 'Font');
+  AddLex('otf', 'Font');
 end;
 
 procedure TfmExplorer.HandleClick(ADouble: boolean);
@@ -518,11 +524,6 @@ begin
   AddExt('pyc', FIconIndexBin);
   AddExt('o', FIconIndexBin);
   AddExt('a', FIconIndexBin);
-  AddExt('ppt', FIconIndexBin);
-  AddExt('pptx', FIconIndexBin);
-  AddExt('fnt', FIconIndexBin);
-  AddExt('ttf', FIconIndexBin);
-  AddExt('otf', FIconIndexBin);
 
   AddExt('wav', FIconIndexAudio);
   AddExt('mp3', FIconIndexAudio);
