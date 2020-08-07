@@ -84,7 +84,7 @@ implementation
 {$R *.lfm}
 
 type
-  TExplorerTreeData = class
+  TExplorerNodeData = class
   public
     Path: string;
     IsDir: boolean;
@@ -198,7 +198,7 @@ procedure TfmExplorer.HandleClick(ADouble: boolean);
 var
   P: TPoint;
   Node: TTreeNode;
-  Data: TExplorerTreeData;
+  Data: TExplorerNodeData;
   Kind: TExplorerClickKind;
 begin
   P:= Tree.ScreenToClient(Mouse.CursorPos);
@@ -206,7 +206,7 @@ begin
   if Assigned(Node) then
     if Assigned(Node.Data) then
     begin
-      Data:= TExplorerTreeData(Node.Data);
+      Data:= TExplorerNodeData(Node.Data);
       if Data.IsDir then
       begin
         if Node.Expanded then
@@ -250,10 +250,10 @@ end;
 
 procedure TfmExplorer.TreeExpanding(Sender: TObject; Node: TTreeNode; var AllowExpansion: Boolean);
 var
-  Data: TExplorerTreeData;
+  Data: TExplorerNodeData;
 begin
   AllowExpansion:= true;
-  Data:= TExplorerTreeData(Node.Data);
+  Data:= TExplorerNodeData(Node.Data);
   if Data=nil then exit;
   if Data.Expanded then exit;
   if not Data.IsDir then exit;
@@ -376,7 +376,7 @@ var
   Node: TTreeNode;
   List: TStringList;
   bDir: boolean;
-  Data: TExplorerTreeData;
+  NodeData: TExplorerNodeData;
   CountHidden, NIcon: integer;
   S: string;
   i: integer;
@@ -407,17 +407,17 @@ begin
       S:= List[i];
       bDir:= List.Objects[i]<>nil;
 
-      Data:= TExplorerTreeData.Create;
-      Data.Path:= AFolder+DirectorySeparator+S;
-      Data.IsDir:= bDir;
-      Data.Expanded:= false;
+      NodeData:= TExplorerNodeData.Create;
+      NodeData.Path:= AFolder+DirectorySeparator+S;
+      NodeData.IsDir:= bDir;
+      NodeData.Expanded:= false;
 
       if bDir then
         S:= PrettyDirName(S);
 
-      Node:= Tree.Items.AddChildObject(ANode, S, Data);
+      Node:= Tree.Items.AddChildObject(ANode, S, NodeData);
       if ExplorerOptions.ShowIcons then
-        NIcon:= GetImageIndex(Data.Path, Data.IsDir)
+        NIcon:= GetImageIndex(NodeData.Path, NodeData.IsDir)
       else
         NIcon:= -1;
       Node.ImageIndex:= NIcon;
