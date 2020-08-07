@@ -110,6 +110,16 @@ begin
   InitCommonLexers;
 end;
 
+procedure TfmExplorer.FormDestroy(Sender: TObject);
+begin
+  Tree.Items.Clear;
+  FreeAndNil(ListExtToLexer);
+  FreeAndNil(ListLexer);
+  FreeAndNil(ListExt);
+  if Assigned(FIconCfg) then
+    FreeAndNil(FIconCfg);
+end;
+
 procedure TfmExplorer.InitCommonLexers;
   //
   procedure AddLex(const AExt, ALexer: string); inline;
@@ -176,16 +186,6 @@ begin
   AddLex('cmake', 'CMake');
   AddLex('ps1', 'PowerShell');
   AddLex('d', 'D');
-end;
-
-procedure TfmExplorer.FormDestroy(Sender: TObject);
-begin
-  Tree.Items.Clear;
-  FreeAndNil(ListExtToLexer);
-  FreeAndNil(ListLexer);
-  FreeAndNil(ListExt);
-  if Assigned(FIconCfg) then
-    FreeAndNil(FIconCfg);
 end;
 
 procedure TfmExplorer.HandleClick(ADouble: boolean);
@@ -293,9 +293,9 @@ begin
   ext1:= ExtractFileExt(s1);
   ext2:= ExtractFileExt(s2);
 
-  Result:= stricomp(PChar(ext1), PChar(ext2));
+  Result:= AnsiCompareText(ext1, ext2);
   if Result=0 then
-    Result:= stricomp(PChar(s1), PChar(s2));
+    Result:= AnsiCompareText(s1, s2);
 end;
 
 procedure TfmExplorer.FillTreeForFolder(const AFolder: string; ANode: TTreeNode);
