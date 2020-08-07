@@ -63,7 +63,7 @@ type
     procedure InitUsualExtensions;
     procedure InitIconConfig;
     procedure HandleClick(ADouble: boolean);
-    procedure ReadFolder(const AFolder: string; List: TStringList; out ACountHidden: integer);
+    procedure ReadFolder(const AFolder: string; AList: TStringList; out ACountHidden: integer);
     function GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
     function GetImageIndexFromPng(const AFilename: string): integer;
     function PrettyDirName(const S: string): string;
@@ -301,7 +301,7 @@ begin
     Result:= AnsiCompareText(s1, s2);
 end;
 
-procedure TfmExplorer.ReadFolder(const AFolder: string; List: TStringList; out ACountHidden: integer);
+procedure TfmExplorer.ReadFolder(const AFolder: string; AList: TStringList; out ACountHidden: integer);
 const
   MaskAll = {$ifdef windows} '*.*' {$else} '*' {$endif};
 var
@@ -309,6 +309,7 @@ var
   bDir: boolean;
   S: string;
 begin
+  AList.Clear;
   ACountHidden:= 0;
   if FindFirst(AFolder+DirectorySeparator+MaskAll, faAnyFile, Rec)=0 then
   begin
@@ -323,7 +324,7 @@ begin
       end;
 
       bDir:= (Rec.Attr and faDirectory)<>0;
-      List.AddObject(S, TObject(PtrInt(bDir)));
+      AList.AddObject(S, TObject(PtrInt(bDir)));
     until FindNext(Rec)<>0;
     FindClose(Rec);
   end;
