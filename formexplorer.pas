@@ -47,8 +47,6 @@ type
     procedure InitIconConfig;
     function GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
     function GetImageIndexFromPng(const AFilename: string): integer;
-    function DetectUsualFiles(const AExt: string; var AIndex: integer): boolean;
-    function DetectLexerByExt(const AExt: string; var ALexer: string): boolean;
     function PrettyDirName(const S: string): string;
     procedure FillTreeForFolder(const AFolder: string; ANode: TTreeNode);
     procedure SetFolder(const AValue: string);
@@ -79,7 +77,7 @@ type
 
 procedure TfmExplorer.FormCreate(Sender: TObject);
   //
-  procedure AddLex(const AExt, ALexer: string);
+  procedure AddLex(const AExt, ALexer: string); inline;
   var
     D: TExplorerStringDataItem;
   begin
@@ -104,6 +102,7 @@ begin
 
   ListExtToLexer:= TStringList.Create;
   ListExtToLexer.Sorted:= true;
+  ListExtToLexer.OwnsObjects:= true;
 
   AddLex('c', 'C');
   AddLex('h', 'C');
@@ -290,62 +289,13 @@ begin
   end;
 end;
 
-function TfmExplorer.DetectUsualFiles(const AExt: string; var AIndex: integer): boolean;
-begin
-  Result:= true;
-  case AExt of
-    'log',
-    'txt':
-      AIndex:= FIconIndexDefault;
-    'zip',
-    'rar',
-    'tar',
-    'xz',
-    'gz',
-    '7z':
-      AIndex:= FIconIndexZip;
-    'png',
-    'gif',
-    'bmp',
-    'jpg',
-    'jpeg',
-    'svg',
-    'ico':
-      AIndex:= FIconIndexPic;
-    'exe',
-    'dll',
-    'dat',
-    'so',
-    'dylib',
-    'dbg',
-    'chm',
-    'pyc',
-    'o',
-    'a',
-    'mp3',
-    'mp4',
-    'm4a',
-    'mpg',
-    'mpeg',
-    'avi',
-    'mov',
-    'ogg',
-    'flac',
-    'webm',
-    'pdf',
-    'doc',
-    'docx',
-    'xls',
-    'xlsx',
-    'ppt',
-    'pptx':
-      AIndex:= FIconIndexBin;
-    else
-      Result:= false;
-  end;
-end;
-
 procedure TfmExplorer.InitIconConfig;
+  //
+  procedure AddExt(const AExt: string; AIndex: integer); inline;
+  begin
+    ListExt.AddObject(AExt, TObject(PtrInt(AIndex)));
+  end;
+  //
 var
   fnConfig: string;
 begin
@@ -368,6 +318,53 @@ begin
     FIconIndexZip:= GetImageIndexFromPng(FIconNameZip);
     FIconIndexPic:= GetImageIndexFromPng(FIconNamePic);
     FIconIndexBin:= GetImageIndexFromPng(FIconNameBin);
+
+    AddExt('log', FIconIndexDefault);
+    AddExt('txt', FIconIndexDefault);
+
+    AddExt('zip', FIconIndexZip);
+    AddExt('rar', FIconIndexZip);
+    AddExt('tar', FIconIndexZip);
+    AddExt('xz', FIconIndexZip);
+    AddExt('gz', FIconIndexZip);
+    AddExt('7z', FIconIndexZip);
+
+    AddExt('png', FIconIndexPic);
+    AddExt('gif', FIconIndexPic);
+    AddExt('bmp', FIconIndexPic);
+    AddExt('jpg', FIconIndexPic);
+    AddExt('jpeg', FIconIndexPic);
+    AddExt('svg', FIconIndexPic);
+    AddExt('ico', FIconIndexPic);
+
+    AddExt('exe', FIconIndexBin);
+    AddExt('dll', FIconIndexBin);
+    AddExt('dat', FIconIndexBin);
+    AddExt('so', FIconIndexBin);
+    AddExt('dylib', FIconIndexBin);
+    AddExt('dbg', FIconIndexBin);
+    AddExt('chm', FIconIndexBin);
+    AddExt('pyc', FIconIndexBin);
+    AddExt('o', FIconIndexBin);
+    AddExt('a', FIconIndexBin);
+    AddExt('mp3', FIconIndexBin);
+    AddExt('mp4', FIconIndexBin);
+    AddExt('m4a', FIconIndexBin);
+    AddExt('mpg', FIconIndexBin);
+    AddExt('mpeg', FIconIndexBin);
+    AddExt('avi', FIconIndexBin);
+    AddExt('mov', FIconIndexBin);
+    AddExt('ogg', FIconIndexBin);
+    AddExt('flac', FIconIndexBin);
+    AddExt('webm', FIconIndexBin);
+    AddExt('pdf', FIconIndexBin);
+    AddExt('doc', FIconIndexBin);
+    AddExt('docx', FIconIndexBin);
+    AddExt('xls', FIconIndexBin);
+    AddExt('xlsx', FIconIndexBin);
+    AddExt('ppt', FIconIndexBin);
+    AddExt('pptx', FIconIndexBin);
+    AddExt('iso', FIconIndexBin);
   end;
 end;
 
@@ -389,13 +386,14 @@ begin
   ext:= LowerCase(ExtractFileExt(AFileName));
   if ext<>'' then
     Delete(ext, 1, 1);
-  if DetectUsualFiles(ext, Result) then exit;
 
   //read cache for extensions
   if ListExt.Find(ext, i) then
     exit(PtrInt(ListExt.Objects[i]));
 
-  if not DetectLexerByExt(ext, SLexer) then
+  if ListExtToLexer.Find(ext, i) then
+    SLexer:= TExplorerStringDataItem(ListExtToLexer.Objects[i]).Str
+  else
     SLexer:= OnGetLexer(AFileName);
   if SLexer='' then exit;
 
@@ -411,7 +409,7 @@ begin
   ListExt.AddObject(ext, TObject(PtrInt(Result)));
   ListLexer.AddObject(SLexer, TObject(PtrInt(Result)));
 
-  ShowMessage('Load icon: '+ext);
+  //ShowMessage('Load icon: '+ext);
 end;
 
 function TfmExplorer.GetImageIndexFromPng(const AFilename: string): integer;
@@ -430,15 +428,6 @@ begin
   finally
     FreeAndNil(Img);
   end;
-end;
-
-function TfmExplorer.DetectLexerByExt(const AExt: string; var ALexer: string): boolean;
-var
-  N: integer;
-begin
-  Result:= ListExtToLexer.Find(AExt, N);
-  if Result then
-    ALexer:= TExplorerStringDataItem(ListExtToLexer.Objects[N]).Str;
 end;
 
 end.
