@@ -16,6 +16,7 @@ type
     ShowDotNamesFirst: boolean;
     ShowFolderBrackets: boolean;
     ShowIcons: boolean;
+    ShowNodeForEmpty: boolean;
     TextEmpty: string;
     TextEmptyWithHidden: string;
   end;
@@ -413,11 +414,14 @@ begin
 
     if List.Count=0 then
     begin
-      if CountHidden=0 then
-        S:= ExplorerOptions.TextEmpty
-      else
-        S:= Format(ExplorerOptions.TextEmptyWithHidden, [CountHidden]);
-      Node:= Tree.Items.AddChild(ANode, S);
+      if ExplorerOptions.ShowNodeForEmpty then
+      begin
+        if CountHidden=0 then
+          S:= ExplorerOptions.TextEmpty
+        else
+          S:= Format(ExplorerOptions.TextEmptyWithHidden, [CountHidden]);
+        Node:= Tree.Items.AddChild(ANode, S);
+      end;
       exit;
     end;
 
@@ -634,6 +638,7 @@ initialization
     ShowDotNamesFirst:= true;
     ShowFolderBrackets:= true;
     ShowIcons:= true;
+    ShowNodeForEmpty:= false;
     TextEmpty:= '(Empty)';
     TextEmptyWithHidden:= '(Empty, %d hidden item(s))';
   end;
