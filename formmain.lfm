@@ -42,6 +42,15 @@ object fmMain: TfmMain
     Width = 549
     Panels = <>
   end
+  object chkShowDotNames: TCheckBox
+    Left = 325
+    Height = 23
+    Top = 164
+    Width = 135
+    Caption = 'Show dot-names'
+    OnChange = chkShowDotNamesChange
+    TabOrder = 4
+  end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
     Left = 330
     Top = 91

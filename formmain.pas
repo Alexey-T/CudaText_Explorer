@@ -14,11 +14,13 @@ type
 
   TfmMain = class(TForm)
     Button1: TButton;
+    chkShowDotNames: TCheckBox;
     Panel1: TPanel;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     Splitter1: TSplitter;
     StatusBar1: TStatusBar;
     procedure Button1Click(Sender: TObject);
+    procedure chkShowDotNamesChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
     exp: TfmExplorer;
@@ -75,6 +77,12 @@ procedure TfmMain.Button1Click(Sender: TObject);
 begin
   if SelectDirectoryDialog1.Execute then
     exp.Folder:= SelectDirectoryDialog1.FileName;
+end;
+
+procedure TfmMain.chkShowDotNamesChange(Sender: TObject);
+begin
+  ExplorerOptions.ShowDotNames:= chkShowDotNames.Checked;
+  exp.Folder:= exp.Folder;
 end;
 
 end.

@@ -12,6 +12,7 @@ type
   TExplorerOptions = record
     IconDir: string;
     ShowDotNames: boolean;
+    ShowDotNamesFirst: boolean;
     ShowFolderBrackets: boolean;
     TextEmpty: string;
     TextEmptyWithHidden: string;
@@ -270,7 +271,7 @@ end;
 
 procedure TfmExplorer.SetFolder(const AValue: string);
 begin
-  if FFolder=AValue then Exit;
+  //if FFolder=AValue then Exit; //allow to re-read dir
   FFolder:= AValue;
 
   Tree.Items.Clear;
@@ -285,7 +286,9 @@ function _CompareFilenames(L: TStringList; Index1, Index2: integer): integer;
 var
   s1, s2, ext1, ext2: string;
   d1, d2: PtrInt;
+  dot1, dot2: boolean;
 begin
+  //show dirs first
   d1:= PtrInt(L.Objects[Index1]);
   d2:= PtrInt(L.Objects[Index2]);
   if d1<>d2 then
@@ -293,12 +296,21 @@ begin
 
   s1:= L[Index1];
   s2:= L[Index2];
+
+  if ExplorerOptions.ShowDotNamesFirst then
+  begin
+    dot1:= s1[1]='.';
+    dot2:= s2[1]='.';
+    if dot1<>dot2 then
+      exit(ord(dot2)-ord(dot1));
+  end;
+
   ext1:= ExtractFileExt(s1);
   ext2:= ExtractFileExt(s2);
 
-  Result:= AnsiCompareText(ext1, ext2);
+  Result:= CompareText(ext1, ext2);
   if Result=0 then
-    Result:= AnsiCompareText(s1, s2);
+    Result:= CompareText(s1, s2);
 end;
 
 procedure TfmExplorer.ReadFolder(const AFolder: string; AList: TStringList; out ACountHidden: integer);
@@ -544,6 +556,7 @@ initialization
   with ExplorerOptions do
   begin
     ShowDotNames:= false;
+    ShowDotNamesFirst:= true;
     ShowFolderBrackets:= true;
     TextEmpty:= '(Empty)';
     TextEmptyWithHidden:= '(Empty, %d hidden item(s))';
