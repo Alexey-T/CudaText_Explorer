@@ -217,9 +217,9 @@ begin
         else
           Kind:= eckFileClick;
       end;
+      if Assigned(FOnItemClick) then
+        FOnItemClick(Data.Path, Kind);
     end;
-  if Assigned(FOnItemClick) then
-    FOnItemClick(Data.Path, Kind);
 end;
 
 procedure TfmExplorer.TreeClick(Sender: TObject);
