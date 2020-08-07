@@ -156,6 +156,7 @@ begin
   AddLex('log', 'Log files');
   AddLex('md', 'Markdown');
   AddLex('xml', 'XML');
+  AddLex('xsl', 'XSLT');
   AddLex('php', 'PHP');
   AddLex('py', 'Python');
   AddLex('ini', 'Ini files');
