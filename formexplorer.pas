@@ -110,6 +110,7 @@ begin
   AddLex('json', 'JSON');
   AddLex('java', 'Java');
   AddLex('sh', 'Bash script');
+  AddLex('bat', 'Batch files');
   AddLex('cmd', 'Batch files');
   AddLex('md', 'Markdown');
   AddLex('xml', 'XML');
@@ -131,10 +132,27 @@ begin
   AddLex('r', 'R');
   AddLex('scss', 'SCSS');
   AddLex('sass', 'Sass');
+  AddLex('less', 'LESS');
   AddLex('pl', 'Perl');
   AddLex('go', 'Go');
   AddLex('dart', 'Dart');
+  AddLex('hs', 'Haskell');
+  AddLex('erl', 'Erlang');
+  AddLex('clj', 'Clojure');
   AddLex('coffee', 'CoffeeScript');
+  AddLex('lisp', 'Lisp');
+  AddLex('rst', 'reStructuredText');
+  AddLex('haml', 'Haml');
+  AddLex('scala', 'Scala');
+  AddLex('tex', 'LaTeX');
+  AddLex('tcl', 'Tcl');
+  AddLex('textile', 'Textile');
+  AddLex('au3', 'AutoIt');
+  AddLex('ahk', 'AutoHotkey');
+  AddLex('diff', 'Diff');
+  AddLex('cmake', 'CMake');
+  AddLex('ps1', 'PowerShell');
+  AddLex('d', 'D');
 end;
 
 procedure TfmExplorer.FormDestroy(Sender: TObject);
@@ -321,6 +339,7 @@ begin
 
     AddExt('log', FIconIndexDefault);
     AddExt('txt', FIconIndexDefault);
+    AddExt('csv', FIconIndexDefault);
 
     AddExt('zip', FIconIndexZip);
     AddExt('rar', FIconIndexZip);
