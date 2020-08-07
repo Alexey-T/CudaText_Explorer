@@ -15,6 +15,7 @@ type
     ShowDotNames: boolean;
     ShowDotNamesFirst: boolean;
     ShowFolderBrackets: boolean;
+    ShowIcons: boolean;
     TextEmpty: string;
     TextEmptyWithHidden: string;
   end;
@@ -272,6 +273,7 @@ end;
 procedure TfmExplorer.SetFolder(const AValue: string);
 var
   RootNode: TTreeNode;
+  NIcon: integer;
 begin
   FFolder:= AValue;
 
@@ -286,8 +288,12 @@ begin
   if ExplorerOptions.ShowRootNode then
   begin
     RootNode:= Tree.Items.Add(nil, PrettyDirName(ExtractFileName(FFolder)));
-    RootNode.ImageIndex:= FIconIndexDir;
-    RootNode.SelectedIndex:= FIconIndexDir;
+    if ExplorerOptions.ShowIcons then
+      NIcon:= FIconIndexDir
+    else
+      NIcon:= -1;
+    RootNode.ImageIndex:= NIcon;
+    RootNode.SelectedIndex:= NIcon;
   end
   else
     RootNode:= nil;
@@ -364,7 +370,7 @@ var
   List: TStringList;
   bDir: boolean;
   Data: TExplorerTreeData;
-  CountHidden: integer;
+  CountHidden, NIcon: integer;
   S: string;
   i: integer;
 begin
@@ -403,8 +409,12 @@ begin
         S:= PrettyDirName(S);
 
       Node:= Tree.Items.AddChildObject(ANode, S, Data);
-      Node.ImageIndex:= GetImageIndex(Data.Path, Data.IsDir);
-      Node.SelectedIndex:= Node.ImageIndex;
+      if ExplorerOptions.ShowIcons then
+        NIcon:= GetImageIndex(Data.Path, Data.IsDir)
+      else
+        NIcon:= -1;
+      Node.ImageIndex:= NIcon;
+      Node.SelectedIndex:= NIcon;
 
       //add fictive child, to show expand arrow
       if bDir then
@@ -573,6 +583,7 @@ initialization
     ShowDotNames:= false;
     ShowDotNamesFirst:= true;
     ShowFolderBrackets:= true;
+    ShowIcons:= true;
     TextEmpty:= '(Empty)';
     TextEmptyWithHidden:= '(Empty, %d hidden item(s))';
   end;

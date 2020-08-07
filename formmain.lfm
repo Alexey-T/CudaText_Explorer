@@ -43,7 +43,7 @@ object fmMain: TfmMain
     Panels = <>
   end
   object chkShowDotNames: TCheckBox
-    Left = 325
+    Left = 324
     Height = 23
     Top = 164
     Width = 135
@@ -52,7 +52,7 @@ object fmMain: TfmMain
     TabOrder = 4
   end
   object chkShowRoot: TCheckBox
-    Left = 325
+    Left = 324
     Height = 23
     Top = 136
     Width = 131
@@ -61,6 +61,17 @@ object fmMain: TfmMain
     OnChange = chkShowRootChange
     State = cbChecked
     TabOrder = 5
+  end
+  object chkShowIcons: TCheckBox
+    Left = 324
+    Height = 23
+    Top = 190
+    Width = 99
+    Caption = 'Show icons'
+    Checked = True
+    OnChange = chkShowIconsChange
+    State = cbChecked
+    TabOrder = 6
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
     Left = 232
