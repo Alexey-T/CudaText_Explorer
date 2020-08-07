@@ -9,8 +9,6 @@ uses
   jsonConf;
 
 type
-  TExplorerOnGetLexer = function(const AFileName: string): string of object;
-
   TExplorerClickKind = (
     eckFileClick,
     eckFileDblClick,
@@ -18,7 +16,9 @@ type
     eckFolderUnfold
     );
 
-  TExplorerOnClick = procedure(const AFileName: string; AKind: TExplorerClickKind) of object;
+type
+  TExplorerOnItemClick = procedure(const AFileName: string; AKind: TExplorerClickKind) of object;
+  TExplorerOnGetLexer = function(const AFileName: string): string of object;
 
 type
   { TfmExplorer }
@@ -39,7 +39,7 @@ type
     FIconDir: string;
     FShowDotNames: boolean;
     FOnGetLexer: TExplorerOnGetLexer;
-    FOnItemClick: TExplorerOnClick;
+    FOnItemClick: TExplorerOnItemClick;
     FIconCfg: TJSONConfig;
     FIconIndexDefault: integer;
     FIconIndexDir: integer;
@@ -63,7 +63,7 @@ type
     property ShowDotNames: boolean read FShowDotNames write FShowDotNames;
     property IconDir: string read FIconDir write FIconDir;
     property OnGetLexer: TExplorerOnGetLexer read FOnGetLexer write FOnGetLexer;
-    property OnItemClick: TExplorerOnClick read FOnItemClick write FOnItemClick;
+    property OnItemClick: TExplorerOnItemClick read FOnItemClick write FOnItemClick;
   end;
 
 implementation
