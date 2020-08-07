@@ -10,6 +10,7 @@ uses
 
 type
   TExplorerOptions = record
+    IconDir: string;
     ShowDotNames: boolean;
     ShowFolderBrackets: boolean;
   end;
@@ -45,7 +46,6 @@ type
     procedure TreeExpanding(Sender: TObject; Node: TTreeNode; var AllowExpansion: Boolean);
   private
     FFolder: string;
-    FIconDir: string;
     FOnGetLexer: TExplorerOnGetLexer;
     FOnItemClick: TExplorerOnItemClick;
     FIconCfg: TJSONConfig;
@@ -68,7 +68,6 @@ type
     procedure SetFolder(const AValue: string);
   public
     property Folder: string read FFolder write SetFolder;
-    property IconDir: string read FIconDir write FIconDir;
     property OnGetLexer: TExplorerOnGetLexer read FOnGetLexer write FOnGetLexer;
     property OnItemClick: TExplorerOnItemClick read FOnItemClick write FOnItemClick;
   end;
@@ -365,7 +364,7 @@ var
 begin
   if not Assigned(FIconCfg) then
   begin
-    fnConfig:= FIconDir+DirectorySeparator+'icons.json';
+    fnConfig:= ExplorerOptions.IconDir+DirectorySeparator+'icons.json';
     if not FileExists(fnConfig) then exit;
 
     FIconCfg:= TJSONConfig.Create(Self);
@@ -494,7 +493,7 @@ var
   Img: TPortableNetworkGraphic;
   fn: string;
 begin
-  fn:= FIconDir+DirectorySeparator+AFilename;
+  fn:= ExplorerOptions.IconDir+DirectorySeparator+AFilename;
   if not FileExists(fn) then
     exit(FIconIndexDefault);
 

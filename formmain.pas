@@ -21,7 +21,7 @@ type
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
-    fe: TfmExplorer;
+    exp: TfmExplorer;
     function ExplorerGetLexer(const fn: string): string;
     procedure ExplorerClick(const fn: string; Kind: TExplorerClickKind);
   public
@@ -33,23 +33,26 @@ var
 
 implementation
 
+uses
+  FileUtil;
+
 {$R *.lfm}
 
 { TfmMain }
 
 procedure TfmMain.FormCreate(Sender: TObject);
 begin
-  fe:= TfmExplorer.Create(Self);
-  fe.Parent:= Panel1;
-  fe.Align:= alClient;
-  fe.Show;
+  exp:= TfmExplorer.Create(Self);
+  exp.Parent:= Panel1;
+  exp.Align:= alClient;
+  exp.Show;
 
-  fe.IconDir:= ExtractFilePath(Application.ExeName)+'vscode_16x16';
-  fe.OnGetLexer:= @ExplorerGetLexer;
-  fe.OnItemClick:= @ExplorerClick;
-  fe.Folder:= '/home/user/test';
+  ExplorerOptions.IconDir:= ExtractFilePath(Application.ExeName)+'vscode_16x16';
+  exp.OnGetLexer:= @ExplorerGetLexer;
+  exp.OnItemClick:= @ExplorerClick;
+  exp.Folder:= ExtractFileDir(Application.ExeName);
 
-  Caption:= 'Explorer: '+fe.Folder;
+  Caption:= 'Explorer: '+exp.Folder;
 end;
 
 function TfmMain.ExplorerGetLexer(const fn: string): string;
@@ -71,7 +74,7 @@ end;
 procedure TfmMain.Button1Click(Sender: TObject);
 begin
   if SelectDirectoryDialog1.Execute then
-    fe.Folder:= SelectDirectoryDialog1.FileName;
+    exp.Folder:= SelectDirectoryDialog1.FileName;
 end;
 
 end.
