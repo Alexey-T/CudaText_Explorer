@@ -49,7 +49,10 @@ end;
 
 function TfmMain.GetLexer(const fn: string): string;
 begin
-  Result:= '';
+  case LowerCase(ExtractFileExt(fn)) of
+    '.pp', '.inc': Result:= 'Pascal';
+    else Result:= '';
+  end;
 end;
 
 procedure TfmMain.Button1Click(Sender: TObject);

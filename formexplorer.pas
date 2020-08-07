@@ -41,7 +41,8 @@ type
     FIconIndexZip: integer;
     FIconIndexPic: integer;
     FIconIndexBin: integer;
-    FIconCache: TStringList;
+    ListExt: TStringList;
+    ListExtToLexer: TStringList;
     procedure InitIconConfig;
     function GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
     function GetImageIndexFromPng(const AFilename: string): integer;
@@ -69,9 +70,23 @@ type
     Expanded: boolean;
   end;
 
+  TExplorerStringDataItem = class
+    Str: string;
+  end;
+
 { TfmExplorer }
 
 procedure TfmExplorer.FormCreate(Sender: TObject);
+  //
+  procedure AddLex(const AExt, ALexer: string);
+  var
+    D: TExplorerStringDataItem;
+  begin
+    D:= TExplorerStringDataItem.Create;
+    D.Str:= ALexer;
+    ListExtToLexer.AddObject(AExt, D);
+  end;
+  //
 begin
   Tree.ShowRoot:= false;
   Tree.ReadOnly:= true;
@@ -80,14 +95,55 @@ begin
 
   FShowDotNames:= false;
 
-  FIconCache:= TStringList.Create;
-  FIconCache.Sorted:= true;
+  ListExt:= TStringList.Create;
+  ListExt.Sorted:= true;
+
+  ListExtToLexer:= TStringList.Create;
+  ListExtToLexer.Sorted:= true;
+
+  AddLex('c', 'C');
+  AddLex('h', 'C');
+  AddLex('cpp', 'C++');
+  AddLex('hpp', 'C++');
+  AddLex('htm', 'HTML');
+  AddLex('html', 'HTML');
+  AddLex('css', 'CSS');
+  AddLex('js', 'JavaScript');
+  AddLex('json', 'JSON');
+  AddLex('java', 'Java');
+  AddLex('sh', 'Bash script');
+  AddLex('cmd', 'Batch files');
+  AddLex('md', 'Markdown');
+  AddLex('xml', 'XML');
+  AddLex('php', 'PHP');
+  AddLex('py', 'Python');
+  AddLex('ini', 'Ini files');
+  AddLex('inf', 'Ini files');
+  AddLex('rs', 'Rust');
+  AddLex('vbs', 'VBScript');
+  AddLex('lua', 'Lua');
+  AddLex('sql', 'SQL');
+  AddLex('pas', 'Pascal');
+  AddLex('yml', 'YAML');
+  AddLex('yaml', 'YAML');
+  AddLex('asm', 'Assembly');
+  AddLex('cs', 'C#');
+  AddLex('ts', 'TypeScript');
+  AddLex('rb', 'Ruby');
+  AddLex('r', 'R');
+  AddLex('scss', 'SCSS');
+  AddLex('sass', 'Sass');
+  AddLex('pl', 'Perl');
+  AddLex('go', 'Go');
+  AddLex('dart', 'Dart');
+  AddLex('coffee', 'CoffeeScript');
 end;
 
 procedure TfmExplorer.FormDestroy(Sender: TObject);
 begin
   Tree.Items.Clear;
-  FreeAndNil(FIconCache);
+  FreeAndNil(ListExtToLexer);
+  FreeAndNil(ListExt);
   if Assigned(FIconCfg) then
     FreeAndNil(FIconCfg);
 end;
@@ -330,12 +386,8 @@ begin
     Delete(ext, 1, 1);
   if DetectUsualFiles(ext, Result) then exit;
 
-  //cache holds extensions, not lexer names! much faster
-  if FIconCache.Find(ext, i) then
-  begin
-    Result:= integer(PtrInt(FIconCache.Objects[i]));
-    exit;
-  end;
+  if ListExt.Find(ext, i) then
+    exit(PtrInt(ListExt.Objects[i]));
 
   if not DetectLexerByExt(ext, SLexer) then
     SLexer:= OnGetLexer(AFileName);
@@ -345,7 +397,7 @@ begin
   if fnIcon='' then exit;
 
   Result:= GetImageIndexFromPng(fnIcon);
-  FIconCache.AddObject(ext, TObject(PtrInt(Result)));
+  ListExt.AddObject(ext, TObject(PtrInt(Result)));
 
   //ShowMessage('load ico: '+SLexer);
 end;
@@ -369,74 +421,12 @@ begin
 end;
 
 function TfmExplorer.DetectLexerByExt(const AExt: string; var ALexer: string): boolean;
+var
+  N: integer;
 begin
-  Result:= true;
-  case AExt of
-    'c', 'h':
-      ALexer:= 'C';
-    'cpp', 'hpp':
-      ALexer:= 'C++';
-    'htm', 'html':
-      ALexer:= 'HTML';
-    'css':
-      ALexer:= 'CSS';
-    'js':
-      ALexer:= 'JavaScript';
-    'json':
-      ALexer:= 'JSON';
-    'java':
-      ALexer:= 'Java';
-    'sh':
-      ALexer:= 'Bash script';
-    'cmd':
-      ALexer:= 'Batch files';
-    'md':
-      ALexer:= 'Markdown';
-    'xml':
-      ALexer:= 'XML';
-    'php':
-      ALexer:= 'PHP';
-    'py':
-      ALexer:= 'Python';
-    'ini', 'inf':
-      ALexer:= 'Ini files';
-    'rs':
-      ALexer:= 'Rust';
-    'vbs':
-      ALexer:= 'VBScript';
-    'lua':
-      ALexer:= 'Lua';
-    'sql':
-      ALexer:= 'SQL';
-    'pas':
-      ALexer:= 'Pascal';
-    'yml', 'yaml':
-      ALexer:= 'YAML';
-    'asm':
-      ALexer:= 'Assembly';
-    'cs':
-      ALexer:= 'C#';
-    'ts':
-      ALexer:= 'TypeScript';
-    'rb':
-      ALexer:= 'Ruby';
-    'r':
-      ALexer:= 'R';
-    'scss':
-      ALexer:= 'SCSS';
-    'sass':
-      ALexer:= 'Sass';
-    'pl':
-      ALexer:= 'Perl';
-    'go':
-      ALexer:= 'Go';
-    'dart':
-      ALexer:= 'Dart';
-    'coffee':
-      ALexer:= 'CoffeeScript';
-    else
-      Result:= false;
-  end;
+  Result:= ListExtToLexer.Find(AExt, N);
+  if Result then
+    ALexer:= TExplorerStringDataItem(ListExtToLexer.Objects[N]).Str;
 end;
 
 end.
