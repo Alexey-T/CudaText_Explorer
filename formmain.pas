@@ -90,9 +90,13 @@ begin
     exp.Folder:= SelectDirectoryDialog1.FileName;
 end;
 
+var
+  NTab: integer = 0;
+
 procedure TfmMain.BtnAddClick(Sender: TObject);
 begin
-  Listbox1.Items.Add('Tab '+FormatDateTime('hh:ss', Now));
+  Inc(NTab);
+  Listbox1.Items.Add('Tab '+IntToStr(NTab));
   Listbox1.ItemIndex:= Listbox1.Items.Count-1;
 end;
 
