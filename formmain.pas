@@ -79,7 +79,7 @@ end;
 
 procedure TfmMain.ExplorerClick(const fn: string; Kind: TExplorerClickKind);
 const
-  sKind: array[TExplorerClickKind] of string = ('click', 'dbl-click', 'fold', 'unfold');
+  sKind: array[TExplorerClickKind] of string = ('-', 'click', 'dbl-click', 'fold', 'unfold');
 begin
   StatusBar1.SimpleText:= '"'+fn+'", '+sKind[Kind];
 end;

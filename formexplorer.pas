@@ -17,6 +17,7 @@ type
     ShowFolderBrackets: boolean;
     ShowIcons: boolean;
     ShowNodeForEmpty: boolean;
+    FoldDirsByClick: boolean;
     TextEmpty: string;
     TextEmptyWithHidden: string;
   end;
@@ -26,6 +27,7 @@ var
 
 type
   TExplorerClickKind = (
+    eckNone,
     eckFileClick,
     eckFileDblClick,
     eckFolderFold,
@@ -279,18 +281,24 @@ begin
   if Assigned(Node) then
     if Assigned(Node.Data) then
     begin
+      Kind:= eckNone;
       Data:= TExplorerNodeData(Node.Data);
       if Data.IsDir then
       begin
-        if Node.Expanded then
+        if ExplorerOptions.FoldDirsByClick then
         begin
-          Node.Collapse(false);
-          Kind:= eckFolderFold;
-        end
-        else
-        begin
-          Node.Expand(false);
-          Kind:= eckFolderUnfold;
+          if Node.Expanded then
+          begin
+            Node.Collapse(false);
+            Kind:= eckFolderFold;
+          end
+          else
+          begin
+            Node.Expand(false);
+            Kind:= eckFolderUnfold;
+          end;
+          if Assigned(FOnItemClick) then
+            FOnItemClick(Data.Path, Kind);
         end;
       end
       else
@@ -299,9 +307,9 @@ begin
           Kind:= eckFileDblClick
         else
           Kind:= eckFileClick;
+        if Assigned(FOnItemClick) then
+          FOnItemClick(Data.Path, Kind);
       end;
-      if Assigned(FOnItemClick) then
-        FOnItemClick(Data.Path, Kind);
     end;
 end;
 
@@ -634,6 +642,7 @@ initialization
     ShowFolderBrackets:= true;
     ShowIcons:= true;
     ShowNodeForEmpty:= false;
+    FoldDirsByClick:= false;//true;
     TextEmpty:= '(Empty)';
     TextEmptyWithHidden:= '(Empty, %d hidden item(s))';
   end;
