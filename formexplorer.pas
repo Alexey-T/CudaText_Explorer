@@ -141,9 +141,9 @@ procedure TfmExplorer.InitCommonLexers;
   //
 begin
   AddLex('c', 'C');
-  AddLex('h', 'C');
+  AddLex('h', 'C header');
   AddLex('cpp', 'C++');
-  AddLex('hpp', 'C++');
+  AddLex('hpp', 'C++ header');
   AddLex('htm', 'HTML');
   AddLex('html', 'HTML');
   AddLex('css', 'CSS');
