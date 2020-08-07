@@ -531,9 +531,8 @@ begin
 
   AddExt('exe', FIconIndexBin);
   AddExt('dll', FIconIndexBin);
-  AddExt('dat', FIconIndexBin);
   AddExt('so', FIconIndexBin);
-  AddExt('dylib', FIconIndexBin);
+  AddExt('ocx', FIconIndexBin);
   AddExt('dbg', FIconIndexBin);
   AddExt('chm', FIconIndexBin);
   AddExt('pyc', FIconIndexBin);
@@ -543,6 +542,7 @@ begin
   AddExt('dbf', FIconIndexBin);
   AddExt('mdb', FIconIndexBin);
   AddExt('apk', FIconIndexBin);
+  AddExt('dat', FIconIndexBin);
   AddExt('bin', FIconIndexBin);
   AddExt('msi', FIconIndexBin);
 
@@ -557,6 +557,7 @@ begin
   AddExt('cda', FIconIndexAudio);
   AddExt('mid', FIconIndexAudio);
   AddExt('midi', FIconIndexAudio);
+  AddExt('mka', FIconIndexAudio);
 
   AddExt('mp4', FIconIndexVideo);
   AddExt('m4a', FIconIndexVideo);
@@ -565,6 +566,7 @@ begin
   AddExt('avi', FIconIndexVideo);
   AddExt('mov', FIconIndexVideo);
   AddExt('webm', FIconIndexVideo);
+  AddExt('mkv', FIconIndexVideo);
 end;
 
 function TfmExplorer.GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
