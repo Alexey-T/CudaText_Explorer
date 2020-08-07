@@ -2,15 +2,15 @@ object fmMain: TfmMain
   Left = 1620
   Height = 547
   Top = 204
-  Width = 487
+  Width = 549
   Caption = 'Explorer test'
   ClientHeight = 547
-  ClientWidth = 487
+  ClientWidth = 549
   OnCreate = FormCreate
   LCLVersion = '2.1.0.0'
   object Panel1: TPanel
     Left = 0
-    Height = 547
+    Height = 527
     Top = 0
     Width = 314
     Align = alLeft
@@ -20,7 +20,7 @@ object fmMain: TfmMain
   end
   object Splitter1: TSplitter
     Left = 314
-    Height = 547
+    Height = 527
     Top = 0
     Width = 5
   end
@@ -33,6 +33,13 @@ object fmMain: TfmMain
     Caption = 'Folder...'
     OnClick = Button1Click
     TabOrder = 2
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 20
+    Top = 527
+    Width = 549
+    Panels = <>
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
     Left = 330

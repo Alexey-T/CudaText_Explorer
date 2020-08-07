@@ -9,7 +9,8 @@ uses
   jsonConf;
 
 type
-  TExplorerOnGetLexer = function(const fn: string): string of object;
+  TExplorerOnGetLexer = function(const AFileName: string): string of object;
+  TExplorerOnClick = procedure(const AFileName: string; ADblClick: boolean) of object;
 
 type
   { TfmExplorer }
@@ -22,6 +23,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure TreeClick(Sender: TObject);
+    procedure TreeDblClick(Sender: TObject);
     procedure TreeDeletion(Sender: TObject; Node: TTreeNode);
     procedure TreeExpanding(Sender: TObject; Node: TTreeNode; var AllowExpansion: Boolean);
   private
@@ -29,6 +31,7 @@ type
     FIconDir: string;
     FShowDotNames: boolean;
     FOnGetLexer: TExplorerOnGetLexer;
+    FOnItemClick: TExplorerOnClick;
     FIconCfg: TJSONConfig;
     FIconIndexDefault: integer;
     FIconIndexDir: integer;
@@ -38,6 +41,7 @@ type
     ListExt: TStringList;
     ListLexer: TStringList;
     ListExtToLexer: TStringList;
+    procedure HandleClick(ADouble: boolean);
     procedure InitCommonLexers;
     procedure InitUsualExtensions;
     procedure InitIconConfig;
@@ -51,6 +55,7 @@ type
     property ShowDotNames: boolean read FShowDotNames write FShowDotNames;
     property IconDir: string read FIconDir write FIconDir;
     property OnGetLexer: TExplorerOnGetLexer read FOnGetLexer write FOnGetLexer;
+    property OnItemClick: TExplorerOnClick read FOnItemClick write FOnItemClick;
   end;
 
 implementation
@@ -171,7 +176,7 @@ begin
     FreeAndNil(FIconCfg);
 end;
 
-procedure TfmExplorer.TreeClick(Sender: TObject);
+procedure TfmExplorer.HandleClick(ADouble: boolean);
 var
   P: TPoint;
   Node: TTreeNode;
@@ -184,11 +189,28 @@ begin
     begin
       Data:= TExplorerTreeData(Node.Data);
       if Data.IsDir then
+      begin
         if Node.Expanded then
           Node.Collapse(false)
         else
           Node.Expand(false);
+        if Assigned(FOnItemClick) then
+          FOnItemClick('', ADouble);
+      end
+      else
+      if Assigned(FOnItemClick) then
+        FOnItemClick(Data.Path, ADouble);
     end;
+end;
+
+procedure TfmExplorer.TreeClick(Sender: TObject);
+begin
+  HandleClick(false);
+end;
+
+procedure TfmExplorer.TreeDblClick(Sender: TObject);
+begin
+  HandleClick(true);
 end;
 
 procedure TfmExplorer.TreeDeletion(Sender: TObject; Node: TTreeNode);

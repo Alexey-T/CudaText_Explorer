@@ -29,6 +29,7 @@ object fmExplorer: TfmExplorer
       Images = Images
       TabOrder = 0
       OnClick = TreeClick
+      OnDblClick = TreeDblClick
       OnDeletion = TreeDeletion
       OnExpanding = TreeExpanding
     end
