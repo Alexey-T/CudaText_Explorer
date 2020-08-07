@@ -59,6 +59,8 @@ type
     FIconIndexZip: integer;
     FIconIndexPic: integer;
     FIconIndexBin: integer;
+    FIconIndexAudio: integer;
+    FIconIndexVideo: integer;
     ListExt: TStringList;
     ListLexer: TStringList;
     ListExtToLexer: TStringList;
@@ -440,7 +442,7 @@ end;
 procedure TfmExplorer.InitIconConfig;
 var
   fnConfig: string;
-  fnDefault, fnDir, fnZip, fnPic, fnBin: string;
+  fnDefault, fnDir, fnZip, fnPic, fnBin, fnAudio, fnVideo: string;
 begin
   if not Assigned(FIconCfg) then
   begin
@@ -455,12 +457,16 @@ begin
     fnZip:= FIconCfg.GetValue('_zip', '');
     fnPic:= FIconCfg.GetValue('_img', '');
     fnBin:= FIconCfg.GetValue('_bin', '');
+    fnAudio:= FIconCfg.GetValue('_audio', '');
+    fnVideo:= FIconCfg.GetValue('_video', '');
 
     FIconIndexDefault:= GetImageIndexFromPng(fnDefault);
     FIconIndexDir:= GetImageIndexFromPng(fnDir);
     FIconIndexZip:= GetImageIndexFromPng(fnZip);
     FIconIndexPic:= GetImageIndexFromPng(fnPic);
     FIconIndexBin:= GetImageIndexFromPng(fnBin);
+    FIconIndexAudio:= GetImageIndexFromPng(fnAudio);
+    FIconIndexVideo:= GetImageIndexFromPng(fnVideo);
 
     InitUsualExtensions;
   end;
@@ -506,16 +512,6 @@ begin
   AddExt('pyc', FIconIndexBin);
   AddExt('o', FIconIndexBin);
   AddExt('a', FIconIndexBin);
-  AddExt('mp3', FIconIndexBin);
-  AddExt('mp4', FIconIndexBin);
-  AddExt('m4a', FIconIndexBin);
-  AddExt('mpg', FIconIndexBin);
-  AddExt('mpeg', FIconIndexBin);
-  AddExt('avi', FIconIndexBin);
-  AddExt('mov', FIconIndexBin);
-  AddExt('ogg', FIconIndexBin);
-  AddExt('flac', FIconIndexBin);
-  AddExt('webm', FIconIndexBin);
   AddExt('pdf', FIconIndexBin);
   AddExt('doc', FIconIndexBin);
   AddExt('docx', FIconIndexBin);
@@ -523,6 +519,19 @@ begin
   AddExt('xlsx', FIconIndexBin);
   AddExt('ppt', FIconIndexBin);
   AddExt('pptx', FIconIndexBin);
+
+  AddExt('wav', FIconIndexAudio);
+  AddExt('mp3', FIconIndexAudio);
+  AddExt('ogg', FIconIndexAudio);
+  AddExt('flac', FIconIndexAudio);
+
+  AddExt('mp4', FIconIndexVideo);
+  AddExt('m4a', FIconIndexVideo);
+  AddExt('mpg', FIconIndexVideo);
+  AddExt('mpeg', FIconIndexVideo);
+  AddExt('avi', FIconIndexVideo);
+  AddExt('mov', FIconIndexVideo);
+  AddExt('webm', FIconIndexVideo);
 end;
 
 function TfmExplorer.GetImageIndex(const AFileName: string; AIsDir: boolean): integer;

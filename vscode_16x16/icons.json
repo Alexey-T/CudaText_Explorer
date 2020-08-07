@@ -7,6 +7,8 @@
     "_bin": "file_type_binary.png",
     "_server": "icon_server.png",
     "_bad": "icon_bad.png",
+    "_audio": "file_type_audio.png",
+    "_video": "file_type_video.png",
     "ActionScript": "file_type_actionscript.png",
     "Apache config": "file_type_apache.png",
     "Apache Hive": "file_type_apache.png",
