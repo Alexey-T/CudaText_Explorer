@@ -39,6 +39,8 @@ type
     ListExt: TStringList;
     ListLexer: TStringList;
     ListExtToLexer: TStringList;
+    procedure InitCommonLexers;
+    procedure InitUsualExtensions;
     procedure InitIconConfig;
     function GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
     function GetImageIndexFromPng(const AFilename: string): integer;
@@ -71,16 +73,6 @@ type
 { TfmExplorer }
 
 procedure TfmExplorer.FormCreate(Sender: TObject);
-  //
-  procedure AddLex(const AExt, ALexer: string); inline;
-  var
-    D: TExplorerStringDataItem;
-  begin
-    D:= TExplorerStringDataItem.Create;
-    D.Str:= ALexer;
-    ListExtToLexer.AddObject(AExt, D);
-  end;
-  //
 begin
   Tree.ShowRoot:= false;
   Tree.ReadOnly:= true;
@@ -99,6 +91,21 @@ begin
   ListExtToLexer.Sorted:= true;
   ListExtToLexer.OwnsObjects:= true;
 
+  InitCommonLexers;
+end;
+
+procedure TfmExplorer.InitCommonLexers;
+  //
+  procedure AddLex(const AExt, ALexer: string); inline;
+  var
+    D: TExplorerStringDataItem;
+  begin
+    D:= TExplorerStringDataItem.Create;
+    D.Str:= ALexer;
+    ListExtToLexer.AddObject(AExt, D);
+  end;
+  //
+begin
   AddLex('c', 'C');
   AddLex('h', 'C');
   AddLex('cpp', 'C++');
@@ -303,19 +310,9 @@ begin
 end;
 
 procedure TfmExplorer.InitIconConfig;
-  //
-  procedure AddExt(const AExt: string; AIndex: integer); inline;
-  begin
-    ListExt.AddObject(AExt, TObject(PtrInt(AIndex)));
-  end;
-  //
 var
   fnConfig: string;
-  fnDefault,
-  fnDir,
-  fnZip,
-  fnPic,
-  fnBin: string;
+  fnDefault, fnDir, fnZip, fnPic, fnBin: string;
 begin
   if not Assigned(FIconCfg) then
   begin
@@ -337,54 +334,65 @@ begin
     FIconIndexPic:= GetImageIndexFromPng(fnPic);
     FIconIndexBin:= GetImageIndexFromPng(fnBin);
 
-    AddExt('log', FIconIndexDefault);
-    AddExt('txt', FIconIndexDefault);
-    AddExt('csv', FIconIndexDefault);
-
-    AddExt('zip', FIconIndexZip);
-    AddExt('rar', FIconIndexZip);
-    AddExt('tar', FIconIndexZip);
-    AddExt('xz', FIconIndexZip);
-    AddExt('gz', FIconIndexZip);
-    AddExt('7z', FIconIndexZip);
-
-    AddExt('png', FIconIndexPic);
-    AddExt('gif', FIconIndexPic);
-    AddExt('bmp', FIconIndexPic);
-    AddExt('jpg', FIconIndexPic);
-    AddExt('jpeg', FIconIndexPic);
-    AddExt('svg', FIconIndexPic);
-    AddExt('ico', FIconIndexPic);
-
-    AddExt('exe', FIconIndexBin);
-    AddExt('dll', FIconIndexBin);
-    AddExt('dat', FIconIndexBin);
-    AddExt('so', FIconIndexBin);
-    AddExt('dylib', FIconIndexBin);
-    AddExt('dbg', FIconIndexBin);
-    AddExt('chm', FIconIndexBin);
-    AddExt('pyc', FIconIndexBin);
-    AddExt('o', FIconIndexBin);
-    AddExt('a', FIconIndexBin);
-    AddExt('mp3', FIconIndexBin);
-    AddExt('mp4', FIconIndexBin);
-    AddExt('m4a', FIconIndexBin);
-    AddExt('mpg', FIconIndexBin);
-    AddExt('mpeg', FIconIndexBin);
-    AddExt('avi', FIconIndexBin);
-    AddExt('mov', FIconIndexBin);
-    AddExt('ogg', FIconIndexBin);
-    AddExt('flac', FIconIndexBin);
-    AddExt('webm', FIconIndexBin);
-    AddExt('pdf', FIconIndexBin);
-    AddExt('doc', FIconIndexBin);
-    AddExt('docx', FIconIndexBin);
-    AddExt('xls', FIconIndexBin);
-    AddExt('xlsx', FIconIndexBin);
-    AddExt('ppt', FIconIndexBin);
-    AddExt('pptx', FIconIndexBin);
-    AddExt('iso', FIconIndexBin);
+    InitUsualExtensions;
   end;
+end;
+
+procedure TfmExplorer.InitUsualExtensions;
+  //
+  procedure AddExt(const AExt: string; AIndex: integer); inline;
+  begin
+    ListExt.AddObject(AExt, TObject(PtrInt(AIndex)));
+  end;
+  //
+begin
+  AddExt('log', FIconIndexDefault);
+  AddExt('txt', FIconIndexDefault);
+  AddExt('csv', FIconIndexDefault);
+
+  AddExt('zip', FIconIndexZip);
+  AddExt('rar', FIconIndexZip);
+  AddExt('tar', FIconIndexZip);
+  AddExt('xz', FIconIndexZip);
+  AddExt('gz', FIconIndexZip);
+  AddExt('7z', FIconIndexZip);
+
+  AddExt('png', FIconIndexPic);
+  AddExt('gif', FIconIndexPic);
+  AddExt('bmp', FIconIndexPic);
+  AddExt('jpg', FIconIndexPic);
+  AddExt('jpeg', FIconIndexPic);
+  AddExt('svg', FIconIndexPic);
+  AddExt('ico', FIconIndexPic);
+
+  AddExt('exe', FIconIndexBin);
+  AddExt('dll', FIconIndexBin);
+  AddExt('dat', FIconIndexBin);
+  AddExt('so', FIconIndexBin);
+  AddExt('dylib', FIconIndexBin);
+  AddExt('dbg', FIconIndexBin);
+  AddExt('chm', FIconIndexBin);
+  AddExt('pyc', FIconIndexBin);
+  AddExt('o', FIconIndexBin);
+  AddExt('a', FIconIndexBin);
+  AddExt('mp3', FIconIndexBin);
+  AddExt('mp4', FIconIndexBin);
+  AddExt('m4a', FIconIndexBin);
+  AddExt('mpg', FIconIndexBin);
+  AddExt('mpeg', FIconIndexBin);
+  AddExt('avi', FIconIndexBin);
+  AddExt('mov', FIconIndexBin);
+  AddExt('ogg', FIconIndexBin);
+  AddExt('flac', FIconIndexBin);
+  AddExt('webm', FIconIndexBin);
+  AddExt('pdf', FIconIndexBin);
+  AddExt('doc', FIconIndexBin);
+  AddExt('docx', FIconIndexBin);
+  AddExt('xls', FIconIndexBin);
+  AddExt('xlsx', FIconIndexBin);
+  AddExt('ppt', FIconIndexBin);
+  AddExt('pptx', FIconIndexBin);
+  AddExt('iso', FIconIndexBin);
 end;
 
 function TfmExplorer.GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
