@@ -195,6 +195,11 @@ begin
   AddLex('cmake', 'CMake');
   AddLex('ps1', 'PowerShell');
   AddLex('d', 'D');
+  AddLex('pdf', 'PDF');
+  AddLex('doc', 'Word');
+  AddLex('docx', 'Word');
+  AddLex('xls', 'Excel');
+  AddLex('xlsx', 'Excel');
 end;
 
 procedure TfmExplorer.HandleClick(ADouble: boolean);
@@ -513,11 +518,6 @@ begin
   AddExt('pyc', FIconIndexBin);
   AddExt('o', FIconIndexBin);
   AddExt('a', FIconIndexBin);
-  AddExt('pdf', FIconIndexBin);
-  AddExt('doc', FIconIndexBin);
-  AddExt('docx', FIconIndexBin);
-  AddExt('xls', FIconIndexBin);
-  AddExt('xlsx', FIconIndexBin);
   AddExt('ppt', FIconIndexBin);
   AddExt('pptx', FIconIndexBin);
   AddExt('fnt', FIconIndexBin);
