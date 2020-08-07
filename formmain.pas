@@ -51,6 +51,7 @@ function TfmMain.GetLexer(const fn: string): string;
 begin
   case LowerCase(ExtractFileExt(fn)) of
     '.pp', '.inc': Result:= 'Pascal';
+    '.lpi', '.lpr', '.lps': Result:= 'XML';
     else Result:= '';
   end;
 end;

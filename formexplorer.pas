@@ -42,6 +42,7 @@ type
     FIconIndexPic: integer;
     FIconIndexBin: integer;
     ListExt: TStringList;
+    ListLexer: TStringList;
     ListExtToLexer: TStringList;
     procedure InitIconConfig;
     function GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
@@ -98,6 +99,9 @@ begin
   ListExt:= TStringList.Create;
   ListExt.Sorted:= true;
 
+  ListLexer:= TStringList.Create;
+  ListLexer.Sorted:= true;
+
   ListExtToLexer:= TStringList.Create;
   ListExtToLexer.Sorted:= true;
 
@@ -143,6 +147,7 @@ procedure TfmExplorer.FormDestroy(Sender: TObject);
 begin
   Tree.Items.Clear;
   FreeAndNil(ListExtToLexer);
+  FreeAndNil(ListLexer);
   FreeAndNil(ListExt);
   if Assigned(FIconCfg) then
     FreeAndNil(FIconCfg);
@@ -386,6 +391,7 @@ begin
     Delete(ext, 1, 1);
   if DetectUsualFiles(ext, Result) then exit;
 
+  //read cache for extensions
   if ListExt.Find(ext, i) then
     exit(PtrInt(ListExt.Objects[i]));
 
@@ -393,13 +399,19 @@ begin
     SLexer:= OnGetLexer(AFileName);
   if SLexer='' then exit;
 
+  //read cache for lexers
+  if ListLexer.Find(SLexer, i) then
+    exit(PtrInt(ListLexer.Objects[i]));
+
   fnIcon:= FIconCfg.GetValue(SLexer, '');
   if fnIcon='' then exit;
-
   Result:= GetImageIndexFromPng(fnIcon);
-  ListExt.AddObject(ext, TObject(PtrInt(Result)));
 
-  //ShowMessage('load ico: '+SLexer);
+  //save to 2 caches
+  ListExt.AddObject(ext, TObject(PtrInt(Result)));
+  ListLexer.AddObject(SLexer, TObject(PtrInt(Result)));
+
+  ShowMessage('Load icon: '+ext);
 end;
 
 function TfmExplorer.GetImageIndexFromPng(const AFilename: string): integer;
