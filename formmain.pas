@@ -59,14 +59,13 @@ begin
   exp:= TfmExplorer.Create(Self);
   exp.Parent:= PanelLeft;
   exp.Align:= alClient;
+  exp.BorderStyle:= bsNone;
   exp.Show;
 
   ExplorerOptions.DirOfIcons:= ExtractFilePath(Application.ExeName)+'vscode_16x16';
   exp.OnGetLexer:= @ExplorerGetLexer;
   exp.OnItemClick:= @ExplorerClick;
   exp.Folder:= ExtractFileDir(Application.ExeName);
-
-  Caption:= 'Explorer: '+exp.Folder;
 end;
 
 function TfmMain.ExplorerGetLexer(const fn: string): string;
