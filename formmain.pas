@@ -61,7 +61,7 @@ begin
   exp.Align:= alClient;
   exp.Show;
 
-  ExplorerOptions.IconDir:= ExtractFilePath(Application.ExeName)+'vscode_16x16';
+  ExplorerOptions.DirOfIcons:= ExtractFilePath(Application.ExeName)+'vscode_16x16';
   exp.OnGetLexer:= @ExplorerGetLexer;
   exp.OnItemClick:= @ExplorerClick;
   exp.Folder:= ExtractFileDir(Application.ExeName);

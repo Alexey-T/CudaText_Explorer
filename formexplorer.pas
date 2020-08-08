@@ -10,7 +10,7 @@ uses
 
 type
   TExplorerOptions = record
-    IconDir: string;
+    DirOfIcons: string;
     ShowRootNode: boolean;
     ShowDotNames: boolean;
     ShowDotNamesFirst: boolean;
@@ -536,7 +536,7 @@ var
 begin
   if not Assigned(FIconCfg) then
   begin
-    fnConfig:= ExplorerOptions.IconDir+DirectorySeparator+'icons.json';
+    fnConfig:= ExplorerOptions.DirOfIcons+DirectorySeparator+'icons.json';
     if not FileExists(fnConfig) then exit;
 
     FIconCfg:= TJSONConfig.Create(Self);
@@ -626,7 +626,7 @@ var
   Img: TPortableNetworkGraphic;
   fn: string;
 begin
-  fn:= ExplorerOptions.IconDir+DirectorySeparator+AFilename;
+  fn:= ExplorerOptions.DirOfIcons+DirectorySeparator+AFilename;
   if not FileExists(fn) then
     exit(FIconIndexDefault);
 
