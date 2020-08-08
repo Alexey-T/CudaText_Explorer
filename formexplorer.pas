@@ -196,6 +196,9 @@ begin
   AddLex('cmake', 'CMake');
   AddLex('ps1', 'PowerShell');
   AddLex('kt', 'Kotlin');
+  AddLex('styl', 'Stylus');
+  AddLex('slim', 'Slim');
+  AddLex('swift', 'Swift');
   AddLex('d', 'D');
   AddLex('po', 'PO');
 
