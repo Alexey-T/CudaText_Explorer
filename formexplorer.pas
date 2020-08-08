@@ -195,6 +195,7 @@ begin
   AddLex('diff', 'Diff');
   AddLex('cmake', 'CMake');
   AddLex('ps1', 'PowerShell');
+  AddLex('kt', 'Kotlin');
   AddLex('d', 'D');
   AddLex('po', 'PO');
 
