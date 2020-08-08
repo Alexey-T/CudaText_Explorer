@@ -19,7 +19,7 @@ type
     chkShowDotNames: TCheckBox;
     chkShowIcons: TCheckBox;
     chkShowRoot: TCheckBox;
-    ListBox1: TListBox;
+    L: TListBox;
     PanelLeft: TPanel;
     Panel2: TPanel;
     PanelRt: TPanel;
@@ -37,6 +37,7 @@ type
     exp: TfmExplorer;
     function ExplorerGetLexer(const fn: string): string;
     procedure ExplorerClick(const fn: string; Kind: TExplorerClickKind);
+    procedure FakeOpenFile(const fn: string);
   public
 
   end;
@@ -82,6 +83,27 @@ const
   sKind: array[TExplorerClickKind] of string = ('-', 'click', 'dbl-click', 'fold', 'unfold');
 begin
   StatusBar1.SimpleText:= '"'+fn+'", '+sKind[Kind];
+
+  case Kind of
+    eckFileClick:
+      FakeOpenFile(fn);
+  end;
+end;
+
+procedure TfmMain.FakeOpenFile(const fn: string);
+var
+  cap: string;
+  n: integer;
+begin
+  cap:= ExtractFileName(fn) + ' ('+ExtractFileDir(fn)+')';
+  n:= L.Items.IndexOf(cap);
+  if n>=0 then
+    L.ItemIndex:= n
+  else
+  begin
+    L.Items.Add(cap);
+    L.ItemIndex:= L.Items.Count-1;
+  end;
 end;
 
 procedure TfmMain.BtnFolderClick(Sender: TObject);
@@ -96,15 +118,15 @@ var
 procedure TfmMain.BtnAddClick(Sender: TObject);
 begin
   Inc(NTab);
-  Listbox1.Items.Add('Tab '+IntToStr(NTab));
-  Listbox1.ItemIndex:= Listbox1.Items.Count-1;
+  L.Items.Add('Tab '+IntToStr(NTab));
+  L.ItemIndex:= L.Items.Count-1;
 end;
 
 procedure TfmMain.BtnCloseClick(Sender: TObject);
 var
   N: integer;
 begin
-  with Listbox1 do
+  with L do
     if ItemIndex>=0 then
     begin
       N:= ItemIndex;

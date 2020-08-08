@@ -44,7 +44,7 @@ object fmMain: TfmMain
     ClientHeight = 527
     ClientWidth = 286
     TabOrder = 3
-    object ListBox1: TListBox
+    object L: TListBox
       Left = 0
       Height = 360
       Top = 8
