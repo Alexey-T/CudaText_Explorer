@@ -199,6 +199,10 @@ begin
   AddLex('styl', 'Stylus');
   AddLex('slim', 'Slim');
   AddLex('swift', 'Swift');
+  AddLex('toml', 'TOML');
+  AddLex('twig', 'Twig');
+  AddLex('svg', 'SVG');
+  AddLex('psd', 'Photoshop');
   AddLex('d', 'D');
   AddLex('po', 'PO');
 
@@ -567,10 +571,8 @@ begin
   AddExt('bmp', FIconIndexPic);
   AddExt('jpg', FIconIndexPic);
   AddExt('jpeg', FIconIndexPic);
-  AddExt('svg', FIconIndexPic);
   AddExt('ico', FIconIndexPic);
   AddExt('ai', FIconIndexPic);
-  AddExt('psd', FIconIndexPic);
   AddExt('tif', FIconIndexPic);
   AddExt('tiff', FIconIndexPic);
 end;
