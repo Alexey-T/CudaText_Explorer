@@ -16,6 +16,7 @@ type
     ShowDotNamesFirst: boolean;
     ShowFolderBrackets: boolean;
     ShowIcons: boolean;
+    ShowIconsDirs: boolean;
     ShowNodeForEmpty: boolean;
     FoldDirsByClick: boolean;
     TextEmpty: string;
@@ -524,7 +525,6 @@ end;
 procedure TfmExplorer.InitIconConfig;
 var
   fnConfig: string;
-  fnDefault, fnDir, fnPic: string;
 begin
   if not Assigned(FIconCfg) then
   begin
@@ -534,13 +534,14 @@ begin
     FIconCfg:= TJSONConfig.Create(Self);
     FIconCfg.Filename:= fnConfig;
 
-    fnDefault:= FIconCfg.GetValue('_', '');
-    fnDir:= FIconCfg.GetValue('_dir', '');
-    fnPic:= FIconCfg.GetValue('_img', '');
+    FIconIndexDefault:= GetImageIndexFromPng(FIconCfg.GetValue('_', ''));
 
-    FIconIndexDefault:= GetImageIndexFromPng(fnDefault);
-    FIconIndexDir:= GetImageIndexFromPng(fnDir);
-    FIconIndexPic:= GetImageIndexFromPng(fnPic);
+    if ExplorerOptions.ShowIconsDirs then
+      FIconIndexDir:= GetImageIndexFromPng(FIconCfg.GetValue('_dir', ''))
+    else
+      FIconIndexDir:= -1;
+
+    FIconIndexPic:= GetImageIndexFromPng(FIconCfg.GetValue('_img', ''));
 
     InitUsualExtensions;
   end;
@@ -641,6 +642,7 @@ initialization
     ShowDotNamesFirst:= true;
     ShowFolderBrackets:= true;
     ShowIcons:= true;
+    ShowIconsDirs:= true;
     ShowNodeForEmpty:= false;
     FoldDirsByClick:= true;
     TextEmpty:= '(Empty)';
