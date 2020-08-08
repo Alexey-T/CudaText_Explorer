@@ -1,28 +1,28 @@
 object fmExplorer: TfmExplorer
   Left = 181
   Height = 573
-  Top = 197
+  Top = 158
   Width = 325
   Caption = 'fmExplorer'
   ClientHeight = 573
   ClientWidth = 325
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  LCLVersion = '2.0.10.0'
+  LCLVersion = '2.1.0.0'
   object PanelTree: TPanel
     Left = 0
-    Height = 555
-    Top = 18
+    Height = 440
+    Top = 133
     Width = 325
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 555
+    ClientHeight = 440
     ClientWidth = 325
     TabOrder = 0
     object Tree: TTreeView
       Left = 0
-      Height = 555
-      Top = 0
+      Height = 414
+      Top = 26
       Width = 325
       Align = alClient
       BorderStyle = bsNone
@@ -33,19 +33,60 @@ object fmExplorer: TfmExplorer
       OnDeletion = TreeDeletion
       OnExpanding = TreeExpanding
     end
+    object PanelTreeCap: TPanel
+      Left = 0
+      Height = 26
+      Top = 0
+      Width = 325
+      Align = alTop
+      Caption = 'Folder'
+      TabOrder = 1
+    end
   end
   object PanelTabs: TPanel
     Left = 0
-    Height = 18
+    Height = 127
     Top = 0
     Width = 325
     Align = alTop
     BevelOuter = bvNone
+    ClientHeight = 127
+    ClientWidth = 325
+    Constraints.MinHeight = 60
     TabOrder = 1
+    object PanelTabsCap: TPanel
+      Left = 0
+      Height = 26
+      Top = 0
+      Width = 325
+      Align = alTop
+      Caption = 'Tabs'
+      TabOrder = 0
+    end
+    object ListTabs: TATListbox
+      Left = 0
+      Height = 101
+      Top = 26
+      Width = 325
+      Align = alClient
+      ParentFont = False
+      ScrollStyleHorz = alssHide
+      ScrollStyleVert = alssAuto
+    end
+  end
+  object Splitter1: TSplitter
+    Cursor = crVSplit
+    Left = 0
+    Height = 6
+    Top = 127
+    Width = 325
+    Align = alTop
+    AutoSnap = False
+    ResizeAnchor = akTop
   end
   object Images: TImageList
     AllocBy = 15
-    Left = 203
-    Top = 77
+    Left = 248
+    Top = 312
   end
 end

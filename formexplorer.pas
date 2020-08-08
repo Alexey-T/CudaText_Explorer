@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls,
-  jsonConf;
+  ATListbox, jsonConf;
 
 type
   TExplorerOptions = record
@@ -43,9 +43,13 @@ type
   { TfmExplorer }
 
   TfmExplorer = class(TForm)
+    ListTabs: TATListbox;
     Images: TImageList;
+    PanelTabsCap: TPanel;
+    PanelTreeCap: TPanel;
     PanelTree: TPanel;
     PanelTabs: TPanel;
+    Splitter1: TSplitter;
     Tree: TTreeView;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
