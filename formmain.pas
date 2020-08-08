@@ -37,7 +37,7 @@ type
     exp: TfmExplorer;
     function ExplorerGetLexer(const fn: string): string;
     procedure ExplorerClick(const fn: string; Kind: TExplorerClickKind);
-    procedure FakeOpenFile(const fn: string);
+    procedure FakeOpenFile(const fn: string; AsTemp: boolean);
   public
 
   end;
@@ -86,24 +86,54 @@ begin
 
   case Kind of
     eckFileClick:
-      FakeOpenFile(fn);
+      FakeOpenFile(fn, true);
+    eckFileDblClick:
+      FakeOpenFile(fn, false);
   end;
 end;
 
-procedure TfmMain.FakeOpenFile(const fn: string);
+procedure TfmMain.FakeOpenFile(const fn: string; AsTemp: boolean);
+const
+  cTempPrefix = '* ';
 var
   cap: string;
-  n: integer;
+  n, i: integer;
 begin
   cap:= ExtractFileName(fn) + ' ('+ExtractFileDir(fn)+')';
+
   n:= L.Items.IndexOf(cap);
   if n>=0 then
-    L.ItemIndex:= n
-  else
   begin
-    L.Items.Add(cap);
-    L.ItemIndex:= L.Items.Count-1;
+    L.ItemIndex:= n;
+    exit;
   end;
+
+  n:= L.Items.IndexOf(cTempPrefix+cap);
+  if n>=0 then
+  begin
+    if AsTemp then
+      cap:= cTempPrefix+cap;
+    L.Items[n]:= cap;
+    L.ItemIndex:= n;
+    exit;
+  end;
+
+  if AsTemp then
+  begin
+    n:= -1;
+    for i:= 0 to L.Items.Count-1 do
+      if Pos(cTempPrefix, L.Items[i])=1 then
+      begin
+        L.Items[i]:= cTempPrefix+cap;
+        L.ItemIndex:= n;
+        exit;
+      end;
+  end;
+
+  if AsTemp then
+    cap:= cTempPrefix+cap;
+  L.Items.Add(cap);
+  L.ItemIndex:= L.Items.Count-1;
 end;
 
 procedure TfmMain.BtnFolderClick(Sender: TObject);
