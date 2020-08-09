@@ -334,6 +334,8 @@ begin
   AddLex('dart', 'Dart');
   AddLex('hs', 'Haskell');
   AddLex('erl', 'Erlang');
+  AddLex('elm', 'Elm');
+  AddLex('ex', 'Elixir');
   AddLex('clj', 'Clojure');
   AddLex('coffee', 'CoffeeScript');
   AddLex('lisp', 'Lisp');
