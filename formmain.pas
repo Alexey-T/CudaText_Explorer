@@ -6,7 +6,9 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
-  ComCtrls, Math, formexplorer;
+  ComCtrls, Math,
+  ATFlatThemes,
+  formexplorer;
 
 type
 
@@ -269,6 +271,11 @@ begin
   ExplorerOptions.ShowRootNode:= chkShowRoot.Checked;
   exp.Refresh;
 end;
+
+initialization
+
+  ATFlatTheme.FontName:= 'default';
+  ATFlatTheme.FontSize:= 10;
 
 end.
 

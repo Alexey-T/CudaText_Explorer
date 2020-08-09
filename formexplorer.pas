@@ -6,7 +6,11 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls,
-  ATListbox, ATButtons, Math, IniFiles;
+  Math,
+  IniFiles,
+  ATListbox,
+  ATButtons,
+  ATFlatThemes;
 
 type
   TExplorerOptions = record
@@ -37,6 +41,8 @@ type
     CaptionPanelColorFont: TColor;
     CaptionButtonXSize: integer;
     CaptionButtonX: array[boolean] of string;
+    FontName_Cap: string;
+    FontSize_Cap: integer;
   end;
 
 var
@@ -602,6 +608,14 @@ var
   b: boolean;
   NColor: TColor;
 begin
+  PanelTabsCap.Font.Name:= ExplorerOptions.FontName_Cap;
+  PanelTreeCap.Font.Name:= ExplorerOptions.FontName_Cap;
+  PanelTabsCap.Font.Size:= ExplorerOptions.FontSize_Cap;
+  PanelTreeCap.Font.Size:= ExplorerOptions.FontSize_Cap;
+
+  Tree.Font.Name:= ATFlatTheme.FontName;
+  Tree.Font.Size:= ATFlatTheme.FontSize;
+
   N:= ExplorerOptions.CaptionPanelHeight;
   PanelTabsCap.Height:= N;
   PanelTreeCap.Height:= N;
@@ -977,6 +991,8 @@ initialization
     CaptionButtonXSize:= 22;
     CaptionButtonX[false]:= '+';
     CaptionButtonX[true]:= '–';
+    FontName_Cap:= 'default';
+    FontSize_Cap:= 9;
   end;
 
 end.
