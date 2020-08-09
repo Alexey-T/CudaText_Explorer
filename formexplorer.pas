@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls,
-  ATListbox, Math, jsonConf;
+  ATListbox, ATButtons, Math, jsonConf;
 
 type
   TExplorerOptions = record
@@ -51,6 +51,8 @@ type
   { TfmExplorer }
 
   TfmExplorer = class(TForm)
+    BtnTreeX: TATButton;
+    BtnTabsX: TATButton;
     ListTabs: TATListbox;
     Images: TImageList;
     PanelTabsCap: TPanel;
@@ -59,6 +61,8 @@ type
     PanelTabs: TPanel;
     Splitter1: TSplitter;
     Tree: TTreeView;
+    procedure BtnTreeXClick(Sender: TObject);
+    procedure BtnTabsXClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormResize(Sender: TObject);
@@ -150,6 +154,18 @@ begin
   InitCommonLexers;
 
   FTabsSizeAuto:= true;
+end;
+
+procedure TfmExplorer.BtnTreeXClick(Sender: TObject);
+begin
+  Tree.Visible:= not Tree.Visible;
+  UpdatePanelSizes;
+end;
+
+procedure TfmExplorer.BtnTabsXClick(Sender: TObject);
+begin
+  ListTabs.Visible:= not ListTabs.Visible;
+  UpdatePanelSizes;
 end;
 
 procedure TfmExplorer.FormDestroy(Sender: TObject);
@@ -551,10 +567,29 @@ begin
   ListTabs.ItemTop:= Max(0, Min(ListTabs.ItemTop, ListTabs.ItemCount-ListTabs.VisibleItems));
 end;
 
+const
+  cBtn: array[boolean] of string = ('+', '–');
+
 procedure TfmExplorer.UpdatePanelSizes;
 var
   N, NSize, NSizeAuto, NSizeNormal, NSizeMax: integer;
+  bTabs, bTree: boolean;
 begin
+  bTabs:= ListTabs.Visible;
+  bTree:= Tree.Visible;
+
+  BtnTabsX.Caption:= cBtn[bTabs];
+  BtnTreeX.Caption:= cBtn[bTree];
+
+  if not bTabs then
+  begin
+    Splitter1.Visible:= false;
+    PanelTabs.Constraints.MaxHeight:= PanelTabsCap.Height;
+    PanelTabs.Height:= PanelTabsCap.Height;
+    FTabsSizeAuto:= true;
+    exit
+  end;
+
   NSizeAuto:= ListTabs.ItemCount*ListTabs.ItemHeight;
   Inc(NSizeAuto, ExplorerOptions.TabsIndentV);
   N:= ClientHeight;
@@ -832,7 +867,7 @@ initialization
     TextEmptyWithHidden:= '(Empty, %d hidden item(s))';
     TabsIndent1:= 12;
     TabsIndent2:= 4;
-    TabsIndentV:= 1;
+    TabsIndentV:= 0;
     TabsHeightPercents:= 25;
     TabsHeightMaxPercents:= 70;
   end;

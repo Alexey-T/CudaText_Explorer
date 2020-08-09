@@ -41,7 +41,21 @@ object fmExplorer: TfmExplorer
       Width = 325
       Align = alTop
       Caption = 'Folder'
+      ClientHeight = 26
+      ClientWidth = 325
       TabOrder = 1
+      object BtnTreeX: TATButton
+        Left = 296
+        Height = 24
+        Top = 1
+        Width = 28
+        Align = alRight
+        Caption = 'x'
+        TabOrder = 0
+        Focusable = False
+        Flat = True
+        OnClick = BtnTreeXClick
+      end
     end
   end
   object PanelTabs: TPanel
@@ -61,7 +75,21 @@ object fmExplorer: TfmExplorer
       Width = 325
       Align = alTop
       Caption = 'Tabs'
+      ClientHeight = 26
+      ClientWidth = 325
       TabOrder = 0
+      object BtnTabsX: TATButton
+        Left = 296
+        Height = 24
+        Top = 1
+        Width = 28
+        Align = alRight
+        Caption = 'x'
+        TabOrder = 0
+        Focusable = False
+        Flat = True
+        OnClick = BtnTabsXClick
+      end
     end
     object ListTabs: TATListbox
       Left = 0
