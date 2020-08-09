@@ -71,6 +71,7 @@ begin
   exp.BorderStyle:= bsNone;
   exp.Show;
 
+  exp.UpdatePanelSizes;
   ExplorerOptions.DirOfIcons:= ExtractFilePath(Application.ExeName)+'vscode_16x16';
 
   exp.OnGetLexer:= @ExplorerGetLexer;
