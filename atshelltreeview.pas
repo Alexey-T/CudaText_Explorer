@@ -57,8 +57,9 @@ type
     procedure ReadFolder(const AFolder: string; AList: TStringList; out ACountHidden: integer);
     procedure TreeClick(Sender: TObject);
     procedure TreeDblClick(Sender: TObject);
-    procedure TreeDeletion(Sender: TObject; Node: TTreeNode);
-    procedure TreeExpanding(Sender: TObject; Node: TTreeNode; var AllowExpansion: Boolean);
+  protected
+    procedure Delete(Node: TTreeNode); override;
+    function CanExpand(Node: TTreeNode): boolean; override;
   public
     property Folder: string read FFolder write SetFolder;
     constructor Create(AOwner: TComponent); override;
@@ -203,12 +204,18 @@ begin
     end;
 end;
 
-procedure TATShellTreeview.TreeExpanding(Sender: TObject; Node: TTreeNode;
-  var AllowExpansion: Boolean);
+procedure TATShellTreeview.Delete(Node: TTreeNode);
+begin
+  if Assigned(Node.Data) then
+    TObject(Node.Data).Free;
+  inherited;
+end;
+
+function TATShellTreeview.CanExpand(Node: TTreeNode): boolean;
 var
   Data: TExplorerNodeData;
 begin
-  AllowExpansion:= true;
+  Result:= true;
   Data:= TExplorerNodeData(Node.Data);
   if Data=nil then exit;
   if Data.Expanded then exit;
@@ -259,12 +266,6 @@ begin
   HandleClick(true);
 end;
 
-procedure TATShellTreeview.TreeDeletion(Sender: TObject; Node: TTreeNode);
-begin
-  if Assigned(Node.Data) then
-    TObject(Node.Data).Free;
-end;
-
 constructor TATShellTreeview.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
@@ -275,8 +276,6 @@ begin
 
   OnClick:= @TreeClick;
   OnDblClick:= @TreeDblClick;
-  OnDeletion:= @TreeDeletion;
-  OnExpanding:= @TreeExpanding;
 
   Images:= ATShellIcons.Images;
 end;
