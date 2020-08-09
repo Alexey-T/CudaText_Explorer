@@ -7,6 +7,8 @@ It uses helper object of class ATShellIcons which holds cache of file-type icons
 ATShellTreeview gives "Folder" property which loads the folder to the root of treeview. Only first level of folder is read initially. All sub-folders are read on demand, on unfolding tree nodes.
 It gives event OnShellItemClick which allows to detect click and double-click on nodes (giving full file path).
 
+ATShellOptions global record allows to change many options of that treeview.
+
 # Usage
 
 Component is not placed on Lazarus component palette, it must be created at runtime.
