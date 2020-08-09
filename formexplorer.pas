@@ -461,10 +461,7 @@ begin
   if ExplorerOptions.ShowRootNode then
   begin
     RootNode:= Tree.Items.Add(nil, PrettyDirName(ExtractFileName(FFolder)));
-    if ExplorerOptions.ShowIcons then
-      NIcon:= FIconIndexDir
-    else
-      NIcon:= -1;
+    NIcon:= FIconIndexDir;
     RootNode.ImageIndex:= NIcon;
     RootNode.SelectedIndex:= NIcon;
   end
@@ -632,10 +629,7 @@ begin
         S:= PrettyDirName(S);
 
       Node:= Tree.Items.AddChildObject(ANode, S, NodeData);
-      if ExplorerOptions.ShowIcons then
-        NIcon:= GetImageIndex(NodeData.Path, NodeData.IsDir)
-      else
-        NIcon:= -1;
+      NIcon:= GetImageIndex(NodeData.Path, NodeData.IsDir);
       Node.ImageIndex:= NIcon;
       Node.SelectedIndex:= NIcon;
 
@@ -702,6 +696,8 @@ var
   ext: string;
   N: integer;
 begin
+  if not ExplorerOptions.ShowIcons then
+    exit(-1);
   if AIsDir then
     exit(FIconIndexDir);
   Result:= FIconIndexDefault;
