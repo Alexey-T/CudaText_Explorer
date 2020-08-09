@@ -18,6 +18,7 @@ type
     ShowIcons: boolean;
     ShowIconsDirs: boolean;
     ShowNodeForEmpty: boolean;
+    ShowCaptionButtonsX: boolean;
     FoldDirsByClick: boolean;
     TextEmpty: string;
     TextEmptyWithHidden: string;
@@ -580,6 +581,7 @@ const
 procedure TfmExplorer.UpdateTheme;
 var
   N: integer;
+  b: boolean;
   NColor: TColor;
 begin
   N:= ExplorerOptions.CaptionPanelHeight;
@@ -597,6 +599,10 @@ begin
   N:= ExplorerOptions.ButtonXSize;
   BtnTabsX.Width:= N;
   BtnTreeX.Width:= N;
+
+  b:= ExplorerOptions.ShowCaptionButtonsX;
+  BtnTabsX.Visible:= b;
+  BtnTreeX.Visible:= b;
 
   if ExplorerOptions.TabsBelow then
     PanelTabs.Align:= alBottom
@@ -905,6 +911,7 @@ initialization
     ShowIcons:= true;
     ShowIconsDirs:= true;
     ShowNodeForEmpty:= false;
+    ShowCaptionButtonsX:= true;
     FoldDirsByClick:= true;
     TextEmpty:= '(Empty)';
     TextEmptyWithHidden:= '(Empty, %d hidden item(s))';
