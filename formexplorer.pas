@@ -57,6 +57,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure ListTabsChangedSel(Sender: TObject);
+    procedure ListTabsClickXMark(Sender: TObject);
     procedure TreeClick(Sender: TObject);
     procedure TreeDblClick(Sender: TObject);
     procedure TreeDeletion(Sender: TObject; Node: TTreeNode);
@@ -68,6 +69,7 @@ type
     FOnGetTabs: TExplorerOnGetTabs;
     FOnGetTabProp: TExplorerOnGetTabProp;
     FOnTabSelect: TExplorerOnTabSelect;
+    FOnTabClose: TExplorerOnTabSelect;
     FIconCfg: TJSONConfig;
     FIconIndexDefault: integer;
     FIconIndexDir: integer;
@@ -94,6 +96,7 @@ type
     property OnGetTabs: TExplorerOnGetTabs read FOnGetTabs write FOnGetTabs;
     property OnGetTabProp: TExplorerOnGetTabProp read FOnGetTabProp write FOnGetTabProp;
     property OnTabSelect: TExplorerOnTabSelect read FOnTabSelect write FOnTabSelect;
+    property OnTabClose: TExplorerOnTabSelect read FOnTabClose write FOnTabClose;
   end;
 
 implementation
@@ -130,8 +133,6 @@ begin
   ListExtToLexer.Sorted:= true;
   ListExtToLexer.OwnsObjects:= true;
 
-  ListTabs.VirtualMode:= false;
-
   InitCommonLexers;
 end;
 
@@ -149,6 +150,12 @@ procedure TfmExplorer.ListTabsChangedSel(Sender: TObject);
 begin
   if Assigned(FOnTabSelect) then
     FOnTabSelect(ListTabs.ItemIndex);
+end;
+
+procedure TfmExplorer.ListTabsClickXMark(Sender: TObject);
+begin
+  if Assigned(FOnTabClose) then
+    FOnTabClose(ListTabs.ItemIndex);
 end;
 
 procedure TfmExplorer.InitCommonLexers;

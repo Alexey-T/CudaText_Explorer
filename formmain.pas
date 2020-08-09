@@ -43,6 +43,7 @@ type
     procedure ExplorerGetTabProp(AIndex: integer; out ACaption, AFilename: string; out AModified: boolean);
     procedure UpdateTabs(ASelChange: boolean);
     procedure ExplorerTabSelect(AIndex: integer);
+    procedure ExplorerTabClose(AIndex: integer);
   public
 
   end;
@@ -71,11 +72,14 @@ begin
   exp.Show;
 
   ExplorerOptions.DirOfIcons:= ExtractFilePath(Application.ExeName)+'vscode_16x16';
+
   exp.OnGetLexer:= @ExplorerGetLexer;
   exp.OnItemClick:= @ExplorerClick;
   exp.OnGetTabs:= @ExplorerGetTabs;
   exp.OnGetTabProp:= @ExplorerGetTabProp;
   exp.OnTabSelect:= @ExplorerTabSelect;
+  exp.OnTabClose:= @ExplorerTabClose;
+
   exp.Folder:= ExtractFileDir(Application.ExeName);
 end;
 
@@ -188,6 +192,20 @@ begin
   L.ItemIndex:= AIndex;
 end;
 
+procedure TfmMain.ExplorerTabClose(AIndex: integer);
+var
+  N: integer;
+begin
+  if AIndex<L.Items.Count then
+  begin
+    N:= L.ItemIndex;
+    L.Items.Delete(AIndex);
+    if L.Items.Count>0 then
+      L.ItemIndex:= Max(0, Min(N, L.Items.Count-1));
+    UpdateTabs(false);
+  end;
+end;
+
 procedure TfmMain.BtnFolderClick(Sender: TObject);
 begin
   if SelectDirectoryDialog1.Execute then
@@ -195,12 +213,12 @@ begin
 end;
 
 var
-  NTab: integer = 0;
+  MaxTabIndex: integer = 0;
 
 procedure TfmMain.BtnAddClick(Sender: TObject);
 begin
-  Inc(NTab);
-  L.Items.Add('Tab '+IntToStr(NTab));
+  Inc(MaxTabIndex);
+  L.Items.Add('Tab '+IntToStr(MaxTabIndex));
   L.ItemIndex:= L.Items.Count-1;
   UpdateTabs(false);
 end;

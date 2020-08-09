@@ -69,9 +69,13 @@ object fmExplorer: TfmExplorer
       Top = 26
       Width = 325
       Align = alClient
+      HotTrack = True
       ParentFont = False
       ScrollStyleHorz = alssHide
       ScrollStyleVert = alssAuto
+      ShowXMark = albsxHotItem
+      VirtualMode = False
+      OnClickXMark = ListTabsClickXMark
       OnChangedSel = ListTabsChangedSel
     end
   end
