@@ -178,10 +178,10 @@ begin
   NIndent2:= ExplorerOptions.IndentListbox2;
 
   if AIndex=list.ItemIndex then
-    C.Brush.Color:= clLtGray
+    C.Brush.Color:= list.Theme^.ColorBgListboxSel
   else
   if list.HotTrack and (AIndex=list.HotTrackIndex) then
-    C.Brush.Color:= clMoneyGreen
+    C.Brush.Color:= list.Theme^.ColorBgListboxHottrack
   else
     C.Brush.Color:= list.Theme^.ColorBgListbox;
   C.FillRect(ARect);
