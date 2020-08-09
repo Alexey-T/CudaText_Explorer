@@ -33,11 +33,15 @@ type
     procedure chkShowIconsChange(Sender: TObject);
     procedure chkShowRootChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure LSelectionChange(Sender: TObject; User: boolean);
   private
     exp: TfmExplorer;
+    procedure FakeOpenFile(const fn: string; AsTemp: boolean);
     function ExplorerGetLexer(const fn: string): string;
     procedure ExplorerClick(const fn: string; Kind: TExplorerClickKind);
-    procedure FakeOpenFile(const fn: string; AsTemp: boolean);
+    procedure ExplorerGetTabs(out ACount: integer; out ASelected: integer);
+    procedure ExplorerGetTabProp(AIndex: integer; out ACaption, AFilename: string; out AModified: boolean);
+    procedure UpdateTabs(ASelChange: boolean);
   public
 
   end;
@@ -52,6 +56,9 @@ uses
 
 {$R *.lfm}
 
+const
+  cTempPrefix = '* ';
+
 { TfmMain }
 
 procedure TfmMain.FormCreate(Sender: TObject);
@@ -65,7 +72,14 @@ begin
   ExplorerOptions.DirOfIcons:= ExtractFilePath(Application.ExeName)+'vscode_16x16';
   exp.OnGetLexer:= @ExplorerGetLexer;
   exp.OnItemClick:= @ExplorerClick;
+  exp.OnGetTabs:= @ExplorerGetTabs;
+  exp.OnGetTabProp:= @ExplorerGetTabProp;
   exp.Folder:= ExtractFileDir(Application.ExeName);
+end;
+
+procedure TfmMain.LSelectionChange(Sender: TObject; User: boolean);
+begin
+  UpdateTabs(true);
 end;
 
 function TfmMain.ExplorerGetLexer(const fn: string): string;
@@ -92,12 +106,11 @@ begin
 end;
 
 procedure TfmMain.FakeOpenFile(const fn: string; AsTemp: boolean);
-const
-  cTempPrefix = '* ';
 var
   cap: string;
   n, i: integer;
 begin
+ try
   cap:= ExtractFileName(fn) + ' ('+ExtractFileDir(fn)+')';
 
   n:= L.Items.IndexOf(cap);
@@ -133,6 +146,39 @@ begin
     cap:= cTempPrefix+cap;
   L.Items.Add(cap);
   L.ItemIndex:= L.Items.Count-1;
+ finally
+   UpdateTabs(false);
+ end;
+end;
+
+procedure TfmMain.ExplorerGetTabs(out ACount: integer; out ASelected: integer);
+begin
+  ACount:= L.Items.Count;
+  ASelected:= L.ItemIndex;
+end;
+
+procedure TfmMain.ExplorerGetTabProp(AIndex: integer; out ACaption,
+  AFilename: string; out AModified: boolean);
+begin
+  if (AIndex>=0) and (AIndex<L.Items.Count) then
+  begin
+    ACaption:= L.Items[AIndex];
+    if Pos(cTempPrefix, ACaption)=1 then
+      Delete(ACaption, 1, Length(cTempPrefix));
+    AFilename:= 'filename'+IntToStr(AIndex);
+    AModified:= Odd(AIndex);
+  end
+  else
+  begin
+    ACaption:= '';
+    AFilename:= '';
+    AModified:= false;
+  end;
+end;
+
+procedure TfmMain.UpdateTabs(ASelChange: boolean);
+begin
+  exp.UpdateTabs(ASelChange);
 end;
 
 procedure TfmMain.BtnFolderClick(Sender: TObject);
@@ -149,6 +195,7 @@ begin
   Inc(NTab);
   L.Items.Add('Tab '+IntToStr(NTab));
   L.ItemIndex:= L.Items.Count-1;
+  UpdateTabs(false);
 end;
 
 procedure TfmMain.BtnCloseClick(Sender: TObject);
@@ -161,6 +208,7 @@ begin
       N:= ItemIndex;
       Items.Delete(ItemIndex);
       ItemIndex:= Min(N, Items.Count-1);
+      UpdateTabs(false);
     end;
 end;
 

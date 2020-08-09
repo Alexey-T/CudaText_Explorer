@@ -38,6 +38,8 @@ type
 type
   TExplorerOnItemClick = procedure(const AFileName: string; AKind: TExplorerClickKind) of object;
   TExplorerOnGetLexer = function(const AFileName: string): string of object;
+  TExplorerOnGetTabs = procedure(out ACount: integer; out ASelected: integer) of object;
+  TExplorerOnGetTabProp = procedure(AIndex: integer; out ACaption, AFilename: string; out AModified: boolean) of object;
 
 type
   { TfmExplorer }
@@ -61,6 +63,8 @@ type
     FFolder: string;
     FOnGetLexer: TExplorerOnGetLexer;
     FOnItemClick: TExplorerOnItemClick;
+    FOnGetTabs: TExplorerOnGetTabs;
+    FOnGetTabProp: TExplorerOnGetTabProp;
     FIconCfg: TJSONConfig;
     FIconIndexDefault: integer;
     FIconIndexDir: integer;
@@ -80,9 +84,12 @@ type
     procedure SetFolder(const AValue: string);
   public
     procedure Refresh;
+    procedure UpdateTabs(ASelChange: boolean);
     property Folder: string read FFolder write SetFolder;
     property OnGetLexer: TExplorerOnGetLexer read FOnGetLexer write FOnGetLexer;
     property OnItemClick: TExplorerOnItemClick read FOnItemClick write FOnItemClick;
+    property OnGetTabs: TExplorerOnGetTabs read FOnGetTabs write FOnGetTabs;
+    property OnGetTabProp: TExplorerOnGetTabProp read FOnGetTabProp write FOnGetTabProp;
   end;
 
 implementation
@@ -118,6 +125,8 @@ begin
   ListExtToLexer:= TStringList.Create;
   ListExtToLexer.Sorted:= true;
   ListExtToLexer.OwnsObjects:= true;
+
+  ListTabs.VirtualMode:= false;
 
   InitCommonLexers;
 end;
@@ -403,6 +412,41 @@ procedure TfmExplorer.Refresh;
 begin
   if FFolder<>'' then
     SetFolder(FFolder);
+end;
+
+procedure TfmExplorer.UpdateTabs(ASelChange: boolean);
+var
+  NCount, NSel, i: integer;
+  SCaption, SFilename: string;
+  bModified: boolean;
+begin
+  OnGetTabs(NCount, NSel);
+
+  if ASelChange then
+  begin
+    if (NSel>=0) and (NSel<ListTabs.Items.Count) then
+    begin
+      ListTabs.ItemIndex:= NSel;
+      ListTabs.Invalidate;
+    end;
+    exit;
+  end;
+
+  ListTabs.Items.BeginUpdate;
+  try
+    ListTabs.Items.Clear;
+    for i:= 0 to NCount-1 do
+    begin
+      OnGetTabProp(i, SCaption, SFilename, bModified);
+      if bModified then
+        SCaption:= '*'+SCaption;
+      ListTabs.Items.Add(Format('[%d] %s', [i+1, SCaption]));
+    end;
+    ListTabs.ItemIndex:= NSel;
+  finally
+    ListTabs.Items.EndUpdate;
+    ListTabs.Invalidate;
+  end;
 end;
 
 function _CompareFilenames(L: TStringList; Index1, Index2: integer): integer;
