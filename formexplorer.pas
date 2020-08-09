@@ -65,6 +65,7 @@ type
     procedure ListTabsClickXMark(Sender: TObject);
     procedure ListTabsDrawItem(Sender: TObject; C: TCanvas; AIndex: integer;
       const ARect: TRect);
+    procedure ListTabsResize(Sender: TObject);
     procedure TreeClick(Sender: TObject);
     procedure TreeDblClick(Sender: TObject);
     procedure TreeDeletion(Sender: TObject; Node: TTreeNode);
@@ -97,6 +98,7 @@ type
   public
     procedure Refresh;
     procedure UpdateTabs(ASelChange: boolean);
+    procedure UpdateTabsTopIndex;
     procedure UpdatePanelSizes;
     property Folder: string read FFolder write SetFolder;
     property OnGetLexer: TExplorerOnGetLexer read FOnGetLexer write FOnGetLexer;
@@ -216,6 +218,11 @@ begin
     ARect.Left+NIndent1+NIconSize+NIndent2,
     (ARect.Top+ARect.Bottom-C.TextHeight(S)) div 2,
     S);
+end;
+
+procedure TfmExplorer.ListTabsResize(Sender: TObject);
+begin
+  UpdateTabsTopIndex;
 end;
 
 procedure TfmExplorer.InitCommonLexers;
@@ -520,11 +527,16 @@ begin
     UpdatePanelSizes;
 
     ListTabs.ItemIndex:= NSel;
-    ListTabs.ItemTop:= Max(0, Min(ListTabs.ItemTop, ListTabs.ItemCount-ListTabs.VisibleItems));
+    UpdateTabsTopIndex;
   finally
     ListTabs.Items.EndUpdate;
     ListTabs.Invalidate;
   end;
+end;
+
+procedure TfmExplorer.UpdateTabsTopIndex;
+begin
+  ListTabs.ItemTop:= Max(0, Min(ListTabs.ItemTop, ListTabs.ItemCount-ListTabs.VisibleItems));
 end;
 
 procedure TfmExplorer.UpdatePanelSizes;
@@ -540,7 +552,7 @@ begin
 
   Splitter1.Visible:= NSizeAuto>NSizeNormal;
   PanelTabs.Height:= PanelTabsCap.Height + NSize;
-  PanelTabs.Constraints.MaxHeight:= PanelTabsCap.Height + NSizeMax;
+  PanelTabs.Constraints.MaxHeight:= PanelTabsCap.Height + Min(NSizeAuto, NSizeMax);
 end;
 
 function _CompareFilenames(L: TStringList; Index1, Index2: integer): integer;

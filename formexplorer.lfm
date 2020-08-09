@@ -53,7 +53,6 @@ object fmExplorer: TfmExplorer
     BevelOuter = bvNone
     ClientHeight = 127
     ClientWidth = 325
-    Constraints.MinHeight = 60
     TabOrder = 1
     object PanelTabsCap: TPanel
       Left = 0
@@ -82,6 +81,7 @@ object fmExplorer: TfmExplorer
       OnClickXMark = ListTabsClickXMark
       OnChangedSel = ListTabsChangedSel
       OnDrawItem = ListTabsDrawItem
+      OnResize = ListTabsResize
     end
   end
   object Splitter1: TSplitter
