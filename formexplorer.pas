@@ -109,6 +109,7 @@ type
     procedure InitIconConfig;
     procedure HandleClick(ADouble: boolean);
     procedure ReadFolder(const AFolder: string; AList: TStringList; out ACountHidden: integer);
+    function DetectLexer(const fn, ext: string): string;
     function GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
     function GetImageIndexFromPng(const AFilename: string): integer;
     function PrettyDirName(const S: string): string;
@@ -868,11 +869,27 @@ begin
   AddExt('tiff', FIconIndexPic);
 end;
 
+function TfmExplorer.DetectLexer(const fn, ext: string): string;
+var
+  N: integer;
+begin
+  Result:= '';
+
+  if fn='Dockerfile' then
+    exit(fn);
+
+  if ListExtToLexer.Find(ext, N) then
+    exit(TExplorerStringDataItem(ListExtToLexer.Objects[N]).Str);
+
+  if Assigned(FOnGetLexer) then
+    Result:= FOnGetLexer(fn);
+end;
+
 function TfmExplorer.GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
 var
   SLexer: string;
   fnIcon: string;
-  ext: string;
+  fn, ext: string;
   N: integer;
 begin
   if not ExplorerOptions.ShowIcons then
@@ -881,10 +898,11 @@ begin
     exit(FIconIndexDir);
   Result:= FIconIndexDefault;
 
+  fn:= ExtractFileName(AFileName);
   //show dot-names with default icon
-  if AFileName[1]='.' then exit;
+  if fn[1]='.' then exit;
 
-  ext:= LowerCase(ExtractFileExt(AFileName));
+  ext:= LowerCase(ExtractFileExt(fn));
   if ext<>'' then
     Delete(ext, 1, 1);
 
@@ -892,11 +910,7 @@ begin
   if ListExt.Find(ext, N) then
     exit(PtrInt(ListExt.Objects[N]));
 
-  if ListExtToLexer.Find(ext, N) then
-    SLexer:= TExplorerStringDataItem(ListExtToLexer.Objects[N]).Str
-  else
-  if Assigned(OnGetLexer) then
-    SLexer:= OnGetLexer(AFileName);
+  SLexer:= DetectLexer(fn, ext);
   if SLexer='' then exit;
 
   //read cache for lexers
