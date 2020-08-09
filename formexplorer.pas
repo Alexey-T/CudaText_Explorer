@@ -219,7 +219,10 @@ var
   N: integer;
 begin
   list:= ListTabs;
-  NIconSize:= Images.Width;
+  if ExplorerOptions.ShowIcons then
+    NIconSize:= Images.Width
+  else
+    NIconSize:= 0;
   NIndent1:= ExplorerOptions.TabsIndent1;
   NIndent2:= ExplorerOptions.TabsIndent2;
 
@@ -519,7 +522,10 @@ begin
   if ExplorerOptions.ShowRootNode then
   begin
     RootNode:= Tree.Items.Add(nil, PrettyDirName(ExtractFileName(FFolder)));
-    NIcon:= FIconIndexDir;
+    if ExplorerOptions.ShowIcons then
+      NIcon:= FIconIndexDir
+    else
+      NIcon:= -1;
     RootNode.ImageIndex:= NIcon;
     RootNode.SelectedIndex:= NIcon;
   end
@@ -536,6 +542,7 @@ procedure TfmExplorer.Refresh;
 begin
   if FFolder<>'' then
     SetFolder(FFolder);
+  ListTabs.Invalidate;
 end;
 
 procedure TfmExplorer.UpdateTabs(ASelChange: boolean);
