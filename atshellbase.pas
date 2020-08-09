@@ -35,11 +35,6 @@ type
   TATShellOnDetectLexer = function(const AFileName: string): string of object;
 
 type
-  TATShellStringClass = class
-    Str: string;
-  end;
-
-type
   { TATShellIcons }
 
   TATShellIcons = class
@@ -74,6 +69,11 @@ var
   ATShellIcons: TATShellIcons = nil;
 
 implementation
+
+type
+  TATShellStringClass = class
+    Str: string;
+  end;
 
 { TATShellIcons }
 
