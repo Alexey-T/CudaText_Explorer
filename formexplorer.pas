@@ -29,6 +29,7 @@ type
     CaptionPanelHeight: integer;
     CaptionPanelColorBg: TColor;
     CaptionPanelColorFont: TColor;
+    ButtonXSize: integer;
   end;
 
 var
@@ -590,6 +591,10 @@ begin
   NColor:= ExplorerOptions.CaptionPanelColorFont;
   PanelTabsCap.Font.Color:= NColor;
   PanelTreeCap.Font.Color:= NColor;
+
+  N:= ExplorerOptions.ButtonXSize;
+  BtnTabsX.Width:= N;
+  BtnTreeX.Width:= N;
 end;
 
 procedure TfmExplorer.UpdatePanelSizes;
@@ -897,6 +902,7 @@ initialization
     CaptionPanelHeight:= 20;
     CaptionPanelColorBg:= clCream;
     CaptionPanelColorFont:= clDkGray;
+    ButtonXSize:= 22;
   end;
 
 end.
