@@ -60,6 +60,7 @@ type
     Tree: TTreeView;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormResize(Sender: TObject);
     procedure ListTabsChangedSel(Sender: TObject);
     procedure ListTabsClickXMark(Sender: TObject);
     procedure ListTabsDrawItem(Sender: TObject; C: TCanvas; AIndex: integer;
@@ -96,6 +97,7 @@ type
   public
     procedure Refresh;
     procedure UpdateTabs(ASelChange: boolean);
+    procedure UpdatePanelSizes;
     property Folder: string read FFolder write SetFolder;
     property OnGetLexer: TExplorerOnGetLexer read FOnGetLexer write FOnGetLexer;
     property OnItemClick: TExplorerOnItemClick read FOnItemClick write FOnItemClick;
@@ -150,6 +152,11 @@ begin
   FreeAndNil(ListExt);
   if Assigned(FIconCfg) then
     FreeAndNil(FIconCfg);
+end;
+
+procedure TfmExplorer.FormResize(Sender: TObject);
+begin
+  UpdatePanelSizes;
 end;
 
 procedure TfmExplorer.ListTabsChangedSel(Sender: TObject);
@@ -210,7 +217,6 @@ begin
     (ARect.Top+ARect.Bottom-C.TextHeight(S)) div 2,
     S);
 end;
-
 
 procedure TfmExplorer.InitCommonLexers;
   //
@@ -510,12 +516,31 @@ begin
       Data:= TATListboxItemProp.Create(0, bModified, '');
       ListTabs.Items.AddObject(SCaption, Data);
     end;
+
+    UpdatePanelSizes;
+
     ListTabs.ItemIndex:= NSel;
     ListTabs.ItemTop:= Max(0, Min(ListTabs.ItemTop, ListTabs.ItemCount-ListTabs.VisibleItems));
   finally
     ListTabs.Items.EndUpdate;
     ListTabs.Invalidate;
   end;
+end;
+
+procedure TfmExplorer.UpdatePanelSizes;
+const
+  cAddSpace = 2;
+var
+  NSize, NSizeAuto, NSizeNormal, NSizeMax: integer;
+begin
+  NSizeAuto:= ListTabs.ItemCount*ListTabs.ItemHeight + cAddSpace;
+  NSizeNormal:= ClientHeight * ExplorerOptions.TabsHeightPercents div 100;
+  NSizeMax:= ClientHeight * ExplorerOptions.TabsHeightMaxPercents div 100;
+  NSize:= Min(NSizeAuto, NSizeNormal);
+
+  Splitter1.Visible:= NSizeAuto>NSizeNormal;
+  PanelTabs.Height:= PanelTabsCap.Height + NSize;
+  PanelTabs.Constraints.MaxHeight:= PanelTabsCap.Height + NSizeMax;
 end;
 
 function _CompareFilenames(L: TStringList; Index1, Index2: integer): integer;
@@ -772,7 +797,7 @@ initialization
     TabsIndent1:= 12;
     TabsIndent2:= 4;
     TabsHeightPercents:= 25;
-    TabsHeightMaxPercents:= 80;
+    TabsHeightMaxPercents:= 70;
   end;
 
 end.
