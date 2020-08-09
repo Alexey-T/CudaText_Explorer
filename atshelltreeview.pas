@@ -103,7 +103,7 @@ var
 implementation
 
 type
-  TExplorerNodeData = class
+  TATShellNodeData = class
   public
     Path: string;
     IsDir: boolean;
@@ -111,7 +111,7 @@ type
   end;
 
 type
-  TExplorerStringDataItem = class
+  TATShellStringClass = class
     Str: string;
   end;
 
@@ -164,7 +164,7 @@ procedure TATShellTreeview.HandleClick(ADouble: boolean);
 var
   P: TPoint;
   Node: TTreeNode;
-  Data: TExplorerNodeData;
+  Data: TATShellNodeData;
   Kind: TATShellTreeviewClick;
 begin
   P:= ScreenToClient(Mouse.CursorPos);
@@ -173,7 +173,7 @@ begin
     if Assigned(Node.Data) then
     begin
       Kind:= astcNone;
-      Data:= TExplorerNodeData(Node.Data);
+      Data:= TATShellNodeData(Node.Data);
       if Data.IsDir then
       begin
         if ATShellOptions.FoldDirsByClick then
@@ -213,10 +213,10 @@ end;
 
 function TATShellTreeview.CanExpand(Node: TTreeNode): boolean;
 var
-  Data: TExplorerNodeData;
+  Data: TATShellNodeData;
 begin
   Result:= true;
-  Data:= TExplorerNodeData(Node.Data);
+  Data:= TATShellNodeData(Node.Data);
   if Data=nil then exit;
   if Data.Expanded then exit;
   if not Data.IsDir then exit;
@@ -320,7 +320,7 @@ var
   Node: TTreeNode;
   List: TStringList;
   bDir: boolean;
-  NodeData: TExplorerNodeData;
+  NodeData: TATShellNodeData;
   CountHidden, NIcon: integer;
   S: string;
   i: integer;
@@ -356,7 +356,7 @@ begin
       S:= List[i];
       bDir:= List.Objects[i]<>nil;
 
-      NodeData:= TExplorerNodeData.Create;
+      NodeData:= TATShellNodeData.Create;
       NodeData.Path:= AFolder+DirectorySeparator+S;
       NodeData.IsDir:= bDir;
       NodeData.Expanded:= false;
@@ -385,9 +385,9 @@ procedure TATShellIcons.InitCommonLexers;
   //
   procedure AddLex(const AExt, ALexer: string); inline;
   var
-    D: TExplorerStringDataItem;
+    D: TATShellStringClass;
   begin
-    D:= TExplorerStringDataItem.Create;
+    D:= TATShellStringClass.Create;
     D.Str:= ALexer;
     ListExtToLexer.AddObject(AExt, D);
   end;
@@ -622,7 +622,7 @@ begin
     exit(fn);
 
   if ListExtToLexer.Find(ext, N) then
-    exit(TExplorerStringDataItem(ListExtToLexer.Objects[N]).Str);
+    exit(TATShellStringClass(ListExtToLexer.Objects[N]).Str);
 
   if Assigned(FOnGetLexer) then
     Result:= FOnGetLexer(fn);
