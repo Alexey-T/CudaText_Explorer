@@ -675,7 +675,7 @@ begin
   NSizeMax:= N * ExplorerOptions.TabsHeightMaxPercents div 100;
 
   if ExplorerOptions.TabsAutoSize then
-    NSizeAuto:= ListTabs.ItemCount*ListTabs.ItemHeight + ExplorerOptions.TabsIndentV
+    NSizeAuto:= ListTabs.ItemCount*ListTabs.ItemHeightDefault + ExplorerOptions.TabsIndentV
   else
     NSizeAuto:= NSizeNormal;
 
