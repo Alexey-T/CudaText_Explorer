@@ -92,6 +92,7 @@ object fmExplorer: TfmExplorer
     Width = 325
     Align = alTop
     AutoSnap = False
+    OnMoved = Splitter1Moved
     ResizeAnchor = akTop
   end
   object Images: TImageList

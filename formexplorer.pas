@@ -66,6 +66,7 @@ type
     procedure ListTabsDrawItem(Sender: TObject; C: TCanvas; AIndex: integer;
       const ARect: TRect);
     procedure ListTabsResize(Sender: TObject);
+    procedure Splitter1Moved(Sender: TObject);
     procedure TreeClick(Sender: TObject);
     procedure TreeDblClick(Sender: TObject);
     procedure TreeDeletion(Sender: TObject; Node: TTreeNode);
@@ -82,6 +83,8 @@ type
     FIconIndexDefault: integer;
     FIconIndexDir: integer;
     FIconIndexPic: integer;
+    FTabsSizeOld: integer;
+    FTabsSizeAuto: boolean;
     ListExt: TStringList;
     ListLexer: TStringList;
     ListExtToLexer: TStringList;
@@ -144,6 +147,8 @@ begin
   ListExtToLexer.OwnsObjects:= true;
 
   InitCommonLexers;
+
+  FTabsSizeAuto:= true;
 end;
 
 procedure TfmExplorer.FormDestroy(Sender: TObject);
@@ -222,7 +227,13 @@ end;
 
 procedure TfmExplorer.ListTabsResize(Sender: TObject);
 begin
+end;
+
+procedure TfmExplorer.Splitter1Moved(Sender: TObject);
+begin
   UpdateTabsTopIndex;
+  FTabsSizeOld:= ListTabs.Height;
+  FTabsSizeAuto:= false;
 end;
 
 procedure TfmExplorer.InitCommonLexers;
@@ -524,14 +535,14 @@ begin
       ListTabs.Items.AddObject(SCaption, Data);
     end;
 
-    UpdatePanelSizes;
-
     ListTabs.ItemIndex:= NSel;
-    UpdateTabsTopIndex;
   finally
     ListTabs.Items.EndUpdate;
     ListTabs.Invalidate;
   end;
+
+  UpdatePanelSizes;
+  UpdateTabsTopIndex;
 end;
 
 procedure TfmExplorer.UpdateTabsTopIndex;
@@ -548,11 +559,23 @@ begin
   NSizeAuto:= ListTabs.ItemCount*ListTabs.ItemHeight + cAddSpace;
   NSizeNormal:= ClientHeight * ExplorerOptions.TabsHeightPercents div 100;
   NSizeMax:= ClientHeight * ExplorerOptions.TabsHeightMaxPercents div 100;
-  NSize:= Min(NSizeAuto, NSizeNormal);
+
+  if FTabsSizeAuto then
+    NSize:= Min(NSizeAuto, NSizeNormal)
+  else
+  begin
+    if NSize>FTabsSizeOld then
+      NSize:= FTabsSizeOld
+    else
+    begin
+      NSize:= Min(NSizeAuto, NSizeNormal);
+      FTabsSizeAuto:= true;
+    end;
+  end;
 
   Splitter1.Visible:= NSizeAuto>NSizeNormal;
-  PanelTabs.Height:= PanelTabsCap.Height + NSize;
   PanelTabs.Constraints.MaxHeight:= PanelTabsCap.Height + Min(NSizeAuto, NSizeMax);
+  PanelTabs.Height:= PanelTabsCap.Height + NSize;
 end;
 
 function _CompareFilenames(L: TStringList; Index1, Index2: integer): integer;
