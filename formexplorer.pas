@@ -26,6 +26,7 @@ type
     TabsIndentV: integer;
     TabsHeightPercents: integer;
     TabsHeightMaxPercents: integer;
+    TabsAutoSize: boolean;
     CaptionPanelHeight: integer;
     CaptionPanelColorBg: TColor;
     CaptionPanelColorFont: TColor;
@@ -608,7 +609,11 @@ begin
   bTree:= Tree.Visible;
   BtnTabsX.Caption:= cBtn[bTabs];
   BtnTreeX.Caption:= cBtn[bTree];
-  BtnTabsX.Enabled:= ListTabs.ItemCount>0;
+
+  {
+  if ExplorerOptions.TabsAutoSize then
+    BtnTabsX.Enabled:= ListTabs.ItemCount>0;
+    }
 
   if not bTabs then
   begin
@@ -619,11 +624,14 @@ begin
     exit
   end;
 
-  NSizeAuto:= ListTabs.ItemCount*ListTabs.ItemHeight;
-  Inc(NSizeAuto, ExplorerOptions.TabsIndentV);
   N:= ClientHeight;
   NSizeNormal:= N * ExplorerOptions.TabsHeightPercents div 100;
   NSizeMax:= N * ExplorerOptions.TabsHeightMaxPercents div 100;
+
+  if ExplorerOptions.TabsAutoSize then
+    NSizeAuto:= ListTabs.ItemCount*ListTabs.ItemHeight + ExplorerOptions.TabsIndentV
+  else
+    NSizeAuto:= NSizeNormal;
 
   if FTabsSizeAuto then
     NSize:= Min(NSizeAuto, NSizeNormal)
@@ -899,6 +907,7 @@ initialization
     TabsIndentV:= 0;
     TabsHeightPercents:= 25;
     TabsHeightMaxPercents:= 70;
+    TabsAutoSize:= true;
     CaptionPanelHeight:= 20;
     CaptionPanelColorBg:= clCream;
     CaptionPanelColorFont:= clDkGray;
