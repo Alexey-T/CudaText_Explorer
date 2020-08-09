@@ -21,6 +21,8 @@ type
     FoldDirsByClick: boolean;
     TextEmpty: string;
     TextEmptyWithHidden: string;
+    IndentListbox1: integer;
+    IndentListbox2: integer;
   end;
 
 var
@@ -172,8 +174,8 @@ begin
   list:= ListTabs;
   NIcon:= -1;
   NIconSize:= Images.Width;
-  NIndent:= 12;
-  NIndent2:= 4;
+  NIndent:= ExplorerOptions.IndentListbox1;
+  NIndent2:= ExplorerOptions.IndentListbox2;
 
   if AIndex=list.ItemIndex then
     C.Brush.Color:= clLtGray
@@ -181,7 +183,7 @@ begin
   if list.HotTrack and (AIndex=list.HotTrackIndex) then
     C.Brush.Color:= clMoneyGreen
   else
-    C.Brush.Color:= clWhite;
+    C.Brush.Color:= list.Theme^.ColorBgListbox;
   C.FillRect(ARect);
 
   S:= List.Items[AIndex];
@@ -769,6 +771,8 @@ initialization
     FoldDirsByClick:= true;
     TextEmpty:= '(Empty)';
     TextEmptyWithHidden:= '(Empty, %d hidden item(s))';
+    IndentListbox1:= 12;
+    IndentListbox2:= 4;
   end;
 
 end.
