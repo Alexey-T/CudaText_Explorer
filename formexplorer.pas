@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls,
-  ATListbox, ATButtons, Math, jsonConf;
+  ATListbox, ATButtons, Math, IniFiles;
 
 type
   TExplorerOptions = record
@@ -95,7 +95,7 @@ type
     FOnGetTabProp: TExplorerOnGetTabProp;
     FOnTabSelect: TExplorerOnTabSelect;
     FOnTabClose: TExplorerOnTabSelect;
-    FIconCfg: TJSONConfig;
+    FIconCfg: TMemIniFile;
     FIconIndexDefault: integer;
     FIconIndexDir: integer;
     FIconIndexPic: integer;
@@ -134,6 +134,9 @@ type
 implementation
 
 {$R *.lfm}
+
+const
+  cPicSection = 'pic';
 
 type
   TExplorerNodeData = class
@@ -825,20 +828,19 @@ var
 begin
   if not Assigned(FIconCfg) then
   begin
-    fnConfig:= ExplorerOptions.DirOfIcons+DirectorySeparator+'icons.json';
+    fnConfig:= ExplorerOptions.DirOfIcons+DirectorySeparator+'icons.ini';
     if not FileExists(fnConfig) then exit;
 
-    FIconCfg:= TJSONConfig.Create(Self);
-    FIconCfg.Filename:= fnConfig;
+    FIconCfg:= TMemIniFile.Create(fnConfig);
 
-    FIconIndexDefault:= GetImageIndexFromPng(FIconCfg.GetValue('_', ''));
+    FIconIndexDefault:= GetImageIndexFromPng(FIconCfg.ReadString(cPicSection, '_', ''));
 
     if ExplorerOptions.ShowIconsDirs then
-      FIconIndexDir:= GetImageIndexFromPng(FIconCfg.GetValue('_dir', ''))
+      FIconIndexDir:= GetImageIndexFromPng(FIconCfg.ReadString(cPicSection, '_dir', ''))
     else
       FIconIndexDir:= -1;
 
-    FIconIndexPic:= GetImageIndexFromPng(FIconCfg.GetValue('_img', ''));
+    FIconIndexPic:= GetImageIndexFromPng(FIconCfg.ReadString(cPicSection, '_img', ''));
 
     InitUsualExtensions;
   end;
@@ -901,7 +903,7 @@ begin
   if ListLexer.Find(SLexer, N) then
     exit(PtrInt(ListLexer.Objects[N]));
 
-  fnIcon:= FIconCfg.GetValue(SLexer, '');
+  fnIcon:= FIconCfg.ReadString(cPicSection, SLexer, '');
   if fnIcon='' then exit;
   Result:= GetImageIndexFromPng(fnIcon);
 
