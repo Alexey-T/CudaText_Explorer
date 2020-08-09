@@ -1,8 +1,8 @@
-(*****************************************************
+{*****************************************************
 ATShellTreeview component
-Copyright (c) 2020 Alexey Torgashin (uvviewsoft.com)
+Copyright (c) 2020 Alexey Torgashin (UVviewsoft.com)
 License: MPL 2.0 or LGPL
-******************************************************)
+******************************************************}
 
 unit ATShellTreeview;
 
