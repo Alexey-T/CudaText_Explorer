@@ -36,6 +36,7 @@ type
     CaptionPanelColorBg: TColor;
     CaptionPanelColorFont: TColor;
     CaptionButtonXSize: integer;
+    CaptionButtonX: array[boolean] of string;
   end;
 
 var
@@ -590,9 +591,6 @@ begin
   ListTabs.ItemTop:= Max(0, Min(ListTabs.ItemTop, ListTabs.ItemCount-ListTabs.VisibleItems));
 end;
 
-const
-  cBtn: array[boolean] of string = ('+', '–');
-
 procedure TfmExplorer.UpdateUI;
 var
   N: integer;
@@ -651,8 +649,8 @@ var
 begin
   bTabs:= ListTabs.Visible;
   bTree:= Tree.Visible;
-  BtnTabsX.Caption:= cBtn[bTabs];
-  BtnTreeX.Caption:= cBtn[bTree];
+  BtnTabsX.Caption:= ExplorerOptions.CaptionButtonX[bTabs];
+  BtnTreeX.Caption:= ExplorerOptions.CaptionButtonX[bTree];
 
   {
   if ExplorerOptions.TabsAutoSize then
@@ -961,6 +959,8 @@ initialization
     CaptionPanelColorBg:= $e0d0d0;
     CaptionPanelColorFont:= clNavy;
     CaptionButtonXSize:= 22;
+    CaptionButtonX[false]:= '+';
+    CaptionButtonX[true]:= '–';
   end;
 
 end.
