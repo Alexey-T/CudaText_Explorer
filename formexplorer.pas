@@ -10,6 +10,7 @@ uses
   ATListbox,
   ATButtons,
   ATFlatThemes,
+  ATShellBase,
   ATShellTreeview;
 
 type

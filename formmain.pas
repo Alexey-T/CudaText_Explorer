@@ -8,6 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
   ComCtrls, Math,
   ATFlatThemes,
+  ATShellBase,
   ATShellTreeview,
   formexplorer;
 
