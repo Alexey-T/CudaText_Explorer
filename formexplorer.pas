@@ -360,6 +360,10 @@ begin
   AddLex('psd', 'Photoshop');
   AddLex('d', 'D');
   AddLex('po', 'PO');
+  AddLex('csproj', 'csproj');
+  AddLex('fsproj', 'fsproj');
+  AddLex('vbproj', 'vbproj');
+  AddLex('vcxproj', 'vcxproj');
 
   AddLex('ai', 'AI');
   AddLex('pdf', 'PDF');
