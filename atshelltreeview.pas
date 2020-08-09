@@ -42,7 +42,7 @@ type
 
 type
   TATShellTreeviewItemClick = procedure(const AFileName: string; AKind: TATShellTreeviewClick) of object;
-  TATShellOnGetLexer = function(const AFileName: string): string of object;
+  TATShellOnDetectLexer = function(const AFileName: string): string of object;
 
 type
   { TATShellTreeview }
@@ -74,6 +74,7 @@ type
   private const
     cPicSection = 'p';
   private
+    FImages: TImageList;
     ListExt: TStringList;
     ListLexer: TStringList;
     ListExtToLexer: TStringList;
@@ -81,20 +82,20 @@ type
     FIconIndexDefault: integer;
     FIconIndexDir: integer;
     FIconIndexPic: integer;
-    FOnGetLexer: TATShellOnGetLexer;
+    FOnDetectLexer: TATShellOnDetectLexer;
     function DetectLexer(const fn, ext: string): string;
     function GetImageIndexFromPng(const AFilename: string): integer;
     procedure InitCommonLexers;
     procedure InitUsualExtensions;
   public
-    Images: TImageList;
     constructor Create;
     destructor Destroy; override;
-    procedure InitIconConfig;
-    function GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
-    property IconIndexDefault: integer read FIconIndexDefault;
-    property IconIndexDir: integer read FIconIndexDir;
-    property OnGetLexer: TATShellOnGetLexer read FOnGetLexer write FOnGetLexer;
+    procedure InitConfig;
+    property Images: TImageList read FImages;
+    property ImageIndexDefault: integer read FIconIndexDefault;
+    property ImageIndexDir: integer read FIconIndexDir;
+    function ImageIndex(const AFileName: string; AIsDir: boolean): integer;
+    property OnDetectLexer: TATShellOnDetectLexer read FOnDetectLexer write FOnDetectLexer;
   end;
 
 var
@@ -291,7 +292,7 @@ begin
   if FFolder='' then exit;
   if not DirectoryExists(FFolder) then exit;
 
-  ATShellIcons.InitIconConfig;
+  ATShellIcons.InitConfig;
 
   ShowRoot:= not ATShellOptions.ShowRootNode;
 
@@ -299,7 +300,7 @@ begin
   begin
     RootNode:= Items.Add(nil, PrettyDirName(ExtractFileName(FFolder)));
     if ATShellOptions.ShowIcons then
-      NIcon:= ATShellIcons.IconIndexDir
+      NIcon:= ATShellIcons.ImageIndexDir
     else
       NIcon:= -1;
     RootNode.ImageIndex:= NIcon;
@@ -365,7 +366,7 @@ begin
         S:= PrettyDirName(S);
 
       Node:= Items.AddChildObject(ANode, S, NodeData);
-      NIcon:= ATShellIcons.GetImageIndex(NodeData.Path, NodeData.IsDir);
+      NIcon:= ATShellIcons.ImageIndex(NodeData.Path, NodeData.IsDir);
       Node.ImageIndex:= NIcon;
       Node.SelectedIndex:= NIcon;
 
@@ -540,8 +541,8 @@ end;
 
 constructor TATShellIcons.Create;
 begin
-  Images:= TImageList.Create(nil);
-  Images.AllocBy:= 10;
+  FImages:= TImageList.Create(nil);
+  FImages.AllocBy:= 10;
 
   ListExt:= TStringList.Create;
   ListExt.Sorted:= true;
@@ -563,11 +564,11 @@ begin
   FreeAndNil(ListExt);
   if Assigned(FIconCfg) then
     FreeAndNil(FIconCfg);
-  FreeAndNil(Images);
+  FreeAndNil(FImages);
   inherited;
 end;
 
-procedure TATShellIcons.InitIconConfig;
+procedure TATShellIcons.InitConfig;
 var
   fnConfig: string;
 begin
@@ -624,11 +625,11 @@ begin
   if ListExtToLexer.Find(ext, N) then
     exit(TATShellStringClass(ListExtToLexer.Objects[N]).Str);
 
-  if Assigned(FOnGetLexer) then
-    Result:= FOnGetLexer(fn);
+  if Assigned(FOnDetectLexer) then
+    Result:= FOnDetectLexer(fn);
 end;
 
-function TATShellIcons.GetImageIndex(const AFileName: string; AIsDir: boolean): integer;
+function TATShellIcons.ImageIndex(const AFileName: string; AIsDir: boolean): integer;
 var
   SLexer: string;
   fnIcon: string;

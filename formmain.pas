@@ -79,7 +79,7 @@ begin
 
   ATShellOptions.DirOfIcons:= ExtractFilePath(Application.ExeName)+'vscode_16x16';
 
-  ATShellIcons.OnGetLexer:= @ExplorerGetLexer;
+  ATShellIcons.OnDetectLexer:= @ExplorerGetLexer;
   exp.OnItemClick:= @ExplorerClick;
   exp.OnGetTabs:= @ExplorerGetTabs;
   exp.OnGetTabProp:= @ExplorerGetTabProp;

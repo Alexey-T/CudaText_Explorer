@@ -177,7 +177,7 @@ begin
 
   NIcon:= -1;
   if fn<>'' then
-    NIcon:= ATShellIcons.GetImageIndex(fn, false);
+    NIcon:= ATShellIcons.ImageIndex(fn, false);
 
   if NIcon>=0 then
     ATShellIcons.Images.Draw(C,
