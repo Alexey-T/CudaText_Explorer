@@ -33,6 +33,7 @@ type
     procedure chkShowIconsChange(Sender: TObject);
     procedure chkShowRootChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure LSelectionChange(Sender: TObject; User: boolean);
   private
     exp: TfmExplorer;
@@ -71,7 +72,6 @@ begin
   exp.BorderStyle:= bsNone;
   exp.Show;
 
-  exp.UpdatePanelSizes;
   ExplorerOptions.DirOfIcons:= ExtractFilePath(Application.ExeName)+'vscode_16x16';
 
   exp.OnGetLexer:= @ExplorerGetLexer;
@@ -80,7 +80,14 @@ begin
   exp.OnGetTabProp:= @ExplorerGetTabProp;
   exp.OnTabSelect:= @ExplorerTabSelect;
   exp.OnTabClose:= @ExplorerTabClose;
+end;
 
+procedure TfmMain.FormShow(Sender: TObject);
+begin
+  exp.UpdateUI;
+  exp.UpdateCaptionTabs;
+  exp.UpdateCaptionTree;
+  exp.UpdatePanelSizes;
   exp.Folder:= ExtractFileDir(Application.ExeName);
 end;
 

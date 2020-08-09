@@ -7,11 +7,12 @@ object fmMain: TfmMain
   ClientHeight = 547
   ClientWidth = 671
   OnCreate = FormCreate
+  OnShow = FormShow
   Position = poScreenCenter
   LCLVersion = '2.1.0.0'
   object PanelLeft: TPanel
     Left = 0
-    Height = 527
+    Height = 529
     Top = 0
     Width = 380
     Align = alClient
@@ -21,7 +22,7 @@ object fmMain: TfmMain
   end
   object Splitter1: TSplitter
     Left = 380
-    Height = 527
+    Height = 529
     Top = 0
     Width = 5
     Align = alRight
@@ -29,19 +30,19 @@ object fmMain: TfmMain
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 20
-    Top = 527
+    Height = 18
+    Top = 529
     Width = 671
     Panels = <>
   end
   object PanelRt: TPanel
     Left = 385
-    Height = 527
+    Height = 529
     Top = 0
     Width = 286
     Align = alRight
     BevelOuter = bvNone
-    ClientHeight = 527
+    ClientHeight = 529
     ClientWidth = 286
     TabOrder = 3
     object L: TListBox
@@ -57,9 +58,9 @@ object fmMain: TfmMain
     end
     object BtnFolder: TButton
       Left = 184
-      Height = 29
+      Height = 33
       Top = 8
-      Width = 67
+      Width = 71
       AutoSize = True
       Caption = 'Folder...'
       OnClick = BtnFolderClick
@@ -67,9 +68,9 @@ object fmMain: TfmMain
     end
     object BtnAdd: TButton
       Left = 184
-      Height = 29
+      Height = 33
       Top = 64
-      Width = 66
+      Width = 70
       AutoSize = True
       Caption = 'Add tab'
       OnClick = BtnAddClick
@@ -77,9 +78,9 @@ object fmMain: TfmMain
     end
     object BtnClose: TButton
       Left = 184
-      Height = 29
+      Height = 33
       Top = 104
-      Width = 75
+      Width = 79
       AutoSize = True
       Caption = 'Close tab'
       OnClick = BtnCloseClick
@@ -88,7 +89,7 @@ object fmMain: TfmMain
     object Panel2: TPanel
       Left = 0
       Height = 107
-      Top = 420
+      Top = 422
       Width = 286
       Align = alBottom
       BevelOuter = bvNone
@@ -97,7 +98,7 @@ object fmMain: TfmMain
       TabOrder = 4
       object chkShowRoot: TCheckBox
         Left = 8
-        Height = 24
+        Height = 23
         Top = 56
         Width = 131
         Caption = 'Show root node'
@@ -108,7 +109,7 @@ object fmMain: TfmMain
       end
       object chkShowDotNames: TCheckBox
         Left = 8
-        Height = 24
+        Height = 23
         Top = 32
         Width = 135
         Caption = 'Show dot-names'
@@ -117,7 +118,7 @@ object fmMain: TfmMain
       end
       object chkShowIcons: TCheckBox
         Left = 8
-        Height = 24
+        Height = 23
         Top = 8
         Width = 99
         Caption = 'Show icons'

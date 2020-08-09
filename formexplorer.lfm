@@ -40,7 +40,7 @@ object fmExplorer: TfmExplorer
       Top = 0
       Width = 325
       Align = alTop
-      Caption = 'Folder'
+      Caption = 'folder'
       ClientHeight = 26
       ClientWidth = 325
       TabOrder = 1
@@ -74,7 +74,7 @@ object fmExplorer: TfmExplorer
       Top = 0
       Width = 325
       Align = alTop
-      Caption = 'Tabs'
+      Caption = 'tabs'
       ClientHeight = 26
       ClientWidth = 325
       TabOrder = 0

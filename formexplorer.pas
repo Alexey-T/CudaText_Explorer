@@ -19,6 +19,7 @@ type
     ShowIconsDirs: boolean;
     ShowNodeForEmpty: boolean;
     ShowCaptionButtonsX: boolean;
+    ShowDirInTreeCaption: boolean;
     FoldDirsByClick: boolean;
     TextEmpty: string;
     TextEmptyWithHidden: string;
@@ -118,6 +119,8 @@ type
     procedure UpdateTabsTopIndex;
     procedure UpdatePanelSizes;
     procedure UpdateUI;
+    procedure UpdateCaptionTabs;
+    procedure UpdateCaptionTree;
     property Folder: string read FFolder write SetFolder;
     property OnGetLexer: TExplorerOnGetLexer read FOnGetLexer write FOnGetLexer;
     property OnItemClick: TExplorerOnItemClick read FOnItemClick write FOnItemClick;
@@ -190,6 +193,7 @@ end;
 
 procedure TfmExplorer.FormResize(Sender: TObject);
 begin
+  if (FFolder='') and (ListTabs.Items.Count=0) then exit;
   UpdatePanelSizes;
 end;
 
@@ -502,6 +506,7 @@ var
   NIcon: integer;
 begin
   FFolder:= AValue;
+  UpdateCaptionTree;
 
   Tree.Items.Clear;
   if FFolder='' then exit;
@@ -570,6 +575,7 @@ begin
 
   UpdatePanelSizes;
   UpdateTabsTopIndex;
+  UpdateCaptionTabs;
 end;
 
 procedure TfmExplorer.UpdateTabsTopIndex;
@@ -598,9 +604,6 @@ begin
   PanelTabsCap.Font.Color:= NColor;
   PanelTreeCap.Font.Color:= NColor;
 
-  PanelTabsCap.Caption:= ExplorerOptions.CaptionTabsText;
-  PanelTreeCap.Caption:= ExplorerOptions.CaptionTreeText;
-
   N:= ExplorerOptions.CaptionButtonXSize;
   BtnTabsX.Width:= N;
   BtnTreeX.Width:= N;
@@ -615,13 +618,30 @@ begin
     PanelTabs.Align:= alTop;
 end;
 
+procedure TfmExplorer.UpdateCaptionTabs;
+var
+  S: string;
+begin
+  S:= ExplorerOptions.CaptionTabsText;
+  PanelTabsCap.Caption:= S;
+end;
+
+procedure TfmExplorer.UpdateCaptionTree;
+var
+  S: string;
+begin
+  S:= ExplorerOptions.CaptionTreeText;
+  if ExplorerOptions.ShowDirInTreeCaption then
+    if FFolder<>'' then
+      S:= S+' "'+ExtractFileName(FFolder)+'"';
+  PanelTreeCap.Caption:= S;
+end;
+
 procedure TfmExplorer.UpdatePanelSizes;
 var
   N, NSize, NSizeAuto, NSizeNormal, NSizeMax: integer;
   bTabs, bTree: boolean;
 begin
-  UpdateUI;
-
   bTabs:= ListTabs.Visible;
   bTree:= Tree.Visible;
   BtnTabsX.Caption:= cBtn[bTabs];
@@ -917,6 +937,7 @@ initialization
     ShowIconsDirs:= true;
     ShowNodeForEmpty:= false;
     ShowCaptionButtonsX:= true;
+    ShowDirInTreeCaption:= true;
     FoldDirsByClick:= true;
     TextEmpty:= '(Empty)';
     TextEmptyWithHidden:= '(Empty, %d hidden item(s))';
@@ -930,8 +951,8 @@ initialization
     CaptionTabsText:= 'Tabs';
     CaptionTreeText:= 'Folder';
     CaptionPanelHeight:= 20;
-    CaptionPanelColorBg:= clCream;
-    CaptionPanelColorFont:= clDkGray;
+    CaptionPanelColorBg:= $e0d0d0;
+    CaptionPanelColorFont:= clNavy;
     CaptionButtonXSize:= 22;
   end;
 
