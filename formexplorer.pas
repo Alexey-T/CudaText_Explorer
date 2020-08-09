@@ -27,6 +27,7 @@ type
     TabsHeightPercents: integer;
     TabsHeightMaxPercents: integer;
     TabsAutoSize: boolean;
+    TabsBelow: boolean;
     CaptionPanelHeight: integer;
     CaptionPanelColorBg: TColor;
     CaptionPanelColorFont: TColor;
@@ -596,6 +597,11 @@ begin
   N:= ExplorerOptions.ButtonXSize;
   BtnTabsX.Width:= N;
   BtnTreeX.Width:= N;
+
+  if ExplorerOptions.TabsBelow then
+    PanelTabs.Align:= alBottom
+  else
+    PanelTabs.Align:= alTop;
 end;
 
 procedure TfmExplorer.UpdatePanelSizes;
@@ -908,6 +914,7 @@ initialization
     TabsHeightPercents:= 25;
     TabsHeightMaxPercents:= 70;
     TabsAutoSize:= true;
+    TabsBelow:= false;
     CaptionPanelHeight:= 20;
     CaptionPanelColorBg:= clCream;
     CaptionPanelColorFont:= clDkGray;
