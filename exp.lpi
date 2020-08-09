@@ -34,7 +34,7 @@
     </RequiredPackages>
     <Units Count="3">
       <Unit0>
-        <Filename Value="project1.lpr"/>
+        <Filename Value="exp.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit0>
       <Unit1>
@@ -56,7 +56,7 @@
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="project1"/>
+      <Filename Value="exp"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
