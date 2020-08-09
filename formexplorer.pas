@@ -663,7 +663,8 @@ begin
   S:= ExplorerOptions.CaptionTreeText;
   if ExplorerOptions.ShowDirInTreeCaption then
     if FFolder<>'' then
-      S:= S+' "'+ExtractFileName(FFolder)+'"';
+      //S:= S+' "'+ExtractFileName(FFolder)+'"';
+      S:= '"'+ExtractFileName(FFolder)+'"';
   PanelTreeCap.Caption:= S;
 end;
 
