@@ -29,10 +29,12 @@ type
     TabsHeightMaxPercents: integer;
     TabsAutoSize: boolean;
     TabsBelow: boolean;
+    CaptionTabsText: string;
+    CaptionTreeText: string;
     CaptionPanelHeight: integer;
     CaptionPanelColorBg: TColor;
     CaptionPanelColorFont: TColor;
-    ButtonXSize: integer;
+    CaptionButtonXSize: integer;
   end;
 
 var
@@ -115,7 +117,7 @@ type
     procedure UpdateTabs(ASelChange: boolean);
     procedure UpdateTabsTopIndex;
     procedure UpdatePanelSizes;
-    procedure UpdateTheme;
+    procedure UpdateUI;
     property Folder: string read FFolder write SetFolder;
     property OnGetLexer: TExplorerOnGetLexer read FOnGetLexer write FOnGetLexer;
     property OnItemClick: TExplorerOnItemClick read FOnItemClick write FOnItemClick;
@@ -578,7 +580,7 @@ end;
 const
   cBtn: array[boolean] of string = ('+', '–');
 
-procedure TfmExplorer.UpdateTheme;
+procedure TfmExplorer.UpdateUI;
 var
   N: integer;
   b: boolean;
@@ -596,7 +598,10 @@ begin
   PanelTabsCap.Font.Color:= NColor;
   PanelTreeCap.Font.Color:= NColor;
 
-  N:= ExplorerOptions.ButtonXSize;
+  PanelTabsCap.Caption:= ExplorerOptions.CaptionTabsText;
+  PanelTreeCap.Caption:= ExplorerOptions.CaptionTreeText;
+
+  N:= ExplorerOptions.CaptionButtonXSize;
   BtnTabsX.Width:= N;
   BtnTreeX.Width:= N;
 
@@ -615,7 +620,7 @@ var
   N, NSize, NSizeAuto, NSizeNormal, NSizeMax: integer;
   bTabs, bTree: boolean;
 begin
-  UpdateTheme;
+  UpdateUI;
 
   bTabs:= ListTabs.Visible;
   bTree:= Tree.Visible;
@@ -922,10 +927,12 @@ initialization
     TabsHeightMaxPercents:= 70;
     TabsAutoSize:= true;
     TabsBelow:= false;
+    CaptionTabsText:= 'Tabs';
+    CaptionTreeText:= 'Folder';
     CaptionPanelHeight:= 20;
     CaptionPanelColorBg:= clCream;
     CaptionPanelColorFont:= clDkGray;
-    ButtonXSize:= 22;
+    CaptionButtonXSize:= 22;
   end;
 
 end.
