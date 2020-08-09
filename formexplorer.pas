@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls,
-  ATListbox, jsonConf;
+  ATListbox, Math, jsonConf;
 
 type
   TExplorerOptions = record
@@ -40,6 +40,7 @@ type
   TExplorerOnGetLexer = function(const AFileName: string): string of object;
   TExplorerOnGetTabs = procedure(out ACount: integer; out ASelected: integer) of object;
   TExplorerOnGetTabProp = procedure(AIndex: integer; out ACaption, AFilename: string; out AModified: boolean) of object;
+  TExplorerOnTabSelect = procedure(AIndex: integer) of object;
 
 type
   { TfmExplorer }
@@ -55,6 +56,7 @@ type
     Tree: TTreeView;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure ListTabsChangedSel(Sender: TObject);
     procedure TreeClick(Sender: TObject);
     procedure TreeDblClick(Sender: TObject);
     procedure TreeDeletion(Sender: TObject; Node: TTreeNode);
@@ -65,6 +67,7 @@ type
     FOnItemClick: TExplorerOnItemClick;
     FOnGetTabs: TExplorerOnGetTabs;
     FOnGetTabProp: TExplorerOnGetTabProp;
+    FOnTabSelect: TExplorerOnTabSelect;
     FIconCfg: TJSONConfig;
     FIconIndexDefault: integer;
     FIconIndexDir: integer;
@@ -90,6 +93,7 @@ type
     property OnItemClick: TExplorerOnItemClick read FOnItemClick write FOnItemClick;
     property OnGetTabs: TExplorerOnGetTabs read FOnGetTabs write FOnGetTabs;
     property OnGetTabProp: TExplorerOnGetTabProp read FOnGetTabProp write FOnGetTabProp;
+    property OnTabSelect: TExplorerOnTabSelect read FOnTabSelect write FOnTabSelect;
   end;
 
 implementation
@@ -139,6 +143,12 @@ begin
   FreeAndNil(ListExt);
   if Assigned(FIconCfg) then
     FreeAndNil(FIconCfg);
+end;
+
+procedure TfmExplorer.ListTabsChangedSel(Sender: TObject);
+begin
+  if Assigned(FOnTabSelect) then
+    FOnTabSelect(ListTabs.ItemIndex);
 end;
 
 procedure TfmExplorer.InitCommonLexers;
@@ -443,6 +453,7 @@ begin
       ListTabs.Items.Add(Format('[%d] %s', [i+1, SCaption]));
     end;
     ListTabs.ItemIndex:= NSel;
+    ListTabs.ItemTop:= Max(0, Min(ListTabs.ItemTop, ListTabs.ItemCount-ListTabs.VisibleItems));
   finally
     ListTabs.Items.EndUpdate;
     ListTabs.Invalidate;

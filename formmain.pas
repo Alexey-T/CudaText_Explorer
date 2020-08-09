@@ -42,6 +42,7 @@ type
     procedure ExplorerGetTabs(out ACount: integer; out ASelected: integer);
     procedure ExplorerGetTabProp(AIndex: integer; out ACaption, AFilename: string; out AModified: boolean);
     procedure UpdateTabs(ASelChange: boolean);
+    procedure ExplorerTabSelect(AIndex: integer);
   public
 
   end;
@@ -74,6 +75,7 @@ begin
   exp.OnItemClick:= @ExplorerClick;
   exp.OnGetTabs:= @ExplorerGetTabs;
   exp.OnGetTabProp:= @ExplorerGetTabProp;
+  exp.OnTabSelect:= @ExplorerTabSelect;
   exp.Folder:= ExtractFileDir(Application.ExeName);
 end;
 
@@ -179,6 +181,11 @@ end;
 procedure TfmMain.UpdateTabs(ASelChange: boolean);
 begin
   exp.UpdateTabs(ASelChange);
+end;
+
+procedure TfmMain.ExplorerTabSelect(AIndex: integer);
+begin
+  L.ItemIndex:= AIndex;
 end;
 
 procedure TfmMain.BtnFolderClick(Sender: TObject);
