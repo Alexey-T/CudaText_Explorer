@@ -554,11 +554,12 @@ procedure TfmExplorer.UpdatePanelSizes;
 const
   cAddSpace = 2;
 var
-  NSize, NSizeAuto, NSizeNormal, NSizeMax: integer;
+  N, NSize, NSizeAuto, NSizeNormal, NSizeMax: integer;
 begin
   NSizeAuto:= ListTabs.ItemCount*ListTabs.ItemHeight + cAddSpace;
-  NSizeNormal:= ClientHeight * ExplorerOptions.TabsHeightPercents div 100;
-  NSizeMax:= ClientHeight * ExplorerOptions.TabsHeightMaxPercents div 100;
+  N:= ClientHeight;
+  NSizeNormal:= N * ExplorerOptions.TabsHeightPercents div 100;
+  NSizeMax:= N * ExplorerOptions.TabsHeightMaxPercents div 100;
 
   if FTabsSizeAuto then
     NSize:= Min(NSizeAuto, NSizeNormal)
