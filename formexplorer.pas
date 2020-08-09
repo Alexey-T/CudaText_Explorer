@@ -352,6 +352,7 @@ begin
   AddLex('d', 'D');
   AddLex('po', 'PO');
 
+  AddLex('ai', 'AI');
   AddLex('pdf', 'PDF');
   AddLex('doc', 'Word');
   AddLex('docx', 'Word');
@@ -863,7 +864,6 @@ begin
   AddExt('jpg', FIconIndexPic);
   AddExt('jpeg', FIconIndexPic);
   AddExt('ico', FIconIndexPic);
-  AddExt('ai', FIconIndexPic);
   AddExt('tif', FIconIndexPic);
   AddExt('tiff', FIconIndexPic);
 end;
