@@ -136,7 +136,7 @@ implementation
 {$R *.lfm}
 
 const
-  cPicSection = 'pic';
+  cPicSection = 'p';
 
 type
   TExplorerNodeData = class
