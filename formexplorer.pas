@@ -30,8 +30,8 @@ type
     CaptionPanelColorFont: TColor;
     CaptionButtonXSize: integer;
     CaptionButtonX: array[boolean] of string;
-    FontName_Cap: string;
-    FontSize_Cap: integer;
+    CaptionFontName: string;
+    CaptionFontSize: integer;
   end;
 
 var
@@ -282,10 +282,10 @@ var
   b: boolean;
   NColor: TColor;
 begin
-  PanelTabsCap.Font.Name:= ExplorerOptions.FontName_Cap;
-  PanelTreeCap.Font.Name:= ExplorerOptions.FontName_Cap;
-  PanelTabsCap.Font.Size:= ExplorerOptions.FontSize_Cap;
-  PanelTreeCap.Font.Size:= ExplorerOptions.FontSize_Cap;
+  PanelTabsCap.Font.Name:= ExplorerOptions.CaptionFontName;
+  PanelTreeCap.Font.Name:= ExplorerOptions.CaptionFontName;
+  PanelTabsCap.Font.Size:= ExplorerOptions.CaptionFontSize;
+  PanelTreeCap.Font.Size:= ExplorerOptions.CaptionFontSize;
 
   Tree.Options:= Tree.Options-[tvoThemedDraw];
   Tree.Font.Name:= ATFlatTheme.FontName;
@@ -410,8 +410,8 @@ initialization
     CaptionButtonXSize:= 22;
     CaptionButtonX[false]:= '+';
     CaptionButtonX[true]:= '–';
-    FontName_Cap:= 'default';
-    FontSize_Cap:= 9;
+    CaptionFontName:= 'default';
+    CaptionFontSize:= 9;
   end;
 
 end.
