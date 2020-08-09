@@ -69,7 +69,10 @@ object fmExplorer: TfmExplorer
       Top = 26
       Width = 325
       Align = alClient
+      CanGetFocus = True
       HotTrack = True
+      IndentLeft = 8
+      OwnerDrawn = True
       ParentFont = False
       ScrollStyleHorz = alssHide
       ScrollStyleVert = alssAuto
@@ -77,6 +80,7 @@ object fmExplorer: TfmExplorer
       VirtualMode = False
       OnClickXMark = ListTabsClickXMark
       OnChangedSel = ListTabsChangedSel
+      OnDrawItem = ListTabsDrawItem
     end
   end
   object Splitter1: TSplitter

@@ -58,6 +58,8 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure ListTabsChangedSel(Sender: TObject);
     procedure ListTabsClickXMark(Sender: TObject);
+    procedure ListTabsDrawItem(Sender: TObject; C: TCanvas; AIndex: integer;
+      const ARect: TRect);
     procedure TreeClick(Sender: TObject);
     procedure TreeDblClick(Sender: TObject);
     procedure TreeDeletion(Sender: TObject; Node: TTreeNode);
@@ -157,6 +159,54 @@ begin
   if Assigned(FOnTabClose) then
     FOnTabClose(ListTabs.ItemIndex);
 end;
+
+procedure TfmExplorer.ListTabsDrawItem(Sender: TObject; C: TCanvas;
+  AIndex: integer; const ARect: TRect);
+var
+  list: TATListbox;
+  NIcon: integer;
+  fn, S: string;
+  NIconSize, NIndent, NIndent2: integer;
+  N: integer;
+begin
+  list:= ListTabs;
+  NIcon:= -1;
+  NIconSize:= Images.Width;
+  NIndent:= 12;
+  NIndent2:= 4;
+
+  if AIndex=list.ItemIndex then
+    C.Brush.Color:= clLtGray
+  else
+  if list.HotTrack and (AIndex=list.HotTrackIndex) then
+    C.Brush.Color:= clMoneyGreen
+  else
+    C.Brush.Color:= clWhite;
+  C.FillRect(ARect);
+
+  S:= List.Items[AIndex];
+  fn:= '';
+  N:= Pos(' (', S);
+  if N>0 then
+    fn:= Copy(S, 1, N-1);
+
+  if fn<>'' then
+    NIcon:= GetImageIndex(fn, false);
+
+  if NIcon>=0 then
+    Images.Draw(C,
+      ARect.Left+NIndent,
+      (ARect.Top+ARect.Bottom-NIconSize) div 2,
+      NIcon
+      );
+
+  C.Font.Color:= clBlack;
+  C.TextOut(
+    ARect.Left+NIndent+NIconSize+NIndent2,
+    (ARect.Top+ARect.Bottom-C.TextHeight(S)) div 2,
+    S);
+end;
+
 
 procedure TfmExplorer.InitCommonLexers;
   //
@@ -457,7 +507,7 @@ begin
     begin
       OnGetTabProp(i, SCaption, SFilename, bModified);
       Data:= TATListboxItemProp.Create(0, bModified, '');
-      ListTabs.Items.AddObject(Format('[%d] %s', [i+1, SCaption]), Data);
+      ListTabs.Items.AddObject(SCaption, Data);
     end;
     ListTabs.ItemIndex:= NSel;
     ListTabs.ItemTop:= Max(0, Min(ListTabs.ItemTop, ListTabs.ItemCount-ListTabs.VisibleItems));

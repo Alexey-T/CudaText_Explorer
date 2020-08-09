@@ -171,8 +171,8 @@ begin
     ACaption:= L.Items[AIndex];
     if Pos(cTempPrefix, ACaption)=1 then
       Delete(ACaption, 1, Length(cTempPrefix));
-    AFilename:= 'filename'+IntToStr(AIndex);
-    AModified:= Odd(AIndex);
+    AFilename:= 'file'+IntToStr(AIndex);
+    AModified:= AIndex mod 10=0;
   end
   else
   begin
