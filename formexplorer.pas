@@ -436,6 +436,7 @@ var
   NCount, NSel, i: integer;
   SCaption, SFilename: string;
   bModified: boolean;
+  Data: TATListboxItemProp;
 begin
   OnGetTabs(NCount, NSel);
 
@@ -455,9 +456,8 @@ begin
     for i:= 0 to NCount-1 do
     begin
       OnGetTabProp(i, SCaption, SFilename, bModified);
-      if bModified then
-        SCaption:= '*'+SCaption;
-      ListTabs.Items.Add(Format('[%d] %s', [i+1, SCaption]));
+      Data:= TATListboxItemProp.Create(0, bModified, '');
+      ListTabs.Items.AddObject(Format('[%d] %s', [i+1, SCaption]), Data);
     end;
     ListTabs.ItemIndex:= NSel;
     ListTabs.ItemTop:= Max(0, Min(ListTabs.ItemTop, ListTabs.ItemCount-ListTabs.VisibleItems));
