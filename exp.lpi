@@ -32,7 +32,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="3">
+    <Units Count="4">
       <Unit0>
         <Filename Value="exp.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -51,6 +51,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit2>
+      <Unit3>
+        <Filename Value="atshelltreeview.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ATShellTreeview"/>
+      </Unit3>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

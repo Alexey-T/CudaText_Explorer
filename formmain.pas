@@ -8,6 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
   ComCtrls, Math,
   ATFlatThemes,
+  ATShellTreeview,
   formexplorer;
 
 type
@@ -43,7 +44,7 @@ type
     exp: TfmExplorer;
     procedure FakeOpenFile(const fn: string; AsTemp: boolean);
     function ExplorerGetLexer(const fn: string): string;
-    procedure ExplorerClick(const fn: string; Kind: TExplorerClickKind);
+    procedure ExplorerClick(const fn: string; Kind: TATShellTreeviewClick);
     procedure ExplorerGetTabs(out ACount: integer; out ASelected: integer);
     procedure ExplorerGetTabProp(AIndex: integer; out ACaption, AFilename: string; out AModified: boolean);
     procedure UpdateTabs(ASelChange: boolean);
@@ -76,9 +77,9 @@ begin
   exp.BorderStyle:= bsNone;
   exp.Show;
 
-  ExplorerOptions.DirOfIcons:= ExtractFilePath(Application.ExeName)+'vscode_16x16';
+  ATShellOptions.DirOfIcons:= ExtractFilePath(Application.ExeName)+'vscode_16x16';
 
-  exp.OnGetLexer:= @ExplorerGetLexer;
+  ATShellIcons.OnGetLexer:= @ExplorerGetLexer;
   exp.OnItemClick:= @ExplorerClick;
   exp.OnGetTabs:= @ExplorerGetTabs;
   exp.OnGetTabProp:= @ExplorerGetTabProp;
@@ -109,16 +110,16 @@ begin
   end;
 end;
 
-procedure TfmMain.ExplorerClick(const fn: string; Kind: TExplorerClickKind);
+procedure TfmMain.ExplorerClick(const fn: string; Kind: TATShellTreeviewClick);
 const
-  sKind: array[TExplorerClickKind] of string = ('-', 'click', 'dbl-click', 'fold', 'unfold');
+  sKind: array[TATShellTreeviewClick] of string = ('-', 'click', 'dbl-click', 'fold', 'unfold');
 begin
   StatusBar1.SimpleText:= '"'+fn+'", '+sKind[Kind];
 
   case Kind of
-    eckFileClick:
+    astcFileClick:
       FakeOpenFile(fn, true);
-    eckFileDblClick:
+    astcFileDblClick:
       FakeOpenFile(fn, false);
   end;
 end;
@@ -256,19 +257,19 @@ end;
 
 procedure TfmMain.chkShowDotNamesChange(Sender: TObject);
 begin
-  ExplorerOptions.ShowDotNames:= chkShowDotNames.Checked;
+  ATShellOptions.ShowDotNames:= chkShowDotNames.Checked;
   exp.Refresh;
 end;
 
 procedure TfmMain.chkShowIconsChange(Sender: TObject);
 begin
-  ExplorerOptions.ShowIcons:= chkShowIcons.Checked;
+  ATShellOptions.ShowIcons:= chkShowIcons.Checked;
   exp.Refresh;
 end;
 
 procedure TfmMain.chkShowRootChange(Sender: TObject);
 begin
-  ExplorerOptions.ShowRootNode:= chkShowRoot.Checked;
+  ATShellOptions.ShowRootNode:= chkShowRoot.Checked;
   exp.Refresh;
 end;
 
