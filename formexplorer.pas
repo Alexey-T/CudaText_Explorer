@@ -21,8 +21,10 @@ type
     FoldDirsByClick: boolean;
     TextEmpty: string;
     TextEmptyWithHidden: string;
-    IndentListbox1: integer;
-    IndentListbox2: integer;
+    TabsIndent1: integer;
+    TabsIndent2: integer;
+    TabsHeightPercents: integer;
+    TabsHeightMaxPercents: integer;
   end;
 
 var
@@ -173,8 +175,8 @@ var
 begin
   list:= ListTabs;
   NIconSize:= Images.Width;
-  NIndent1:= ExplorerOptions.IndentListbox1;
-  NIndent2:= ExplorerOptions.IndentListbox2;
+  NIndent1:= ExplorerOptions.TabsIndent1;
+  NIndent2:= ExplorerOptions.TabsIndent2;
 
   if AIndex=list.ItemIndex then
     C.Brush.Color:= list.Theme^.ColorBgListboxSel
@@ -767,8 +769,10 @@ initialization
     FoldDirsByClick:= true;
     TextEmpty:= '(Empty)';
     TextEmptyWithHidden:= '(Empty, %d hidden item(s))';
-    IndentListbox1:= 12;
-    IndentListbox2:= 4;
+    TabsIndent1:= 12;
+    TabsIndent2:= 4;
+    TabsHeightPercents:= 25;
+    TabsHeightMaxPercents:= 80;
   end;
 
 end.
