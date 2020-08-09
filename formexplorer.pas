@@ -23,6 +23,7 @@ type
     TextEmptyWithHidden: string;
     TabsIndent1: integer;
     TabsIndent2: integer;
+    TabsIndentV: integer;
     TabsHeightPercents: integer;
     TabsHeightMaxPercents: integer;
   end;
@@ -551,12 +552,11 @@ begin
 end;
 
 procedure TfmExplorer.UpdatePanelSizes;
-const
-  cAddSpace = 2;
 var
   N, NSize, NSizeAuto, NSizeNormal, NSizeMax: integer;
 begin
-  NSizeAuto:= ListTabs.ItemCount*ListTabs.ItemHeight + cAddSpace;
+  NSizeAuto:= ListTabs.ItemCount*ListTabs.ItemHeight;
+  Inc(NSizeAuto, ExplorerOptions.TabsIndentV);
   N:= ClientHeight;
   NSizeNormal:= N * ExplorerOptions.TabsHeightPercents div 100;
   NSizeMax:= N * ExplorerOptions.TabsHeightMaxPercents div 100;
@@ -832,6 +832,7 @@ initialization
     TextEmptyWithHidden:= '(Empty, %d hidden item(s))';
     TabsIndent1:= 12;
     TabsIndent2:= 4;
+    TabsIndentV:= 1;
     TabsHeightPercents:= 25;
     TabsHeightMaxPercents:= 70;
   end;
