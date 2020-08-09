@@ -168,13 +168,12 @@ var
   list: TATListbox;
   NIcon: integer;
   fn, S: string;
-  NIconSize, NIndent, NIndent2: integer;
+  NIconSize, NIndent1, NIndent2: integer;
   N: integer;
 begin
   list:= ListTabs;
-  NIcon:= -1;
   NIconSize:= Images.Width;
-  NIndent:= ExplorerOptions.IndentListbox1;
+  NIndent1:= ExplorerOptions.IndentListbox1;
   NIndent2:= ExplorerOptions.IndentListbox2;
 
   if AIndex=list.ItemIndex then
@@ -192,19 +191,20 @@ begin
   if N>0 then
     fn:= Copy(S, 1, N-1);
 
+  NIcon:= -1;
   if fn<>'' then
     NIcon:= GetImageIndex(fn, false);
 
   if NIcon>=0 then
     Images.Draw(C,
-      ARect.Left+NIndent,
+      ARect.Left+NIndent1,
       (ARect.Top+ARect.Bottom-NIconSize) div 2,
       NIcon
       );
 
-  C.Font.Color:= clBlack;
+  C.Font.Color:= list.Theme^.ColorFont;
   C.TextOut(
-    ARect.Left+NIndent+NIconSize+NIndent2,
+    ARect.Left+NIndent1+NIconSize+NIndent2,
     (ARect.Top+ARect.Bottom-C.TextHeight(S)) div 2,
     S);
 end;
