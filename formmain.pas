@@ -13,9 +13,10 @@ type
   { TfmMain }
 
   TfmMain = class(TForm)
-    BtnAdd: TButton;
-    BtnClose: TButton;
+    BtnTabAdd: TButton;
+    BtnTabClose: TButton;
     BtnFolder: TButton;
+    BtnFolderClose: TButton;
     chkShowDotNames: TCheckBox;
     chkShowIcons: TCheckBox;
     chkShowRoot: TCheckBox;
@@ -26,9 +27,10 @@ type
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     Splitter1: TSplitter;
     StatusBar1: TStatusBar;
-    procedure BtnAddClick(Sender: TObject);
-    procedure BtnCloseClick(Sender: TObject);
+    procedure BtnTabAddClick(Sender: TObject);
+    procedure BtnTabCloseClick(Sender: TObject);
     procedure BtnFolderClick(Sender: TObject);
+    procedure BtnFolderCloseClick(Sender: TObject);
     procedure chkShowDotNamesChange(Sender: TObject);
     procedure chkShowIconsChange(Sender: TObject);
     procedure chkShowRootChange(Sender: TObject);
@@ -220,10 +222,15 @@ begin
     exp.Folder:= SelectDirectoryDialog1.FileName;
 end;
 
+procedure TfmMain.BtnFolderCloseClick(Sender: TObject);
+begin
+  exp.Folder:= '';
+end;
+
 var
   MaxTabIndex: integer = 0;
 
-procedure TfmMain.BtnAddClick(Sender: TObject);
+procedure TfmMain.BtnTabAddClick(Sender: TObject);
 begin
   Inc(MaxTabIndex);
   L.Items.Add('Tab '+IntToStr(MaxTabIndex));
@@ -231,7 +238,7 @@ begin
   UpdateTabs(false);
 end;
 
-procedure TfmMain.BtnCloseClick(Sender: TObject);
+procedure TfmMain.BtnTabCloseClick(Sender: TObject);
 var
   N: integer;
 begin
