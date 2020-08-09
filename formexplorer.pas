@@ -936,8 +936,10 @@ begin
   Result:= GetImageIndexFromPng(fnIcon);
 
   //save to 2 caches
-  ListExt.AddObject(ext, TObject(PtrInt(Result)));
-  ListLexer.AddObject(SLexer, TObject(PtrInt(Result)));
+  if ext<>'' then
+    ListExt.AddObject(ext, TObject(PtrInt(Result)));
+  if SLexer<>'' then
+    ListLexer.AddObject(SLexer, TObject(PtrInt(Result)));
 
   //ShowMessage('Load icon: '+ext);
 end;
