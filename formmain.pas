@@ -276,6 +276,7 @@ initialization
 
   ATFlatTheme.FontName:= 'default';
   ATFlatTheme.FontSize:= 10;
+  ATFlatTheme.ColorFont:= clBlack;
 
 end.
 

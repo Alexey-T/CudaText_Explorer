@@ -619,8 +619,10 @@ begin
   PanelTabsCap.Font.Size:= ExplorerOptions.FontSize_Cap;
   PanelTreeCap.Font.Size:= ExplorerOptions.FontSize_Cap;
 
+  Tree.Options:= Tree.Options-[tvoThemedDraw];
   Tree.Font.Name:= ATFlatTheme.FontName;
   Tree.Font.Size:= ATFlatTheme.FontSize;
+  Tree.Font.Color:= ATFlatTheme.ColorFont;
 
   N:= ExplorerOptions.CaptionPanelHeight;
   PanelTabsCap.Height:= N;
