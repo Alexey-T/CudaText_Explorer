@@ -26,6 +26,9 @@ type
     TabsIndentV: integer;
     TabsHeightPercents: integer;
     TabsHeightMaxPercents: integer;
+    CaptionPanelHeight: integer;
+    CaptionPanelColorBg: TColor;
+    CaptionPanelColorFont: TColor;
   end;
 
 var
@@ -108,6 +111,7 @@ type
     procedure UpdateTabs(ASelChange: boolean);
     procedure UpdateTabsTopIndex;
     procedure UpdatePanelSizes;
+    procedure UpdateTheme;
     property Folder: string read FFolder write SetFolder;
     property OnGetLexer: TExplorerOnGetLexer read FOnGetLexer write FOnGetLexer;
     property OnItemClick: TExplorerOnItemClick read FOnItemClick write FOnItemClick;
@@ -570,16 +574,36 @@ end;
 const
   cBtn: array[boolean] of string = ('+', '–');
 
+procedure TfmExplorer.UpdateTheme;
+var
+  N: integer;
+  NColor: TColor;
+begin
+  N:= ExplorerOptions.CaptionPanelHeight;
+  PanelTabsCap.Height:= N;
+  PanelTreeCap.Height:= N;
+
+  NColor:= ExplorerOptions.CaptionPanelColorBg;
+  PanelTabsCap.Color:= NColor;
+  PanelTreeCap.Color:= NColor;
+
+  NColor:= ExplorerOptions.CaptionPanelColorFont;
+  PanelTabsCap.Font.Color:= NColor;
+  PanelTreeCap.Font.Color:= NColor;
+end;
+
 procedure TfmExplorer.UpdatePanelSizes;
 var
   N, NSize, NSizeAuto, NSizeNormal, NSizeMax: integer;
   bTabs, bTree: boolean;
 begin
+  UpdateTheme;
+
   bTabs:= ListTabs.Visible;
   bTree:= Tree.Visible;
-
   BtnTabsX.Caption:= cBtn[bTabs];
   BtnTreeX.Caption:= cBtn[bTree];
+  BtnTabsX.Enabled:= ListTabs.ItemCount>0;
 
   if not bTabs then
   begin
@@ -870,6 +894,9 @@ initialization
     TabsIndentV:= 0;
     TabsHeightPercents:= 25;
     TabsHeightMaxPercents:= 70;
+    CaptionPanelHeight:= 20;
+    CaptionPanelColorBg:= clCream;
+    CaptionPanelColorFont:= clDkGray;
   end;
 
 end.
