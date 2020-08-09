@@ -94,7 +94,7 @@ type
     property Images: TImageList read FImages;
     property ImageIndexDefault: integer read FIconIndexDefault;
     property ImageIndexDir: integer read FIconIndexDir;
-    function ImageIndex(const AFileName: string; AIsDir: boolean): integer;
+    function ImageIndex(const AFileName: string): integer;
     property OnDetectLexer: TATShellOnDetectLexer read FOnDetectLexer write FOnDetectLexer;
   end;
 
@@ -366,7 +366,10 @@ begin
         S:= PrettyDirName(S);
 
       Node:= Items.AddChildObject(ANode, S, NodeData);
-      NIcon:= ATShellIcons.ImageIndex(NodeData.Path, NodeData.IsDir);
+      if NodeData.IsDir then
+        NIcon:= ATShellIcons.ImageIndexDir
+      else
+        NIcon:= ATShellIcons.ImageIndex(NodeData.Path);
       Node.ImageIndex:= NIcon;
       Node.SelectedIndex:= NIcon;
 
@@ -629,7 +632,7 @@ begin
     Result:= FOnDetectLexer(fn);
 end;
 
-function TATShellIcons.ImageIndex(const AFileName: string; AIsDir: boolean): integer;
+function TATShellIcons.ImageIndex(const AFileName: string): integer;
 var
   SLexer: string;
   fnIcon: string;
@@ -638,8 +641,6 @@ var
 begin
   if not ATShellOptions.ShowIcons then
     exit(-1);
-  if AIsDir then
-    exit(FIconIndexDir);
   Result:= FIconIndexDefault;
 
   fn:= ExtractFileName(AFileName);
