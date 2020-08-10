@@ -23,6 +23,7 @@ type
     ShowIcons: boolean;
     ShowIconsDirs: boolean;
     ShowRootNode: boolean;
+    ShowTextForEmpty: boolean;
     FoldDirsByClick: boolean;
     TextEmpty: string;
     TextEmptyWithHidden: string;
@@ -405,6 +406,7 @@ initialization
     ShowIcons:= true;
     ShowIconsDirs:= true;
     ShowRootNode:= true;
+    ShowTextForEmpty:= false;
     FoldDirsByClick:= true;
     TextEmpty:= '(Empty)';
     TextEmptyWithHidden:= '(Empty, %d hidden item(s))';

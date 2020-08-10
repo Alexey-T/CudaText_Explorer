@@ -289,16 +289,14 @@ begin
 
     if List.Count=0 then
     begin
-      {
-      if ATShellOptions.ShowNodeForEmpty then
+      if ATShellOptions.ShowTextForEmpty then
       begin
         if CountHidden=0 then
           S:= ATShellOptions.TextEmpty
         else
           S:= Format(ATShellOptions.TextEmptyWithHidden, [CountHidden]);
-        Node:= Tree.Items.AddChild(ANode, S);
+        Node:= Items.AddChild(ANode, S);
       end;
-      }
       exit;
     end;
 
