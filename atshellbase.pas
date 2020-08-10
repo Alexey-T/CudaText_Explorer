@@ -269,8 +269,12 @@ var
 begin
   if not Assigned(FIconCfg) then
   begin
+    if not DirectoryExists(ATShellOptions.DirOfIcons) then
+      raise Exception.Create('Icons folder not found: '+ATShellOptions.DirOfIcons);
+
     fnConfig:= ATShellOptions.DirOfIcons+DirectorySeparator+'icons.ini';
-    if not FileExists(fnConfig) then exit;
+    if not FileExists(fnConfig) then
+      raise Exception.Create('Icons config not found: '+fnConfig);
 
     FIconCfg:= TMemIniFile.Create(fnConfig);
 
