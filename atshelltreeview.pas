@@ -224,6 +224,7 @@ begin
   inherited Create(AOwner);
 
   ShowRoot:= false;
+  ShowLines:= false;
   ReadOnly:= true;
   RowSelect:= true;
 
