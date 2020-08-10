@@ -68,6 +68,9 @@ type
 var
   ATShellIcons: TATShellIcons = nil;
 
+type
+  EShellConfigError = class(Exception);
+
 implementation
 
 type
@@ -270,11 +273,11 @@ begin
   if not Assigned(FIconCfg) then
   begin
     if not DirectoryExists(ATShellOptions.DirOfIcons) then
-      raise Exception.Create('Icons folder not found: '+ATShellOptions.DirOfIcons);
+      raise EShellConfigError.Create('Icons folder not found: '+ATShellOptions.DirOfIcons);
 
     fnConfig:= ATShellOptions.DirOfIcons+DirectorySeparator+'icons.ini';
     if not FileExists(fnConfig) then
-      raise Exception.Create('Icons config not found: '+fnConfig);
+      raise EShellConfigError.Create('Icons config not found: '+fnConfig);
 
     FIconCfg:= TMemIniFile.Create(fnConfig);
 
