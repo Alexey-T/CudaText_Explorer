@@ -188,7 +188,7 @@ begin
   AList.Clear;
   ACountHidden:= 0;
   if FindFirst(AFolder+DirectorySeparator+MaskAll, faAnyFile, Rec)=0 then
-  begin
+  try
     repeat
       S:= Rec.Name;
       if (S='.') or (S='..') then Continue;
@@ -202,6 +202,7 @@ begin
       bDir:= (Rec.Attr and faDirectory)<>0;
       AList.AddObject(S, TObject(PtrInt(bDir)));
     until FindNext(Rec)<>0;
+  finally
     FindClose(Rec);
   end;
 end;
