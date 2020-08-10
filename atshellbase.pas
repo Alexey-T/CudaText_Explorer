@@ -337,6 +337,8 @@ var
 begin
   if not ATShellOptions.ShowIcons then
     exit(-1);
+  if FIconCfg=nil then
+    exit(-1);
   Result:= FIconIndexDefault;
 
   fn:= ExtractFileName(AFileName);
