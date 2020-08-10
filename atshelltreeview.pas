@@ -35,8 +35,8 @@ type
     FOnShellItemClick: TATShellTreeviewItemClick;
     procedure SetFolder(const AValue: string);
     procedure HandleClick(ADouble: boolean);
-    procedure FillTreeForFolder(const AFolder: string; ANode: TTreeNode);
-    procedure ReadFolder(const AFolder: string; AList: TStringList; out ACountHidden: integer);
+    procedure ReadDirToNode(const AFolder: string; ANode: TTreeNode);
+    procedure ReadDirToList(const AFolder: string; AList: TStringList; out ACountHidden: integer);
     procedure TreeClick(Sender: TObject);
     procedure TreeDblClick(Sender: TObject);
   protected
@@ -167,8 +167,8 @@ begin
   if not Data.IsDir then exit;
 
   Data.Expanded:= true;
-  FillTreeForFolder(Data.Path, Node);
-  //ShowMessage('fill: '+Data.Path);
+  ReadDirToNode(Data.Path, Node);
+  //ShowMessage('Fill tree: '+Data.Path);
 end;
 
 procedure TATShellTreeview.Refresh;
@@ -176,7 +176,7 @@ begin
   Folder:= Folder;
 end;
 
-procedure TATShellTreeview.ReadFolder(const AFolder: string;
+procedure TATShellTreeview.ReadDirToList(const AFolder: string;
   AList: TStringList; out ACountHidden: integer);
 const
   MaskAll = {$ifdef windows} '*.*' {$else} '*' {$endif};
@@ -208,11 +208,13 @@ end;
 
 procedure TATShellTreeview.TreeClick(Sender: TObject);
 begin
+  //dont override "Click" method- clicking fold-arrow is not ok
   HandleClick(false);
 end;
 
 procedure TATShellTreeview.TreeDblClick(Sender: TObject);
 begin
+  //dont override "DblClick" method- clicking fold-arrow is not ok
   HandleClick(true);
 end;
 
@@ -258,14 +260,14 @@ begin
   else
     RootNode:= nil;
 
-  FillTreeForFolder(FFolder, RootNode);
+  ReadDirToNode(FFolder, RootNode);
 
   if Assigned(RootNode) then
     RootNode.Expand(false);
 end;
 
 
-procedure TATShellTreeview.FillTreeForFolder(const AFolder: string; ANode: TTreeNode);
+procedure TATShellTreeview.ReadDirToNode(const AFolder: string; ANode: TTreeNode);
 var
   Node: TTreeNode;
   List: TStringList;
@@ -282,7 +284,7 @@ begin
 
   List:= TStringList.Create;
   try
-    ReadFolder(AFolder, List, CountHidden);
+    ReadDirToList(AFolder, List, CountHidden);
 
     if List.Count=0 then
     begin
