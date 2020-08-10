@@ -309,6 +309,9 @@ begin
         S:= PrettyDirName(S);
 
       Node:= Items.AddChildObject(ANode, S, NodeData);
+      if not ATShellOptions.ShowIcons then
+        NIcon:= -1
+      else
       if NodeData.IsDir then
         NIcon:= ATShellIcons.ImageIndexDir
       else
