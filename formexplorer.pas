@@ -228,7 +228,7 @@ end;
 
 procedure TfmExplorer.Refresh;
 begin
-  Folder:= Folder;
+  Tree.Refresh;
   ListTabs.Invalidate;
 end;
 

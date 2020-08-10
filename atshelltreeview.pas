@@ -44,6 +44,7 @@ type
     function CanExpand(Node: TTreeNode): boolean; override;
   public
     property Folder: string read FFolder write SetFolder;
+    procedure Refresh;
     constructor Create(AOwner: TComponent); override;
   published
     property OnShellItemClick: TATShellTreeviewItemClick read FOnShellItemClick write FOnShellItemClick;
@@ -168,6 +169,11 @@ begin
   Data.Expanded:= true;
   FillTreeForFolder(Data.Path, Node);
   //ShowMessage('fill: '+Data.Path);
+end;
+
+procedure TATShellTreeview.Refresh;
+begin
+  Folder:= Folder;
 end;
 
 procedure TATShellTreeview.ReadFolder(const AFolder: string;
