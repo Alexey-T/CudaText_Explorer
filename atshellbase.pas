@@ -32,7 +32,7 @@ var
   ATShellOptions: TATShellOptions;
 
 type
-  TATShellOnDetectLexer = function(const AFileName: string): string of object;
+  TATShellIconsOnDetect = function(const AFileName: string): string of object;
 
 type
   { TATShellIcons }
@@ -49,7 +49,7 @@ type
     FIconIndexDefault: integer;
     FIconIndexDir: integer;
     FIconIndexPic: integer;
-    FOnDetectLexer: TATShellOnDetectLexer;
+    FOnDetect: TATShellIconsOnDetect;
     function DetectLexer(const fn, ext: string): string;
     function GetImageIndexFromPng(const AFilename: string): integer;
     procedure InitCommonLexers;
@@ -62,7 +62,7 @@ type
     property ImageIndexDefault: integer read FIconIndexDefault;
     property ImageIndexDir: integer read FIconIndexDir;
     function ImageIndex(const AFileName: string): integer;
-    property OnDetectLexer: TATShellOnDetectLexer read FOnDetectLexer write FOnDetectLexer;
+    property OnDetect: TATShellIconsOnDetect read FOnDetect write FOnDetect;
   end;
 
 var
@@ -324,8 +324,8 @@ begin
   if ListExtToLexer.Find(ext, N) then
     exit(TATShellStringClass(ListExtToLexer.Objects[N]).Str);
 
-  if Assigned(FOnDetectLexer) then
-    Result:= FOnDetectLexer(fn);
+  if Assigned(FOnDetect) then
+    Result:= FOnDetect(fn);
 end;
 
 function TATShellIcons.ImageIndex(const AFileName: string): integer;
