@@ -276,6 +276,7 @@ begin
   AddLex('s3m', '_audio');
   AddLex('xm', '_audio');
   AddLex('it', '_audio');
+  AddLex('ra', '_audio');
 
   AddLex('mp4', '_video');
   AddLex('mpg', '_video');
@@ -292,6 +293,10 @@ begin
   AddLex('3g2', '_video');
   AddLex('asf', '_video');
   AddLex('rm', '_video');
+  AddLex('rmvb', '_video');
+  AddLex('rv', '_video');
+  AddLex('rp', '_video');
+  AddLex('viv', '_video');
   AddLex('swf', '_video');
   AddLex('vob', '_video');
 
