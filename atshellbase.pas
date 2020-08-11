@@ -198,12 +198,20 @@ begin
   AddLex('pdf', 'PDF');
   AddLex('doc', 'Word');
   AddLex('docx', 'Word');
+  AddLex('rtf', 'Word');
+  AddLex('odt', 'Word');
+  AddLex('wpd', 'Word');
+  AddLex('wps', 'Word');
   AddLex('xls', 'Excel');
   AddLex('xlsx', 'Excel');
+  AddLex('xlr', 'Excel');
+  AddLex('ods', 'Excel');
   AddLex('ppt', 'PowerPoint');
+  AddLex('pps', 'PowerPoint');
   AddLex('pptx', 'PowerPoint');
 
   AddLex('zip', '_zip');
+  AddLex('zipx', '_zip');
   AddLex('rar', '_zip');
   AddLex('tar', '_zip');
   AddLex('xz', '_zip');
@@ -216,13 +224,21 @@ begin
   AddLex('iso', '_zip');
   AddLex('jar', '_zip');
   AddLex('arj', '_zip');
-  AddLex('dmg', '_zip');
   AddLex('vcd', '_zip');
+  AddLex('cab', '_zip');
+  AddLex('cbr', '_zip');
+  AddLex('sitx', '_zip');
 
   AddLex('exe', '_bin');
+  AddLex('com', '_bin');
   AddLex('dll', '_bin');
   AddLex('so', '_bin');
   AddLex('ocx', '_bin');
+  AddLex('cpl', '_bin');
+  AddLex('drv', '_bin');
+  AddLex('lnk', '_bin');
+  AddLex('sys', '_bin');
+  AddLex('gadget', '_bin');
   AddLex('dbg', '_bin');
   AddLex('chm', '_bin');
   AddLex('pyc', '_bin');
@@ -231,19 +247,28 @@ begin
   AddLex('db', '_bin');
   AddLex('dbf', '_bin');
   AddLex('mdb', '_bin');
+  AddLex('pdb', '_bin');
+  AddLex('accdb', '_bin');
   AddLex('apk', '_bin');
   AddLex('dat', '_bin');
   AddLex('bin', '_bin');
   AddLex('msi', '_bin');
+  AddLex('cue', '_bin');
+  AddLex('mdf', '_bin');
+  AddLex('dmg', '_bin');
+  AddLex('toast', '_bin');
 
   AddLex('wav', '_audio');
   AddLex('mp3', '_audio');
   AddLex('mpa', '_audio');
+  AddLex('m4a', '_audio');
+  AddLex('m3u', '_audio');
   AddLex('ogg', '_audio');
   AddLex('flac', '_audio');
   AddLex('wma', '_audio');
   AddLex('wpl', '_audio');
   AddLex('aif', '_audio');
+  AddLex('iff', '_audio');
   AddLex('cda', '_audio');
   AddLex('mid', '_audio');
   AddLex('midi', '_audio');
@@ -253,9 +278,9 @@ begin
   AddLex('it', '_audio');
 
   AddLex('mp4', '_video');
-  AddLex('m4a', '_video');
   AddLex('mpg', '_video');
   AddLex('mpeg', '_video');
+  AddLex('m4v', '_video');
   AddLex('avi', '_video');
   AddLex('mov', '_video');
   AddLex('webm', '_video');
@@ -265,6 +290,10 @@ begin
   AddLex('ogv', '_video');
   AddLex('3gp', '_video');
   AddLex('3g2', '_video');
+  AddLex('asf', '_video');
+  AddLex('rm', '_video');
+  AddLex('swf', '_video');
+  AddLex('vob', '_video');
 
   AddLex('fnt', '_font');
   AddLex('fon', '_font');
@@ -311,14 +340,27 @@ begin
   AddExt('txt', FIconIndexDefault);
   AddExt('csv', FIconIndexDefault);
 
+  AddExt('bmp', FIconIndexPic);
   AddExt('png', FIconIndexPic);
   AddExt('gif', FIconIndexPic);
-  AddExt('bmp', FIconIndexPic);
   AddExt('jpg', FIconIndexPic);
   AddExt('jpeg', FIconIndexPic);
   AddExt('ico', FIconIndexPic);
+  AddExt('cur', FIconIndexPic);
+  AddExt('icns', FIconIndexPic);
   AddExt('tif', FIconIndexPic);
   AddExt('tiff', FIconIndexPic);
+  AddExt('dds', FIconIndexPic);
+  AddExt('heic', FIconIndexPic);
+  AddExt('pspimage', FIconIndexPic);
+  AddExt('tga', FIconIndexPic);
+  AddExt('thm', FIconIndexPic);
+  AddExt('yuv', FIconIndexPic);
+  AddExt('eps', FIconIndexPic);
+
+  AddExt('3dm', FIconIndexPic);
+  AddExt('3ds', FIconIndexPic);
+  AddExt('max', FIconIndexPic);
 end;
 
 function TATShellIcons.DetectLexer(const fn, ext: string): string;
