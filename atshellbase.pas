@@ -259,7 +259,12 @@ begin
   AddLex('avi', '_video');
   AddLex('mov', '_video');
   AddLex('webm', '_video');
+  AddLex('wmv', '_video');
   AddLex('mkv', '_video');
+  AddLex('flv', '_video');
+  AddLex('ogv', '_video');
+  AddLex('3gp', '_video');
+  AddLex('3g2', '_video');
 
   AddLex('fnt', '_font');
   AddLex('fon', '_font');
