@@ -198,6 +198,9 @@ begin
   AddLex('graphql', 'GraphQL');
   AddLex('gradle', 'Groovy');
   AddLex('groovy', 'Groovy');
+  AddLex('tcl', 'Tcl');
+  AddLex('tk', 'Tcl');
+  AddLex('tm', 'Tcl');
   AddLex('po', 'PO');
   AddLex('csproj', 'csproj');
   AddLex('fsproj', 'fsproj');
@@ -386,6 +389,8 @@ begin
 
   if fn='Dockerfile' then
     exit(fn);
+  if ChangeFileExt(fn, '')='makefile' then
+    exit('Makefile');
 
   if ListExtToLexer.Find(ext, N) then
     exit(TATShellStringClass(ListExtToLexer.Objects[N]).Str);
