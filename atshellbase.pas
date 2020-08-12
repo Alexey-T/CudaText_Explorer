@@ -188,6 +188,16 @@ begin
   AddLex('svg', 'SVG');
   AddLex('psd', 'Photoshop');
   AddLex('d', 'D');
+  AddLex('f', 'Fortran');
+  AddLex('for', 'Fortran');
+  AddLex('f2k', 'Fortran');
+  AddLex('f90', 'Fortran');
+  AddLex('f95', 'Fortran');
+  AddLex('feature', 'Gherkin');
+  AddLex('gql', 'GraphQL');
+  AddLex('graphql', 'GraphQL');
+  AddLex('gradle', 'Groovy');
+  AddLex('groovy', 'Groovy');
   AddLex('po', 'PO');
   AddLex('csproj', 'csproj');
   AddLex('fsproj', 'fsproj');
