@@ -37,8 +37,11 @@ type
     function GetNodeFilename(Node: TTreeNode; out AIsDir: boolean): string;
     procedure SetFolder(const AValue: string);
     procedure HandleClick(ADouble: boolean);
-    procedure ReadDirToNode(const AFolder: string; ANode: TTreeNode);
     procedure ReadDirToList(const AFolder: string; AList: TStringList; out ACountHidden: integer);
+    procedure ReadDirToNodeFromList(const AFolder: string; ANode: TTreeNode;
+      List: TStringList; ACountHidden: integer);
+    procedure ReadDirToNode(const AFolder: string; ANode: TTreeNode);
+    procedure RereadNode(ANode: TTreeNode);
     procedure TreeClick(Sender: TObject);
     procedure TreeDblClick(Sender: TObject);
     function GetCurrentFilename: string;
@@ -243,6 +246,27 @@ begin
   end;
 end;
 
+procedure TATShellTreeview.RereadNode(ANode: TTreeNode);
+var
+  L: TStringList;
+  fn: string;
+  bDir: boolean;
+  NHidden: integer;
+begin
+  if ANode=nil then exit;
+  fn:= GetNodeFilename(ANode, bDir);
+  if not bDir then exit;
+
+  L:= TStringList.Create;
+  try
+    ReadDirToList(fn, L, NHidden);
+
+
+  finally
+    FreeAndNil(L);
+  end;
+end;
+
 procedure TATShellTreeview.TreeClick(Sender: TObject);
 begin
   //dont override "Click" method- clicking fold-arrow is not ok
@@ -304,13 +328,13 @@ begin
     RootNode.Expand(false);
 end;
 
-procedure TATShellTreeview.ReadDirToNode(const AFolder: string; ANode: TTreeNode);
+procedure TATShellTreeview.ReadDirToNodeFromList(const AFolder: string;
+  ANode: TTreeNode; List: TStringList; ACountHidden: integer);
 var
   Node: TTreeNode;
-  List: TStringList;
   bDir: boolean;
   NodeData: TATShellNodeData;
-  CountHidden, NIcon: integer;
+  NIcon: integer;
   S: string;
   i: integer;
 begin
@@ -319,55 +343,62 @@ begin
   else
     Items.Clear;
 
-  List:= TStringList.Create;
+  if List.Count=0 then
+  begin
+    if ATShellOptions.ShowTextForEmpty then
+    begin
+      if ACountHidden=0 then
+        S:= ATShellOptions.TextEmpty
+      else
+        S:= Format(ATShellOptions.TextEmptyWithHidden, [ACountHidden]);
+      Node:= Items.AddChild(ANode, S);
+    end;
+    exit;
+  end;
+
+  List.CustomSort(@_CompareFilenames);
+
+  for i:= 0 to List.Count-1 do
+  begin
+    S:= List[i];
+    bDir:= List.Objects[i]<>nil;
+
+    NodeData:= TATShellNodeData.Create;
+    NodeData.Path:= AFolder+DirectorySeparator+S;
+    NodeData.IsDir:= bDir;
+    NodeData.Expanded:= false;
+
+    if bDir then
+      S:= PrettyDirName(S);
+
+    Node:= Items.AddChildObject(ANode, S, NodeData);
+    if not ATShellOptions.ShowIcons then
+      NIcon:= -1
+    else
+    if NodeData.IsDir then
+      NIcon:= ATShellIcons.ImageIndexDir
+    else
+      NIcon:= ATShellIcons.ImageIndex(NodeData.Path);
+    Node.ImageIndex:= NIcon;
+    Node.SelectedIndex:= NIcon;
+
+    //add fictive child, to show expand arrow
+    if bDir then
+      Items.AddChild(Node, '?');
+  end;
+end;
+
+procedure TATShellTreeview.ReadDirToNode(const AFolder: string; ANode: TTreeNode);
+var
+  L: TStringList;
+  NHidden: integer;
+begin
+  L:= TStringList.Create;
   try
-    ReadDirToList(AFolder, List, CountHidden);
-
-    if List.Count=0 then
-    begin
-      if ATShellOptions.ShowTextForEmpty then
-      begin
-        if CountHidden=0 then
-          S:= ATShellOptions.TextEmpty
-        else
-          S:= Format(ATShellOptions.TextEmptyWithHidden, [CountHidden]);
-        Node:= Items.AddChild(ANode, S);
-      end;
-      exit;
-    end;
-
-    List.CustomSort(@_CompareFilenames);
-
-    for i:= 0 to List.Count-1 do
-    begin
-      S:= List[i];
-      bDir:= List.Objects[i]<>nil;
-
-      NodeData:= TATShellNodeData.Create;
-      NodeData.Path:= AFolder+DirectorySeparator+S;
-      NodeData.IsDir:= bDir;
-      NodeData.Expanded:= false;
-
-      if bDir then
-        S:= PrettyDirName(S);
-
-      Node:= Items.AddChildObject(ANode, S, NodeData);
-      if not ATShellOptions.ShowIcons then
-        NIcon:= -1
-      else
-      if NodeData.IsDir then
-        NIcon:= ATShellIcons.ImageIndexDir
-      else
-        NIcon:= ATShellIcons.ImageIndex(NodeData.Path);
-      Node.ImageIndex:= NIcon;
-      Node.SelectedIndex:= NIcon;
-
-      //add fictive child, to show expand arrow
-      if bDir then
-        Items.AddChild(Node, '?');
-    end;
+    ReadDirToList(AFolder, L, NHidden);
+    ReadDirToNodeFromList(AFolder, ANode, L, NHidden);
   finally
-    FreeAndNil(List);
+    FreeAndNil(L);
   end;
 end;
 
