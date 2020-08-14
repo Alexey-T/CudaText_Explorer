@@ -38,10 +38,8 @@ type
     procedure SetFolder(const AValue: string);
     procedure HandleClick(ADouble: boolean);
     procedure ReadDirToList(const AFolder: string; AList: TStringList; out ACountHidden: integer);
-    procedure ReadDirToNodeFromList(const AFolder: string; ANode: TTreeNode;
-      List: TStringList; ACountHidden: integer);
+    procedure ReadDirToNodeFromList(const AFolder: string; ANode: TTreeNode; List: TStringList; ACountHidden: integer);
     procedure ReadDirToNode(const AFolder: string; ANode: TTreeNode);
-    procedure RereadNode(ANode: TTreeNode);
     procedure TreeClick(Sender: TObject);
     procedure TreeDblClick(Sender: TObject);
     function GetCurrentFilename: string;
@@ -56,6 +54,7 @@ type
     function FindNodeOfFilename(const AFilename: string): TTreeNode;
     property Folder: string read FFolder write SetFolder;
     property CurrentFilename: string read GetCurrentFilename write SetCurrentFilename;
+    procedure RereadNode(ANode: TTreeNode);
   published
     property OnShellItemClick: TATShellTreeviewItemClick read FOnShellItemClick write FOnShellItemClick;
   end;
@@ -211,8 +210,13 @@ begin
 end;
 
 procedure TATShellTreeview.Refresh;
+var
+  fnSel: string;
 begin
+  fnSel:= CurrentFilename;
   Folder:= Folder;
+  if FileExists(fnSel) then
+    CurrentFilename:= fnSel;
 end;
 
 procedure TATShellTreeview.ReadDirToList(const AFolder: string;
@@ -247,21 +251,28 @@ begin
 end;
 
 procedure TATShellTreeview.RereadNode(ANode: TTreeNode);
+//todo: compare result of ReadDirToList with current node childs,
+//clear/fill node only if changed
 var
   L: TStringList;
-  fn: string;
+  SPath, SFilenameSel: string;
   bDir: boolean;
   NHidden: integer;
 begin
   if ANode=nil then exit;
-  fn:= GetNodeFilename(ANode, bDir);
+  SPath:= GetNodeFilename(ANode, bDir);
   if not bDir then exit;
+
+  SFilenameSel:= CurrentFilename;
 
   L:= TStringList.Create;
   try
-    ReadDirToList(fn, L, NHidden);
-
-
+    ReadDirToList(SPath, L, NHidden);
+    ReadDirToNodeFromList(SPath, ANode, L, NHidden);
+    //restore selected node
+    if ExtractFileDir(SFilenameSel)=SPath then
+      if FileExists(SFilenameSel) then
+        CurrentFilename:= SFilenameSel;
   finally
     FreeAndNil(L);
   end;
