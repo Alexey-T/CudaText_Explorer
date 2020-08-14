@@ -47,13 +47,14 @@ type
     procedure Delete(Node: TTreeNode); override;
     function CanExpand(Node: TTreeNode): boolean; override;
   public
-    property Folder: string read FFolder write SetFolder;
     procedure Refresh;
     constructor Create(AOwner: TComponent); override;
-    function FocusFilename(const AFilename: string): boolean;
+    function FocusNodeOfFilename(const AFilename: string): boolean;
+    function FindNodeOfFilename(const AFilename: string): TTreeNode;
+    property Folder: string read FFolder write SetFolder;
+    property CurrentFilename: string read GetCurrentFilename write SetCurrentFilename;
   published
     property OnShellItemClick: TATShellTreeviewItemClick read FOnShellItemClick write FOnShellItemClick;
-    property CurrentFilename: string read GetCurrentFilename write SetCurrentFilename;
   end;
 
 implementation
@@ -370,14 +371,27 @@ begin
   end;
 end;
 
-function TATShellTreeview.FocusFilename(const AFilename: string): boolean;
+function TATShellTreeview.FocusNodeOfFilename(const AFilename: string): boolean;
+var
+  Node: TTreeNode;
+begin
+  Node:= FindNodeOfFilename(AFilename);
+  Result:= Assigned(Node);
+  if Result then
+  begin
+    Select(Node);
+    Node.MakeVisible;
+  end;
+end;
+
+function TATShellTreeview.FindNodeOfFilename(const AFilename: string): TTreeNode;
 var
   SParts, SPart, SCurDir, SFindText: string;
   Node: TTreeNode;
   N: integer;
   bFinal: boolean;
 begin
-  Result:= false;
+  Result:= nil;
   if FFolder='' then exit;
   if not SBeginsWith(AFilename, FFolder+DirectorySeparator) then exit;
 
@@ -410,19 +424,14 @@ begin
     if Node=nil then exit;
 
     if bFinal then
-    begin
-      Select(Node);
-      Node.MakeVisible;
-      exit(true);
-    end;
+      exit(Node);
     Node.Expand(false);
-
   until SParts='';
 end;
 
 procedure TATShellTreeview.SetCurrentFilename(const AValue: string);
 begin
-  FocusFilename(AValue);
+  FocusNodeOfFilename(AValue);
 end;
 
 function TATShellTreeview.GetCurrentFilename: string;

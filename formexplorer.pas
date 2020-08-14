@@ -393,7 +393,7 @@ end;
 
 procedure TfmExplorer.FocusFilename(const fn: string);
 begin
-  Tree.FocusFilename(fn);
+  Tree.FocusNodeOfFilename(fn);
 end;
 
 
