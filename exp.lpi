@@ -65,6 +65,7 @@
         <Filename Value="formmenubox.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="fmMenuBox"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit5>
     </Units>

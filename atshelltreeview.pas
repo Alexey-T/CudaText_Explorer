@@ -353,21 +353,51 @@ end;
 
 function TATShellTreeview.FocusFilename(const AFilename: string): boolean;
 var
-  SParts, SPart: string;
-  N, i: integer;
+  SParts, SPart, SCurDir, SFindText: string;
+  Node: TTreeNode;
+  N: integer;
+  bFinal: boolean;
 begin
   Result:= false;
   if FFolder='' then exit;
   if not SBeginsWith(AFilename, FFolder+DirectorySeparator) then exit;
 
   SParts:= Copy(AFilename, Length(FFolder)+2, MaxInt);
+  SCurDir:= FFolder;
+
+  if ATShellOptions.ShowRootNode then
+    Node:= Items[0]
+  else
+    Node:= nil;
+
   repeat
-    N:= System.Pos(DirectorySeparator, SParts);
-    if N=0 then
+    N:= Pos(DirectorySeparator, SParts);
+    bFinal:= N=0;
+    if bFinal then
       N:= Length(SParts)+1;
     SPart:= Copy(SParts, 1, N-1);
     System.Delete(SParts, 1, N);
-    //ShowMessage('part: '+SPart);
+    SCurDir+= DirectorySeparator+SPart;
+
+    if bFinal then
+      SFindText:= SPart
+    else
+      SFindText:= PrettyDirName(SPart);
+
+    if Node=nil then
+      Node:= Items.FindTopLvlNode(SFindText)
+    else
+      Node:= Node.FindNode(SFindText);
+    if Node=nil then exit;
+
+    if bFinal then
+    begin
+      Select(Node);
+      Node.MakeVisible;
+      exit(true);
+    end;
+    Node.Expand(false);
+
   until SParts='';
 end;
 

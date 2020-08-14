@@ -1,18 +1,18 @@
 object fmMenuBox: TfmMenuBox
   Left = 1530
-  Height = 484
+  Height = 534
   Top = 185
-  Width = 332
+  Width = 782
   Caption = 'Menu'
-  ClientHeight = 484
-  ClientWidth = 332
+  ClientHeight = 534
+  ClientWidth = 782
   Position = poScreenCenter
   LCLVersion = '2.1.0.0'
   object ButtonPanel1: TButtonPanel
     Left = 6
     Height = 37
-    Top = 441
-    Width = 320
+    Top = 491
+    Width = 770
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     HelpButton.Name = 'HelpButton'
@@ -26,13 +26,13 @@ object fmMenuBox: TfmMenuBox
   end
   object ListBox: TListBox
     Left = 6
-    Height = 429
+    Height = 479
     Top = 6
-    Width = 320
+    Width = 770
     Align = alClient
     BorderSpacing.Around = 6
     ItemHeight = 0
-    ScrollWidth = 318
+    ScrollWidth = 768
     TabOrder = 1
     TopIndex = -1
   end

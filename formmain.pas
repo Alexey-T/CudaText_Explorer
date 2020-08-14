@@ -255,6 +255,7 @@ begin
   try
     FindAllFiles(LFiles, exp.Folder, '*', true);
     if LFiles.Count=0 then exit;
+    LFiles.Sort;
 
     fm:= TfmMenuBox.Create(nil);
     try
