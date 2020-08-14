@@ -34,12 +34,15 @@ type
   private
     FFolder: string;
     FOnShellItemClick: TATShellTreeviewItemClick;
+    function GetNodeFilename(Node: TTreeNode; out AIsDir: boolean): string;
     procedure SetFolder(const AValue: string);
     procedure HandleClick(ADouble: boolean);
     procedure ReadDirToNode(const AFolder: string; ANode: TTreeNode);
     procedure ReadDirToList(const AFolder: string; AList: TStringList; out ACountHidden: integer);
     procedure TreeClick(Sender: TObject);
     procedure TreeDblClick(Sender: TObject);
+    function GetCurrentFilename: string;
+    procedure SetCurrentFilename(const AValue: string);
   protected
     procedure Delete(Node: TTreeNode); override;
     function CanExpand(Node: TTreeNode): boolean; override;
@@ -50,6 +53,7 @@ type
     function FocusFilename(const AFilename: string): boolean;
   published
     property OnShellItemClick: TATShellTreeviewItemClick read FOnShellItemClick write FOnShellItemClick;
+    property CurrentFilename: string read GetCurrentFilename write SetCurrentFilename;
   end;
 
 implementation
@@ -120,48 +124,64 @@ begin
 end;
 
 
+function TATShellTreeview.GetNodeFilename(Node: TTreeNode; out AIsDir: boolean): string;
+var
+  Data: TATShellNodeData;
+begin
+  AIsDir:= false;
+  Result:= '';
+  if Assigned(Node) then
+    if Assigned(Node.Data) then
+    begin
+      Data:= TATShellNodeData(Node.Data);
+      AIsDir:= Data.IsDir;
+      Result:= Data.Path;
+    end;
+end;
+
+
 procedure TATShellTreeview.HandleClick(ADouble: boolean);
 var
   P: TPoint;
   Node: TTreeNode;
-  Data: TATShellNodeData;
   Kind: TATShellTreeviewClick;
+  fn: string;
+  bDir: boolean;
 begin
   P:= ScreenToClient(Mouse.CursorPos);
   Node:= GetNodeAt(P.X, P.Y);
   if Assigned(Node) then
-    if Assigned(Node.Data) then
+  begin
+    fn:= GetNodeFilename(Node, bDir);
+    if fn='' then exit;
+    if bDir then
     begin
-      Kind:= astcNone;
-      Data:= TATShellNodeData(Node.Data);
-      if Data.IsDir then
+      if ATShellOptions.FoldDirsByClick then
       begin
-        if ATShellOptions.FoldDirsByClick then
+        if Node.Expanded then
         begin
-          if Node.Expanded then
-          begin
-            Node.Collapse(false);
-            Kind:= astcFolderFold;
-          end
-          else
-          begin
-            Node.Expand(false);
-            Kind:= astcFolderUnfold;
-          end;
-          if Assigned(FOnShellItemClick) then
-            FOnShellItemClick(Data.Path, Kind);
-        end;
-      end
-      else
-      begin
-        if ADouble then
-          Kind:= astcFileDblClick
+          Node.Collapse(false);
+          Kind:= astcFolderFold;
+        end
         else
-          Kind:= astcFileClick;
+        begin
+          Node.Expand(false);
+          Kind:= astcFolderUnfold;
+        end;
         if Assigned(FOnShellItemClick) then
-          FOnShellItemClick(Data.Path, Kind);
+          FOnShellItemClick(fn, Kind);
       end;
+    end
+    else
+    begin
+      if ADouble then
+        Kind:= astcFileDblClick
+      else
+        Kind:= astcFileClick;
+      if Assigned(FOnShellItemClick) then
+        FOnShellItemClick(fn, Kind);
     end;
+  end;
 end;
 
 procedure TATShellTreeview.Delete(Node: TTreeNode);
@@ -283,7 +303,6 @@ begin
     RootNode.Expand(false);
 end;
 
-
 procedure TATShellTreeview.ReadDirToNode(const AFolder: string; ANode: TTreeNode);
 var
   Node: TTreeNode;
@@ -399,6 +418,22 @@ begin
     Node.Expand(false);
 
   until SParts='';
+end;
+
+procedure TATShellTreeview.SetCurrentFilename(const AValue: string);
+begin
+  FocusFilename(AValue);
+end;
+
+function TATShellTreeview.GetCurrentFilename: string;
+var
+  Node: TTreeNode;
+  bDir: boolean;
+begin
+  Result:= '';
+  Node:= Selected;
+  if Assigned(Node) then
+    Result:= GetNodeFilename(Node, bDir);
 end;
 
 
