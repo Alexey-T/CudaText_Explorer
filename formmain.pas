@@ -22,6 +22,7 @@ type
     BtnFolder: TButton;
     BtnFolderClose: TButton;
     BtnFocusFile: TButton;
+    chkShowBrackets: TCheckBox;
     chkShowDotNames: TCheckBox;
     chkShowIcons: TCheckBox;
     chkShowRoot: TCheckBox;
@@ -37,6 +38,7 @@ type
     procedure BtnTabCloseClick(Sender: TObject);
     procedure BtnFolderClick(Sender: TObject);
     procedure BtnFolderCloseClick(Sender: TObject);
+    procedure chkShowBracketsChange(Sender: TObject);
     procedure chkShowDotNamesChange(Sender: TObject);
     procedure chkShowIconsChange(Sender: TObject);
     procedure chkShowRootChange(Sender: TObject);
@@ -231,6 +233,12 @@ end;
 procedure TfmMain.BtnFolderCloseClick(Sender: TObject);
 begin
   exp.Folder:= '';
+end;
+
+procedure TfmMain.chkShowBracketsChange(Sender: TObject);
+begin
+  ATShellOptions.ShowFolderBrackets:= chkShowBrackets.Checked;
+  exp.Refresh;
 end;
 
 var

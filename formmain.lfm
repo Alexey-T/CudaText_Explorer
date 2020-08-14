@@ -1,28 +1,28 @@
 object fmMain: TfmMain
   Left = 156
-  Height = 547
+  Height = 575
   Top = 154
-  Width = 671
+  Width = 707
   Caption = 'Explorer test'
-  ClientHeight = 547
-  ClientWidth = 671
+  ClientHeight = 575
+  ClientWidth = 707
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poScreenCenter
   LCLVersion = '2.1.0.0'
   object PanelLeft: TPanel
     Left = 0
-    Height = 527
+    Height = 555
     Top = 0
-    Width = 380
+    Width = 416
     Align = alClient
     BevelOuter = bvNone
     Caption = 'Explorer'
     TabOrder = 0
   end
   object Splitter1: TSplitter
-    Left = 380
-    Height = 527
+    Left = 416
+    Height = 555
     Top = 0
     Width = 5
     Align = alRight
@@ -31,18 +31,18 @@ object fmMain: TfmMain
   object StatusBar1: TStatusBar
     Left = 0
     Height = 20
-    Top = 527
-    Width = 671
+    Top = 555
+    Width = 707
     Panels = <>
   end
   object PanelRt: TPanel
-    Left = 385
-    Height = 527
+    Left = 421
+    Height = 555
     Top = 0
     Width = 286
     Align = alRight
     BevelOuter = bvNone
-    ClientHeight = 527
+    ClientHeight = 555
     ClientWidth = 286
     TabOrder = 2
     object ListTabs: TListBox
@@ -89,7 +89,7 @@ object fmMain: TfmMain
     object Panel2: TPanel
       Left = 0
       Height = 107
-      Top = 420
+      Top = 448
       Width = 286
       Align = alBottom
       BevelOuter = bvNone
@@ -126,6 +126,17 @@ object fmMain: TfmMain
         OnChange = chkShowIconsChange
         State = cbChecked
         TabOrder = 0
+      end
+      object chkShowBrackets: TCheckBox
+        Left = 8
+        Height = 24
+        Top = 80
+        Width = 144
+        Caption = 'Show dir brackets'
+        Checked = True
+        OnChange = chkShowBracketsChange
+        State = cbChecked
+        TabOrder = 3
       end
     end
     object BtnFolderClose: TButton
