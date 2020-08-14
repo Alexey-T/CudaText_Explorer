@@ -10,10 +10,10 @@ uses
   ATFlatThemes,
   ATShellBase,
   ATShellTreeview,
-  formexplorer;
+  formexplorer,
+  formmenubox;
 
 type
-
   { TfmMain }
 
   TfmMain = class(TForm)
@@ -21,16 +21,18 @@ type
     BtnTabClose: TButton;
     BtnFolder: TButton;
     BtnFolderClose: TButton;
+    BtnFocusFile: TButton;
     chkShowDotNames: TCheckBox;
     chkShowIcons: TCheckBox;
     chkShowRoot: TCheckBox;
-    L: TListBox;
+    ListTabs: TListBox;
     PanelLeft: TPanel;
     Panel2: TPanel;
     PanelRt: TPanel;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     Splitter1: TSplitter;
     StatusBar1: TStatusBar;
+    procedure BtnFocusFileClick(Sender: TObject);
     procedure BtnTabAddClick(Sender: TObject);
     procedure BtnTabCloseClick(Sender: TObject);
     procedure BtnFolderClick(Sender: TObject);
@@ -40,7 +42,7 @@ type
     procedure chkShowRootChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure LSelectionChange(Sender: TObject; User: boolean);
+    procedure ListTabsSelectionChange(Sender: TObject; User: boolean);
   private
     exp: TfmExplorer;
     procedure FakeOpenFile(const fn: string; AsTemp: boolean);
@@ -97,7 +99,7 @@ begin
   exp.Folder:= ExtractFileDir(Application.ExeName);
 end;
 
-procedure TfmMain.LSelectionChange(Sender: TObject; User: boolean);
+procedure TfmMain.ListTabsSelectionChange(Sender: TObject; User: boolean);
 begin
   UpdateTabs(true);
 end;
@@ -133,39 +135,39 @@ begin
  try
   cap:= ExtractFileName(fn) + ' ('+ExtractFileDir(fn)+')';
 
-  n:= L.Items.IndexOf(cap);
+  n:= ListTabs.Items.IndexOf(cap);
   if n>=0 then
   begin
-    L.ItemIndex:= n;
+    ListTabs.ItemIndex:= n;
     exit;
   end;
 
-  n:= L.Items.IndexOf(cTempPrefix+cap);
+  n:= ListTabs.Items.IndexOf(cTempPrefix+cap);
   if n>=0 then
   begin
     if AsTemp then
       cap:= cTempPrefix+cap;
-    L.Items[n]:= cap;
-    L.ItemIndex:= n;
+    ListTabs.Items[n]:= cap;
+    ListTabs.ItemIndex:= n;
     exit;
   end;
 
   if AsTemp then
   begin
     n:= -1;
-    for i:= 0 to L.Items.Count-1 do
-      if Pos(cTempPrefix, L.Items[i])=1 then
+    for i:= 0 to ListTabs.Items.Count-1 do
+      if Pos(cTempPrefix, ListTabs.Items[i])=1 then
       begin
-        L.Items[i]:= cTempPrefix+cap;
-        L.ItemIndex:= n;
+        ListTabs.Items[i]:= cTempPrefix+cap;
+        ListTabs.ItemIndex:= n;
         exit;
       end;
   end;
 
   if AsTemp then
     cap:= cTempPrefix+cap;
-  L.Items.Add(cap);
-  L.ItemIndex:= L.Items.Count-1;
+  ListTabs.Items.Add(cap);
+  ListTabs.ItemIndex:= ListTabs.Items.Count-1;
  finally
    UpdateTabs(false);
  end;
@@ -173,16 +175,16 @@ end;
 
 procedure TfmMain.ExplorerGetTabs(out ACount: integer; out ASelected: integer);
 begin
-  ACount:= L.Items.Count;
-  ASelected:= L.ItemIndex;
+  ACount:= ListTabs.Items.Count;
+  ASelected:= ListTabs.ItemIndex;
 end;
 
 procedure TfmMain.ExplorerGetTabProp(AIndex: integer; out ACaption,
   AFilename: string; out AModified: boolean);
 begin
-  if (AIndex>=0) and (AIndex<L.Items.Count) then
+  if (AIndex>=0) and (AIndex<ListTabs.Items.Count) then
   begin
-    ACaption:= L.Items[AIndex];
+    ACaption:= ListTabs.Items[AIndex];
     if Pos(cTempPrefix, ACaption)=1 then
       Delete(ACaption, 1, Length(cTempPrefix));
     AFilename:= 'file'+IntToStr(AIndex);
@@ -203,19 +205,19 @@ end;
 
 procedure TfmMain.ExplorerTabSelect(AIndex: integer);
 begin
-  L.ItemIndex:= AIndex;
+  ListTabs.ItemIndex:= AIndex;
 end;
 
 procedure TfmMain.ExplorerTabClose(AIndex: integer);
 var
   N: integer;
 begin
-  if AIndex<L.Items.Count then
+  if AIndex<ListTabs.Items.Count then
   begin
-    N:= L.ItemIndex;
-    L.Items.Delete(AIndex);
-    if L.Items.Count>0 then
-      L.ItemIndex:= Max(0, Min(N, L.Items.Count-1));
+    N:= ListTabs.ItemIndex;
+    ListTabs.Items.Delete(AIndex);
+    if ListTabs.Items.Count>0 then
+      ListTabs.ItemIndex:= Max(0, Min(N, ListTabs.Items.Count-1));
     UpdateTabs(false);
   end;
 end;
@@ -237,16 +239,47 @@ var
 procedure TfmMain.BtnTabAddClick(Sender: TObject);
 begin
   Inc(MaxTabIndex);
-  L.Items.Add('Tab '+IntToStr(MaxTabIndex));
-  L.ItemIndex:= L.Items.Count-1;
+  ListTabs.Items.Add('Tab '+IntToStr(MaxTabIndex));
+  ListTabs.ItemIndex:= ListTabs.Items.Count-1;
   UpdateTabs(false);
+end;
+
+procedure TfmMain.BtnFocusFileClick(Sender: TObject);
+var
+  LFiles: TStringList;
+  fm: TfmMenuBox;
+  NSel: integer;
+  fn: string;
+begin
+  LFiles:= TStringList.Create;
+  try
+    FindAllFiles(LFiles, exp.Folder, '*', true);
+    if LFiles.Count=0 then exit;
+
+    fm:= TfmMenuBox.Create(nil);
+    try
+      fm.ListBox.Items.AddStrings(LFiles);
+      fm.ListBox.ItemIndex:= 0;
+      if fm.ShowModal<>mrOk then exit;
+      NSel:= fm.ListBox.ItemIndex;
+    finally
+      FreeAndNil(fm);
+    end;
+
+    if NSel<0 then exit;
+    fn:= LFiles[NSel];
+  finally
+    LFiles.Free;
+  end;
+
+  exp.FocusFilename(fn);
 end;
 
 procedure TfmMain.BtnTabCloseClick(Sender: TObject);
 var
   N: integer;
 begin
-  with L do
+  with ListTabs do
     if ItemIndex>=0 then
     begin
       N:= ItemIndex;

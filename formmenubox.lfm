@@ -1,0 +1,39 @@
+object fmMenuBox: TfmMenuBox
+  Left = 1530
+  Height = 484
+  Top = 185
+  Width = 332
+  Caption = 'Menu'
+  ClientHeight = 484
+  ClientWidth = 332
+  Position = poScreenCenter
+  LCLVersion = '2.1.0.0'
+  object ButtonPanel1: TButtonPanel
+    Left = 6
+    Height = 37
+    Top = 441
+    Width = 320
+    OKButton.Name = 'OKButton'
+    OKButton.DefaultCaption = True
+    HelpButton.Name = 'HelpButton'
+    HelpButton.DefaultCaption = True
+    CloseButton.Name = 'CloseButton'
+    CloseButton.DefaultCaption = True
+    CancelButton.Name = 'CancelButton'
+    CancelButton.DefaultCaption = True
+    TabOrder = 0
+    ShowButtons = [pbOK, pbCancel]
+  end
+  object ListBox: TListBox
+    Left = 6
+    Height = 429
+    Top = 6
+    Width = 320
+    Align = alClient
+    BorderSpacing.Around = 6
+    ItemHeight = 0
+    ScrollWidth = 318
+    TabOrder = 1
+    TopIndex = -1
+  end
+end

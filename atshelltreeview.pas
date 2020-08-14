@@ -12,7 +12,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, ComCtrls,
-  ATShellBase;
+  ATShellBase,
+  Dialogs;
 
 type
   TATShellTreeviewClick = (
@@ -46,11 +47,25 @@ type
     property Folder: string read FFolder write SetFolder;
     procedure Refresh;
     constructor Create(AOwner: TComponent); override;
+    function FocusFilename(const AFilename: string): boolean;
   published
     property OnShellItemClick: TATShellTreeviewItemClick read FOnShellItemClick write FOnShellItemClick;
   end;
 
 implementation
+
+function SBeginsWith(const S, SubStr: string): boolean;
+var
+  i: integer;
+begin
+  Result:= false;
+  if S='' then exit;
+  if SubStr='' then exit;
+  if Length(SubStr)>Length(S) then exit;
+  for i:= 1 to Length(SubStr) do
+    if S[i]<>SubStr[i] then exit;
+  Result:= true;
+end;
 
 type
   TATShellNodeData = class
@@ -335,5 +350,26 @@ begin
     FreeAndNil(List);
   end;
 end;
+
+function TATShellTreeview.FocusFilename(const AFilename: string): boolean;
+var
+  SParts, SPart: string;
+  N, i: integer;
+begin
+  Result:= false;
+  if FFolder='' then exit;
+  if not SBeginsWith(AFilename, FFolder+DirectorySeparator) then exit;
+
+  SParts:= Copy(AFilename, Length(FFolder)+2, MaxInt);
+  repeat
+    N:= System.Pos(DirectorySeparator, SParts);
+    if N=0 then
+      N:= Length(SParts)+1;
+    SPart:= Copy(SParts, 1, N-1);
+    System.Delete(SParts, 1, N);
+    //ShowMessage('part: '+SPart);
+  until SParts='';
+end;
+
 
 end.

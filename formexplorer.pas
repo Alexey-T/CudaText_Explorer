@@ -86,6 +86,7 @@ type
     procedure UpdateUI;
     procedure UpdateCaptionTabs;
     procedure UpdateCaptionTree;
+    procedure FocusFilename(const fn: string);
     property Folder: string read GetFolder write SetFolder;
     property OnItemClick: TATShellTreeviewItemClick read GetOnItemClick write SetOnItemClick;
     property OnGetTabs: TExplorerOnGetTabs read FOnGetTabs write FOnGetTabs;
@@ -389,6 +390,12 @@ begin
   PanelTabs.Constraints.MaxHeight:= PanelTabsCap.Height + Min(NSizeAuto, NSizeMax);
   PanelTabs.Height:= PanelTabsCap.Height + NSize;
 end;
+
+procedure TfmExplorer.FocusFilename(const fn: string);
+begin
+  Tree.FocusFilename(fn);
+end;
+
 
 initialization
 

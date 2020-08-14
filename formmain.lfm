@@ -12,7 +12,7 @@ object fmMain: TfmMain
   LCLVersion = '2.1.0.0'
   object PanelLeft: TPanel
     Left = 0
-    Height = 529
+    Height = 527
     Top = 0
     Width = 380
     Align = alClient
@@ -22,7 +22,7 @@ object fmMain: TfmMain
   end
   object Splitter1: TSplitter
     Left = 380
-    Height = 529
+    Height = 527
     Top = 0
     Width = 5
     Align = alRight
@@ -30,37 +30,37 @@ object fmMain: TfmMain
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 18
-    Top = 529
+    Height = 20
+    Top = 527
     Width = 671
     Panels = <>
   end
   object PanelRt: TPanel
     Left = 385
-    Height = 529
+    Height = 527
     Top = 0
     Width = 286
     Align = alRight
     BevelOuter = bvNone
-    ClientHeight = 529
+    ClientHeight = 527
     ClientWidth = 286
     TabOrder = 2
-    object L: TListBox
+    object ListTabs: TListBox
       Left = 0
       Height = 360
       Top = 8
       Width = 176
       ItemHeight = 0
-      OnSelectionChange = LSelectionChange
+      OnSelectionChange = ListTabsSelectionChange
       ScrollWidth = 174
       TabOrder = 0
       TopIndex = -1
     end
     object BtnFolder: TButton
       Left = 185
-      Height = 33
+      Height = 29
       Top = 8
-      Width = 71
+      Width = 67
       AutoSize = True
       Caption = 'Folder...'
       OnClick = BtnFolderClick
@@ -68,9 +68,9 @@ object fmMain: TfmMain
     end
     object BtnTabAdd: TButton
       Left = 185
-      Height = 33
+      Height = 29
       Top = 128
-      Width = 70
+      Width = 66
       AutoSize = True
       Caption = 'Add tab'
       OnClick = BtnTabAddClick
@@ -78,9 +78,9 @@ object fmMain: TfmMain
     end
     object BtnTabClose: TButton
       Left = 185
-      Height = 33
+      Height = 29
       Top = 168
-      Width = 79
+      Width = 75
       AutoSize = True
       Caption = 'Close tab'
       OnClick = BtnTabCloseClick
@@ -89,7 +89,7 @@ object fmMain: TfmMain
     object Panel2: TPanel
       Left = 0
       Height = 107
-      Top = 422
+      Top = 420
       Width = 286
       Align = alBottom
       BevelOuter = bvNone
@@ -98,7 +98,7 @@ object fmMain: TfmMain
       TabOrder = 5
       object chkShowRoot: TCheckBox
         Left = 8
-        Height = 23
+        Height = 24
         Top = 56
         Width = 131
         Caption = 'Show root node'
@@ -109,7 +109,7 @@ object fmMain: TfmMain
       end
       object chkShowDotNames: TCheckBox
         Left = 8
-        Height = 23
+        Height = 24
         Top = 32
         Width = 135
         Caption = 'Show dot-names'
@@ -118,7 +118,7 @@ object fmMain: TfmMain
       end
       object chkShowIcons: TCheckBox
         Left = 8
-        Height = 23
+        Height = 24
         Top = 8
         Width = 99
         Caption = 'Show icons'
@@ -130,13 +130,23 @@ object fmMain: TfmMain
     end
     object BtnFolderClose: TButton
       Left = 185
-      Height = 33
+      Height = 29
       Top = 48
-      Width = 53
+      Width = 49
       AutoSize = True
       Caption = 'Close'
       OnClick = BtnFolderCloseClick
       TabOrder = 2
+    end
+    object BtnFocusFile: TButton
+      Left = 185
+      Height = 29
+      Top = 256
+      Width = 87
+      AutoSize = True
+      Caption = 'Focus file...'
+      OnClick = BtnFocusFileClick
+      TabOrder = 6
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
