@@ -49,7 +49,7 @@ type
     procedure TimerTabsTimer(Sender: TObject);
   private
     exp: TfmExplorer;
-    FTabsSelChanged: boolean;
+    FTabsSelChange: boolean;
     procedure FakeOpenFile(const fn: string; AsTemp: boolean);
     function ExplorerGetLexer(const fn: string): string;
     procedure ExplorerClick(const fn: string; Kind: TATShellTreeviewClick);
@@ -112,7 +112,7 @@ end;
 procedure TfmMain.TimerTabsTimer(Sender: TObject);
 begin
   TimerTabs.Enabled:= false;
-  exp.UpdateTabs(FTabsSelChanged);
+  exp.UpdateTabs(FTabsSelChange);
 end;
 
 function TfmMain.ExplorerGetLexer(const fn: string): string;
@@ -210,8 +210,11 @@ begin
 end;
 
 procedure TfmMain.UpdateTabs(ASelChange: boolean);
+//must be via timer! to fix dbl-click in treeview.
+//otherwise dbl-click updates Tabs listbox too soon, and 2nd click goes to different tree item
 begin
-  FTabsSelChanged:= ASelChange;
+  FTabsSelChange:= ASelChange;
+  TimerTabs.Enabled:= false;
   TimerTabs.Enabled:= true;
 end;
 
