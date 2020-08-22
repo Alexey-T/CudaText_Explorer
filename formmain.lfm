@@ -164,4 +164,11 @@ object fmMain: TfmMain
     Left = 224
     Top = 432
   end
+  object TimerTabs: TTimer
+    Enabled = False
+    Interval = 400
+    OnTimer = TimerTabsTimer
+    Left = 223
+    Top = 489
+  end
 end

@@ -33,6 +33,7 @@ type
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     Splitter1: TSplitter;
     StatusBar1: TStatusBar;
+    TimerTabs: TTimer;
     procedure BtnFocusFileClick(Sender: TObject);
     procedure BtnTabAddClick(Sender: TObject);
     procedure BtnTabCloseClick(Sender: TObject);
@@ -45,8 +46,10 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ListTabsSelectionChange(Sender: TObject; User: boolean);
+    procedure TimerTabsTimer(Sender: TObject);
   private
     exp: TfmExplorer;
+    FTabsSelChanged: boolean;
     procedure FakeOpenFile(const fn: string; AsTemp: boolean);
     function ExplorerGetLexer(const fn: string): string;
     procedure ExplorerClick(const fn: string; Kind: TATShellTreeviewClick);
@@ -104,6 +107,12 @@ end;
 procedure TfmMain.ListTabsSelectionChange(Sender: TObject; User: boolean);
 begin
   UpdateTabs(true);
+end;
+
+procedure TfmMain.TimerTabsTimer(Sender: TObject);
+begin
+  TimerTabs.Enabled:= false;
+  exp.UpdateTabs(FTabsSelChanged);
 end;
 
 function TfmMain.ExplorerGetLexer(const fn: string): string;
@@ -202,7 +211,8 @@ end;
 
 procedure TfmMain.UpdateTabs(ASelChange: boolean);
 begin
-  exp.UpdateTabs(ASelChange);
+  FTabsSelChanged:= ASelChange;
+  TimerTabs.Enabled:= true;
 end;
 
 procedure TfmMain.ExplorerTabSelect(AIndex: integer);
